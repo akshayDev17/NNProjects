@@ -1,0 +1,7 @@
+*.pickle
+*.csv
+*.jpg 
+*.zip
+*.docx
+PetImages/
+myTest/
