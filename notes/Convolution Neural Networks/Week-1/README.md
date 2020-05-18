@@ -30,7 +30,7 @@
 2. Object detection: self-driving cars have to not only detect other cars but also their position as well.
 3. Neural Style Transfer: apps that *cartoonify* your face, apply some sort of neural transfer.
 
-![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7B1%20of%20the%20few%20problems%20with%20CV%7D%7D): inputs can get very big(suppose 64$\times$ 64![equation](https://latex.codecogs.com/png.latex?%5Cdpi%7B150%7D%20%5Ctimes)3 (RGB channel) = 12288 features, but for a high resolution image, like 1000$\times$ 1000$\times$ 3(RGB channel) = 3M features) now if  a fully-connected layer is used, with the first hidden layer contains 1000 hidden units, then total weights = 1000$\times$ 3M matrix = 3B parameters. computational, memory requirements $\uparrow$ , difficult to get enough data to prevent NN from over-fitting.
+![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7B1%20of%20the%20few%20problems%20with%20CV%7D%7D): inputs can get very big(suppose 64![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 64![equation](https://latex.codecogs.com/png.latex?%5Cdpi%7B150%7D%20%5Ctimes)3 (RGB channel) = 12288 features, but for a high resolution image, like 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 3(RGB channel) = 3M features) now if  a fully-connected layer is used, with the first hidden layer contains 1000 hidden units, then total weights = 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 3M matrix = 3B parameters. computational, memory requirements $\uparrow$ , difficult to get enough data to prevent NN from over-fitting.
 
 
 
@@ -54,22 +54,22 @@ To handle such large-res images, convolutions, and in turn CNNs are used.
 |  4   |  2   |  1   |  6   |  2   |  8   |
 |  2   |  4   |  5   |  2   |  3   |  9   |
 
-consider this $6\times 6\times 1$ grayscale image(resolution is $6\times 6$, number of colour channels = 1)  .
+consider this 6$\times$6$\times$1 grayscale image(resolution is 6$\times $6, number of colour channels = 1)  .
 
-consider this $3\times 3$ filter(also called the $kernel$, by some research papers):
+consider this 3$\times$3 filter(also called the $kernel$, by some research papers):
 
 | 1    | 0    | -1   |
 | ---- | ---- | ---- |
 | 1    | 0    | -1   |
 | 1    | 0    | -1   |
 
-image is ***convoluted*** with the filter, Image_arr * filter (convolution operator).
+image is ***convoluted*** with the filter, Image_arr $\times$ filter (convolution operator).
 
-output is $4\times 4 $: 
+output is 4$\times$ 4 : 
 
 <img src="images/convolution_eg.png" />
 
-the  -16 encircled in purple ink is obtained when the last $3\times 3$ submatrix is convoluted with the filter: $(1\times 1 + 6\times 1 + 2\times 1)$ = <span style="color:red">9 + </span> $(7\times 0 + 2\times 0 + 3\times 0$)= <span style="color:red">0 + </span> $(8\times -1 + 8\times -1 + 9\times -1)$ = <span style="color:red">-25</span> = **-16**. 
+the  -16 encircled in purple ink is obtained when the last $3\times 3$ submatrix is convoluted with the filter: (1$\times$1 + 6$\times$1 + 2$\times$1) = <span style="color:red">9 + </span> (7$\times$0 + 2$\times$0 + 3$\times$0)= <span style="color:red">0 + </span> (8$\times$-1 + 8$\times$-1 + 9$\times$-1) = <span style="color:red">-25</span> = **-16**. 
 
 <span style="color:red;" >Question: How are exceedingly large or highly negative values handled?</span>
 
@@ -208,9 +208,9 @@ Sobel filter:
     </tr>
 </table>
 
-<span style="color: red;">Question1:</span> Why only $3\times 3$ filters work? can filters (especially edge-detection ones) be of some other $m\times n$ ?
+<span style="color: red;">Question1:</span> Why only 3$\times$3 filters work? can filters (especially edge-detection ones) be of some other m$\times$n ?
 
-filters can also be learned (those 9 numbers, in the $3\times 3$ matrix) using backpropogation. 
+filters can also be learned (those 9 numbers, in the 3$\times$3 matrix) using backpropogation. 
 
 in addition to vertical and horizontal edge filters, inclined edge filters(edge inclined at $45^{\circ}$ , $60^{\circ}$, etc.) can also be used to detect such types of edges. 
 
@@ -224,13 +224,13 @@ The method of learning $w_1$ to $w_9$ using NNs is much more effective than pick
 
 [please find the video link here](https://www.youtube.com/watch?v=JWlLkgbEDQM&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=4)
 
-image-$6\times 6$ * filter-$3\times 3$ = output-resolved-$4\times 4$ , or image-$n\times n$ * filter-$f\times f$ = output-resolved-$n-f+1\times n-f+1$
+image = 6$\times$6 , filter-3$\times$3 = output-resolved-4$\times$4 , or image-n$\times$n ,  filter-f$\times$f ,  output-resolved = (n-f+1)$\times$(n-f+1)
 
 hence as the filter becomes bigger(f $\uparrow$) , the output-resolved image becomes smaller. for the 6$\times $6 image, the filter can be applied only for a few iterations, 6$\rightarrow$4$\rightarrow$2. It wouldn't be practical if every-time some low-level features like edges are detected(i.e. the filter is convoluted with the input image and the output resolved image obeys the edge-detection pattern) the input image shrinks.  This shrinking would be particularly troublesome in Deep-neural nets.
 
 A lot of information is thrown away when the corner-pixels and edge-pixels of the image are used only once to obtain the convoluted output, whereas inner pixels are found to be overlapped in many f$\times $f sub-matrices of the input-image. 
 
-To solve these issues, a *border* of pixels is added to the original image . hence an n $\times$ n image becomes an n+2 $\times$ n+2 image. Padding is usually done with 0's. Hence the convoluted output becomes n+2-f+1 = ($n-f+3 \times n-f+3$).  This is for when **p=1**. If suppose padding is with **p** number of borders, input = $\textrm{n+2p}\times \textrm{n+2p}$ , convoluted image is $\textrm{n+2p-f+1}\times \textrm{n+2p-f+1}$ . For our n=6, p=1,f=3, we can now operate as: $(\textrm{6}\rightarrow\textrm{8})\rightarrow \textrm{6}\rightarrow \textrm{4}\rightarrow \textrm{2}$, if suppose we use padding only once, i.e. *just for the input image*. This results in an increased contribution of the corner and edge pixels in the output-convoluted image.
+To solve these issues, a *border* of pixels is added to the original image . hence an n $\times$ n image becomes an n+2 $\times$ n+2 image. Padding is usually done with 0's. Hence the convoluted output becomes n+2-f+1 = (n-f+3$\times$n-f+3).  This is for when **p=1**. If suppose padding is with **p** number of borders, input = $\textrm{n+2p}\times \textrm{n+2p}$ , convoluted image is $\textrm{n+2p-f+1}\times \textrm{n+2p-f+1}$ . For our n=6, p=1,f=3, we can now operate as: $(\textrm{6}\rightarrow\textrm{8})\rightarrow \textrm{6}\rightarrow \textrm{4}\rightarrow \textrm{2}$, if suppose we use padding only once, i.e. *just for the input image*. This results in an increased contribution of the corner and edge pixels in the output-convoluted image.
 
 
 
@@ -251,7 +251,9 @@ Two common choices to select p-value, or rather decide whether to pad or not: Va
 
 
 
-By convention in CV, f = odd.<span style="color: red;">find why</span>. one reason might be because of the above equation for p, if f = even, we would need some sort of asymmetric padding(fractional p means padding is asymmetric.)
+By convention in CV, f = odd.![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7Bfind%20why%7D%7D). 
+
+one reason might be because of the above equation for p, if f = even, we would need some sort of asymmetric padding(fractional p means padding is asymmetric.)
 
 
 
@@ -299,13 +301,13 @@ Hence, now multiple low-level feature detection possible in input-image with RGB
 
 adding bias to each convoluted output(1-colour channel) from each filter. apply activation function, for instance Relu, after adding bias to output. Then stack the activated-biased outputs with each other. 
 
-<img src="images/1_layer_CNN.png"/>This computation from $6\times 6\times 3$ to $4\times 4\times 2$ is 1 layer of CNN(this is what 1 layer of a CNN does).<span style="color:red;" >Question: How are exceedingly large or highly negative values handled?</span>
+<img src="images/1_layer_CNN.png"/>This computation from $6\times 6\times 3$ to $4\times 4\times 2$ is 1 layer of CNN(this is what 1 layer of a CNN does).![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7BQuestion%3A%20How%20are%20exceedingly%20large%20or%20highly%20negative%20values%20handled%3F%7D%7D)
 
 The g(O1+B) can be related to g($z^{[1]}$), hence now imagine how backprop could be used to choose filters(differential equations to optimise z$^{[1]}$, thus optimise O1, hence optimising the filter-values when taken as parameters).
 
 To mathematically inform regarding the computation needed, suppose filter = 3$\times $3$\times $3, and we have 10 such filters. 27 parameters for each filter, hence 270 for filters and 10 for bias(if suppose different biases are to be used for each filter), so total of 280 parameters. 
 
-<span style="color: red;">Note:</span>The optimisation doesn't depend on the image-size, rather the filter size and number of filters.
+![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7BNote%3A%20%7D%7D)The optimisation doesn't depend on the image-size, rather the filter size and number of filters.
 
 Let l denote the l$^{th}$ convolution layer. f$^{[l]}$ = filter size of the filter used for that layer,  p$^{[l]}$: padding for that layer. s$^{[l]}$ = stride, and so on the superscript is used for all the other quantities. 
 
@@ -392,7 +394,7 @@ Observe that the number of parameters are very large for fully-connected layers,
 
 [please find the video link here](https://www.youtube.com/watch?v=qLq3mDl_bGk&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=11)
 
-consider the previous example. Consider the CONV1 layer. if suppose instead of convolution, a fully-connected layer had been used, keeping the input-output dimensionality same. then #parameters = 32$\times$32$\times$3$\times$28$\times$28$\times$8 = 19,267,584. Hence fully-connected layer isn't computationally feasible.
+consider the previous example. Consider the CONV-1 layer. if suppose instead of convolution, a fully-connected layer had been used, keeping the input-output dimensionality same. then #parameters = 32![equation](https://latex.codecogs.com/png.latex?%5Ctimes)32![equation](https://latex.codecogs.com/png.latex?%5Ctimes)3![equation](https://latex.codecogs.com/png.latex?%5Ctimes)28![equation](https://latex.codecogs.com/png.latex?%5Ctimes)28![equation](https://latex.codecogs.com/png.latex?%5Ctimes)8 = 19,267,584. Hence fully-connected layer isn't computationally feasible.
 
 
 
