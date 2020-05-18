@@ -18,7 +18,7 @@
 
 
 
-<span style="color: red;">Note : </span>[Lecture-1]() is just insights into different case studies, it doesn't have any theoretical-content, hence not mentioned here.
+<span style="color: red;">Note : </span>[Lecture-1](https://www.youtube.com/watch?v=ShhJwEMfiBM&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=13&t=0s) is just insights into different case studies, it doesn't have any theoretical-content, hence not mentioned here.
 
 # Lecture-2 : Classic CNNs<a name="res1lec13"></a>
 
@@ -46,7 +46,7 @@ Observations:
 
 <img src="images/alexnet.png" />
 
-same indicates [same convolutions](#sameconv) 
+same indicates [same convolutions]([https://github.com/akshayDev17/NNProjects/tree/master/notes/Convolution%20Neural%20Networks/Week-1#sameconv](https://github.com/akshayDev17/NNProjects/tree/master/notes/Convolution Neural Networks/Week-1#sameconv)) 
 
 total parameters = (11$\times$11$\times$96+96)+(5$\times$5$\times$256+256)+(3$\times$3$\times$384+384)+(3$\times$3$\times$384+384)+(3$\times$3$\times$256+256)+(4096$\times$9216+1)+(4096$\times$4096+1)+(4096$\times$1000+1) = 58,650,563 $\approx$ 60M .
 
