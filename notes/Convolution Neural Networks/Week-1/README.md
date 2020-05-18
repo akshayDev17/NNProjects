@@ -30,7 +30,7 @@
 2. Object detection: self-driving cars have to not only detect other cars but also their position as well.
 3. Neural Style Transfer: apps that *cartoonify* your face, apply some sort of neural transfer.
 
-![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7B1%20of%20the%20few%20problems%20with%20CV%7D%7D): inputs can get very big(suppose 64![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 64![equation](https://latex.codecogs.com/png.latex?%5Cdpi%7B150%7D%20%5Ctimes)3 (RGB channel) = 12288 features, but for a high resolution image, like 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 3(RGB channel) = 3M features) now if  a fully-connected layer is used, with the first hidden layer contains 1000 hidden units, then total weights = 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 3M matrix = 3B parameters. computational, memory requirements $\uparrow$ , difficult to get enough data to prevent NN from over-fitting.
+![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7B1%20of%20the%20few%20problems%20with%20CV%7D%7D): inputs can get very big(suppose 64![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 64![equation](https://latex.codecogs.com/png.latex?%5Ctimes)3 (RGB channel) = 12288 features, but for a high resolution image, like 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 3(RGB channel) = 3M features) now if  a fully-connected layer is used, with the first hidden layer contains 1000 hidden units, then total weights = 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 3M matrix = 3B parameters. computational, memory requirements $\uparrow$ , difficult to get enough data to prevent NN from over-fitting.
 
 
 
@@ -54,24 +54,24 @@ To handle such large-res images, convolutions, and in turn CNNs are used.
 |  4   |  2   |  1   |  6   |  2   |  8   |
 |  2   |  4   |  5   |  2   |  3   |  9   |
 
-consider this 6$\times$6$\times$1 grayscale image(resolution is 6$\times $6, number of colour channels = 1)  .
+consider this 6![equation](https://latex.codecogs.com/png.latex?%5Ctimes)6![equation](https://latex.codecogs.com/png.latex?%5Ctimes)1 grayscale image(resolution is 6![equation](https://latex.codecogs.com/png.latex?%5Ctimes)6, number of colour channels = 1)  .
 
-consider this 3$\times$3 filter(also called the $kernel$, by some research papers):
+consider this 3![equation](https://latex.codecogs.com/png.latex?%5Ctimes)3 filter(also called the $kernel$, by some research papers):
 
 | 1    | 0    | -1   |
 | ---- | ---- | ---- |
 | 1    | 0    | -1   |
 | 1    | 0    | -1   |
 
-image is ***convoluted*** with the filter, Image_arr $\times$ filter (convolution operator).
+image is ***convoluted*** with the filter, Image_arr![equation](https://latex.codecogs.com/png.latex?%5Ctimes)filter (convolution operator).
 
-output is 4$\times$ 4 : 
+output is ![equation](https://latex.codecogs.com/png.latex?4%5Ctimes4) : 
 
 <img src="images/convolution_eg.png" />
 
-the  -16 encircled in purple ink is obtained when the last $3\times 3$ submatrix is convoluted with the filter: (1$\times$1 + 6$\times$1 + 2$\times$1) = <span style="color:red">9 + </span> (7$\times$0 + 2$\times$0 + 3$\times$0)= <span style="color:red">0 + </span> (8$\times$-1 + 8$\times$-1 + 9$\times$-1) = <span style="color:red">-25</span> = **-16**. 
+the  -16 encircled in purple ink is obtained when the last ![equation](https://latex.codecogs.com/png.latex?3%5Ctimes%203) submatrix is convoluted with the filter: (1![equation](https://latex.codecogs.com/png.latex?%5Ctimes)1 + 6![equation](https://latex.codecogs.com/png.latex?%5Ctimes)1 + 2![equation](https://latex.codecogs.com/png.latex?%5Ctimes)1) =  ![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7B9%20&plus;%7D%7D) (7![equation](https://latex.codecogs.com/png.latex?%5Ctimes)0 + 2![equation](https://latex.codecogs.com/png.latex?%5Ctimes)0 + 3![equation](https://latex.codecogs.com/png.latex?%5Ctimes)0)=  ![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7B0%20&plus;%7D%7D)(8![equation](https://latex.codecogs.com/png.latex?%5Ctimes)-1 + 8![equation](https://latex.codecogs.com/png.latex?%5Ctimes)-1 + 9![equation](https://latex.codecogs.com/png.latex?%5Ctimes)-1) =  ![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7B-25%7D%7D)= **-16**. 
 
-<span style="color:red;" >Question: How are exceedingly large or highly negative values handled?</span>
+![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7BQuestion%3A%20How%20are%20exceedingly%20large%20or%20highly%20negative%20values%20handled%3F%7D%7D)
 
 Note: If you make the convolution operation in TensorFlow you will find the function `tf.nn.conv2d`. In keras you will find `Conv2d` function.
 
@@ -148,9 +148,9 @@ Observe that the filter itself has a light-to-dark transition. If suppose it was
 
 , i.e. a dark-to-light transition, then for the case of light-to-dark input image, the convoluted image would be a central dark band with neighbouring lighter bands.
 
-<span style="color: red;">negative edge:</span> go from darker to lighter band, <span style="color: blue">positive edge</span> : go from lighter to darker band
+![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7Bnegative%20edge%7D%7D) go from darker to lighter band, ![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BBlue%7D%20%5Ctextrm%7Bpositive%20edge%7D%7D) : go from lighter to darker band
 
-<span style="color: red; font-size: 20px;">all transitions are referred to when moving from left-to-right across any matrix</span>.
+![equation](https://latex.codecogs.com/png.latex?%5Cdpi%7B150%7D%20%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7Ball%20transitions%20are%20referred%20to%20when%20moving%20from%20left-to-right%20across%20any%20matrix%7D%7D)
 
 consider the filter:
 
@@ -158,7 +158,7 @@ consider the filter:
 
 Here we can see that horizontal edges are filtered out by the filter, due to its own colour-orientation. 
 
-If a horizontal edge detection filter is used on the vertical edge image, or vice-versa, nothing is resolved, we obtain a dark image( $0_{4\times 4}$ ).
+If a horizontal edge detection filter is used on the vertical edge image, or vice-versa, nothing is resolved, we obtain a dark image( ![equation](https://latex.codecogs.com/png.latex?0_%7B4%5Ctimes%204%7D) ).
 
 Consider the following image:
 
@@ -208,13 +208,13 @@ Sobel filter:
     </tr>
 </table>
 
-<span style="color: red;">Question1:</span> Why only 3$\times$3 filters work? can filters (especially edge-detection ones) be of some other m$\times$n ?
+<span style="color: red;">Question1:</span> Why only 3![equation](https://latex.codecogs.com/png.latex?%5Ctimes)3 filters work? can filters (especially edge-detection ones) be of some other m ![equation](https://latex.codecogs.com/png.latex?%5Ctimes)n ?
 
-filters can also be learned (those 9 numbers, in the 3$\times$3 matrix) using backpropogation. 
+filters can also be learned (those 9 numbers, in the 3![equation](https://latex.codecogs.com/png.latex?%5Ctimes)3 matrix) using backpropogation. 
 
-in addition to vertical and horizontal edge filters, inclined edge filters(edge inclined at $45^{\circ}$ , $60^{\circ}$, etc.) can also be used to detect such types of edges. 
+in addition to vertical and horizontal edge filters, inclined edge filters(edge inclined at ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7B45%7D%5E%7B%5Ccirc%7D) , ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7B60%7D%5E%7B%5Ccirc%7D), etc.) can also be used to detect such types of edges. 
 
-The method of learning $w_1$ to $w_9$ using NNs is much more effective than picking any filters by hand. Filters can basically be used to resolve low-level features of images, such as vertical, horizontal and inclined edges.
+The method of learning ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bw%7D_%7B1%7D) to ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bw%7D_%7B9%7D) using NNs is much more effective than picking any filters by hand. Filters can basically be used to resolve low-level features of images, such as vertical, horizontal and inclined edges.
 
 
 
@@ -224,13 +224,13 @@ The method of learning $w_1$ to $w_9$ using NNs is much more effective than pick
 
 [please find the video link here](https://www.youtube.com/watch?v=JWlLkgbEDQM&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=4)
 
-image = 6$\times$6 , filter-3$\times$3 = output-resolved-4$\times$4 , or image-n$\times$n ,  filter-f$\times$f ,  output-resolved = (n-f+1)$\times$(n-f+1)
+image = 6![equation](https://latex.codecogs.com/png.latex?%5Ctimes)6 , filter-3 ![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 3 = output-resolved-4 ![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 4 , or image-n ![equation](https://latex.codecogs.com/png.latex?%5Ctimes) n ,  filter-f ![equation](https://latex.codecogs.com/png.latex?%5Ctimes) f ,  output-resolved = (n-f+1) ![equation](https://latex.codecogs.com/png.latex?%5Ctimes) (n-f+1)
 
-hence as the filter becomes bigger(f $\uparrow$) , the output-resolved image becomes smaller. for the 6$\times $6 image, the filter can be applied only for a few iterations, 6$\rightarrow$4$\rightarrow$2. It wouldn't be practical if every-time some low-level features like edges are detected(i.e. the filter is convoluted with the input image and the output resolved image obeys the edge-detection pattern) the input image shrinks.  This shrinking would be particularly troublesome in Deep-neural nets.
+hence as the filter becomes bigger(f![equation](https://latex.codecogs.com/png.latex?%5Cuparrow)) , the output-resolved image becomes smaller. for the 6![equation](https://latex.codecogs.com/png.latex?%5Ctimes)6 image, the filter can be applied only for a few iterations, ![equation](https://latex.codecogs.com/png.latex?6%5Crightarrow4%5Crightarrow2) . It wouldn't be practical if every-time some low-level features like edges are detected(i.e. the filter is convoluted with the input image and the output resolved image obeys the edge-detection pattern) the input image shrinks.  This shrinking would be particularly troublesome in Deep-neural nets.
 
-A lot of information is thrown away when the corner-pixels and edge-pixels of the image are used only once to obtain the convoluted output, whereas inner pixels are found to be overlapped in many f$\times $f sub-matrices of the input-image. 
+A lot of information is thrown away when the corner-pixels and edge-pixels of the image are used only once to obtain the convoluted output, whereas inner pixels are found to be overlapped in many f![equation](https://latex.codecogs.com/png.latex?%5Ctimes)f sub-matrices of the input-image. 
 
-To solve these issues, a *border* of pixels is added to the original image . hence an n $\times$ n image becomes an n+2 $\times$ n+2 image. Padding is usually done with 0's. Hence the convoluted output becomes n+2-f+1 = (n-f+3$\times$n-f+3).  This is for when **p=1**. If suppose padding is with **p** number of borders, input = $\textrm{n+2p}\times \textrm{n+2p}$ , convoluted image is $\textrm{n+2p-f+1}\times \textrm{n+2p-f+1}$ . For our n=6, p=1,f=3, we can now operate as: $(\textrm{6}\rightarrow\textrm{8})\rightarrow \textrm{6}\rightarrow \textrm{4}\rightarrow \textrm{2}$, if suppose we use padding only once, i.e. *just for the input image*. This results in an increased contribution of the corner and edge pixels in the output-convoluted image.
+To solve these issues, a *border* of pixels is added to the original image . hence an n![equation](https://latex.codecogs.com/png.latex?%5Ctimes)n image becomes an n+2 ![equation](https://latex.codecogs.com/png.latex?%5Ctimes)  n+2 image. Padding is usually done with 0's. Hence the convoluted output becomes n+2-f+1 = (n-f+3![equation](https://latex.codecogs.com/png.latex?%5Ctimes)n-f+3).  This is for when **p=1**. If suppose padding is with **p** number of borders, input = ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bn&plus;2p%7D%5Ctimes%20%5Ctextrm%7Bn&plus;2p%7D)convoluted image is ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bn&plus;2p-f&plus;1%7D%5Ctimes%20%5Ctextrm%7Bn&plus;2p-f&plus;1%7D) . For our n=6, p=1,f=3, we can now operate as: , if ![equation](https://latex.codecogs.com/png.latex?%28%5Ctextrm%7B6%7D%5Crightarrow%5Ctextrm%7B8%7D%29%5Crightarrow%20%5Ctextrm%7B6%7D%5Crightarrow%20%5Ctextrm%7B4%7D%5Crightarrow%20%5Ctextrm%7B2%7D) suppose we use padding only once, i.e. *just for the input image*. This results in an increased contribution of the corner and edge pixels in the output-convoluted image.
 
 
 
@@ -247,7 +247,7 @@ Two common choices to select p-value, or rather decide whether to pad or not: Va
 ## Same Convolutions<a name="sameconv"></a>
 
 * pad as much so that output-convoluted image-size is same as that of the original-unpadded image-size.
-* suppose n, f. then choose a p such that, $\textrm{n}\rightarrow\textrm{n+2p}\rightarrow\textrm{n+2p-f+1}$, such that n+2p-f+1 = n, or $\textrm{p =} \frac{\textrm{f-1}}{\textrm{2}}$ .
+* suppose n, f. then choose a p such that, ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bn%7D%5Crightarrow%5Ctextrm%7Bn&plus;2p%7D%5Crightarrow%5Ctextrm%7Bn&plus;2p-f&plus;1%7D) such that n+2p-f+1 = n, or  ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bp%20%3D%7D%20%5Cfrac%7B%5Ctextrm%7Bf-1%7D%7D%7B%5Ctextrm%7B2%7D%7D).
 
 
 
@@ -265,7 +265,7 @@ one reason might be because of the above equation for p, if f = even, we would n
 
 stride=s,it basically means moving the filter by *s* number of steps, while convolution  with the input image. Till now we have been using s =1 . Hence when n=7, f=3, but s =2(instead of 1), our output image has resolution of ( {n - f} / s) +1, i.e. 3.
 
-using n, f, s, p ; output-image size = <font size="5">$\lfloor{\frac{n+2p-f}{s}}\rfloor$</font>  + 1. Round this fraction **down**, in case its not an integer. this indicates that if part of the image couldn't convolve with the filter, then we ignore that entire f$\times $f sub-matrix .
+using n, f, s, p ; output-image size = ![equation](https://latex.codecogs.com/png.latex?%5Clfloor%7B%5Cfrac%7Bn&plus;2p-f%7D%7Bs%7D%7D%5Crfloor&plus;1). Round this fraction **down**, in case its not an integer. this indicates that if part of the image couldn't convolve with the filter, then we ignore that entire f![equation](https://latex.codecogs.com/png.latex?%5Ctimes)f sub-matrix .
 
 <img src="images/stridConv.png" />
 
@@ -277,7 +277,7 @@ using n, f, s, p ; output-image size = <font size="5">$\lfloor{\frac{n+2p-f}{s}}
 
 [please find the video link here](https://www.youtube.com/watch?v=q2U9EPXeRKY&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=6)
 
-convolutions on RGB image, hence input image = $6\times 6\times 3$, hence the filter has to also be $3\times 3\times 3$ . Its obvious that number of channels in filter and input image should be the same. However, the output convoluted image has only **1 colour channel**.
+convolutions on RGB image, hence input image = ![equation](https://latex.codecogs.com/png.latex?6%5Ctimes%206%5Ctimes%203) hence the filter has to also be = ![equation](https://latex.codecogs.com/png.latex?3%5Ctimes%203%5Ctimes%203). Its obvious that number of channels in filter and input image should be the same. However, the output convoluted image has only **1 colour channel**.
 
 <img src="images/rgb_convolution.png" />
 
@@ -301,23 +301,23 @@ Hence, now multiple low-level feature detection possible in input-image with RGB
 
 adding bias to each convoluted output(1-colour channel) from each filter. apply activation function, for instance Relu, after adding bias to output. Then stack the activated-biased outputs with each other. 
 
-<img src="images/1_layer_CNN.png"/>This computation from $6\times 6\times 3$ to $4\times 4\times 2$ is 1 layer of CNN(this is what 1 layer of a CNN does).![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7BQuestion%3A%20How%20are%20exceedingly%20large%20or%20highly%20negative%20values%20handled%3F%7D%7D)
+<img src="images/1_layer_CNN.png"/>This computation from ![equation](https://latex.codecogs.com/png.latex?6%5Ctimes%206%5Ctimes%203)to  ![equation](https://latex.codecogs.com/png.latex?4%5Ctimes%204%5Ctimes%202) is 1 layer of CNN(this is what 1 layer of a CNN does).![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7BQuestion%3A%20How%20are%20exceedingly%20large%20or%20highly%20negative%20values%20handled%3F%7D%7D)
 
-The g(O1+B) can be related to g($z^{[1]}$), hence now imagine how backprop could be used to choose filters(differential equations to optimise z$^{[1]}$, thus optimise O1, hence optimising the filter-values when taken as parameters).
+The g(O1+B) can be related to g(![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bz%7D%5E%7B%5B1%5D%7D)), hence now imagine how backprop could be used to choose filters(differential equations to optimise ,![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bz%7D%5E%7B%5B1%5D%7D) thus optimise O1, hence optimising the filter-values when taken as parameters).
 
-To mathematically inform regarding the computation needed, suppose filter = 3$\times $3$\times $3, and we have 10 such filters. 27 parameters for each filter, hence 270 for filters and 10 for bias(if suppose different biases are to be used for each filter), so total of 280 parameters. 
+To mathematically inform regarding the computation needed, suppose filter = 3![equation](https://latex.codecogs.com/png.latex?%5Ctimes)3![equation](https://latex.codecogs.com/png.latex?%5Ctimes)3, and we have 10 such filters. 27 parameters for each filter, hence 270 for filters and 10 for bias(if suppose different biases are to be used for each filter), so total of 280 parameters. 
 
 ![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7BNote%3A%20%7D%7D)The optimisation doesn't depend on the image-size, rather the filter size and number of filters.
 
-Let l denote the l$^{th}$ convolution layer. f$^{[l]}$ = filter size of the filter used for that layer,  p$^{[l]}$: padding for that layer. s$^{[l]}$ = stride, and so on the superscript is used for all the other quantities. 
+Let l denote the ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bl%7D%5E%7B%5Ctextrm%7Bth%7D%7D) convolution layer. ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bf%7D%5E%7B%5Bl%5D%7D) = filter size of the filter used for that layer,  : ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bp%7D%5E%7B%5Bl%5D%7D)padding for that layer. ![equation](https://latex.codecogs.com/png.latex?s%5E%7B%5Bl%5D%7D) =  stride, and so on the superscript is used for all the other quantities. 
 
-Now, consider the l$^{th}$ layer. input-image to this layer would be of dimensions n$_H^{[l-1]}$ $\times$ n$_W^{[l-1]} \times $n$_C^{[l-1]}$  if suppose *same convolutions* method of padding is used. The relation between the input-size of l-1$^{th}$ layer and l$^{th}$ layer is :
+Now, consider the ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bl%7D%5E%7B%5Ctextrm%7Bth%7D%7D)layer. input-image to this layer would be of dimensions ![equation](https://latex.codecogs.com/png.latex?n_H%5E%7B%5Bl-1%5D%7D%20%5Ctimes%20n_W%5E%7B%5Bl-1%5D%7D%20%5Ctimes%20n_C%5E%7B%5Bl-1%5D%7D) if suppose *same convolutions* method of padding is used. The relation between the input-size of ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bl-1%7D%5E%7B%5Ctextrm%7Bth%7D%7D) layer and ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bl%7D%5E%7B%5Ctextrm%7Bth%7D%7D) layer is :
 
-$n^{[l]}$ = <font size="5">$\lfloor{\frac{n^{[l-1]} + 2p^{[l]} - f^{[l]} }{s^{[l]}} + 1} \rfloor$</font> , i.e. what was the output from previous layer, what will be the filter used, padding used and stride length used in the current layer. The formula applies for both height and width of the **output volume**. 
+![equation](https://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20n%5E%7B%5Bl%5D%7D%20%3D%20%5Clfloor%7B%5Cfrac%7Bn%5E%7B%5Bl-1%5D%7D%20&plus;%202p%5E%7B%5Bl%5D%7D%20-%20f%5E%7B%5Bl%5D%7D%20%7D%7Bs%5E%7B%5Bl%5D%7D%7D%20&plus;%201%7D%20%5Crfloor) , i.e. what was the output from previous layer, what will be the filter used, padding used and stride length used in the current layer. The formula applies for both height and width of the **output volume**. 
 
-* each filter = $f^{[l]} \times f^{[l]}\times n_C^{[l-1]}$ since the number of filters depend upon the input-size of the current layer. 
-* **Activations** a[l] = n$_H^{[l]}$ $\times$ n$_W^{[l]} \times $n$_C^{[l]}$  ., for mini-batch gradient descent, let m be the batch size(tensorflow convolution functions don't usually give the option of choosing different batch sizes for different layers ) for each layer, the A$^{[l]}$ = m$\times $ n$_H^{[l]}$ $\times$ n$_W^{[l]} \times $n$_C^{[l]}$ .
-* **weights ** : $f^{[l]} \times f^{[l]}\times n_C^{[l-1]} \times $n$_C^{[l]}$ 
+* each filter = ![equation](https://latex.codecogs.com/png.latex?f%5E%7B%5Bl%5D%7D%20%5Ctimes%20f%5E%7B%5Bl%5D%7D%5Ctimes%20n_C%5E%7B%5Bl-1%5D%7D) since the number of filters depend upon the input-size of the current layer. 
+* **Activations** ![equation](https://latex.codecogs.com/png.latex?a%5E%7B%5Bl%5D%7D%20%3D%20n_H%5E%7B%5Bl%5D%7D%20%5Ctimes%20n_W%5E%7B%5Bl%5D%7D%20%5Ctimes%20n_C%5E%7B%5Bl%5D%7D)  ., for mini-batch gradient descent, let m be the batch size(tensorflow convolution functions don't usually give the option of choosing different batch sizes for different layers ) for each layer, the  ![equation](https://latex.codecogs.com/png.latex?A%5E%7B%5Bl%5D%7D%20%3D%20m%5Ctimes%20n_H%5E%7B%5Bl%5D%7D%20%5Ctimes%20n_W%5E%7B%5Bl%5D%7D%20%5Ctimes%20n_C%5E%7B%5Bl%5D%7D).
+* **weights** : ![equation](https://latex.codecogs.com/png.latex?f%5E%7B%5Bl%5D%7D%20%5Ctimes%20f%5E%7B%5Bl%5D%7D%5Ctimes%20n_C%5E%7B%5Bl-1%5D%7D%20%5Ctimes%20n_C%5E%7B%5Bl%5D%7D)
 
 
 
@@ -347,7 +347,7 @@ Types of layers in a CNN:
 
 <img src="images/m1.png" />
 
-Think of the 4$\times$4 input as a middle-layer or activation-layer for some features, a large number means that some particular features is detected(recall that if an edge existed, the output would have either the negatively or positively highest value, and if a feature doesn't exist or isn't detected by the current filter, the output-cell value for that feature would be  very small.) 
+Think of the 4![equation](https://latex.codecogs.com/png.latex?%5Ctimes)4 input as a middle-layer or activation-layer for some features, a large number means that some particular features is detected(recall that if an edge existed, the output would have either the negatively or positively highest value, and if a feature doesn't exist or isn't detected by the current filter, the output-cell value for that feature would be  very small.) 
 
 Hence, it may be that the **9** represents some sort of a stark feature. 
 
@@ -357,7 +357,7 @@ Any low values might indicate that some feature isn't detected, or is very minut
 
 for max-pooling, the gradient descent doesn't learn anything from them, once f,s are fixed, since there is no such thing as filter-values. 
 
-Since there is no concept of *number of filters*, number of channels of the input = number of channels of the output(in other words, for **max-pooling layers** n$_C^{[l-1]}$ = n$_C^{[l]}$). Each channel of input the max-pooling is performed to get the corresponding output for that channel.
+Since there is no concept of *number of filters*, number of channels of the input = number of channels of the output(in other words, for **max-pooling layers** ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bn%7D_C%5E%7B%5Bl-1%5D%7D%20%3D%20%5Ctextrm%7Bn%7D_C%5E%7B%5Bl%5D%7D)). Each channel of input the max-pooling is performed to get the corresponding output for that channel.
 
 
 
@@ -378,7 +378,7 @@ common choice of hyperparameters : f=2, s=2, usually padding isn't used here. th
 
 number-recognition from image, RGB channel used, **inspired from** LeNet5(by Hyan mikun) 
 
-Layer l = conv$^{[l]}$ + pool$^{[l]}$ , this is because pooling layers don't need any hyperparameter optimisation, hence can be clubbed together with the previous convolution layer.
+Layer l = ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bconv%7D%5E%7B%5Bl%5D%7D%20&plus;%20%5Ctextrm%7Bpool%7D%5E%7B%5Bl%5D%7D), this is because pooling layers don't need any hyperparameter optimisation, hence can be clubbed together with the previous convolution layer.
 
 <img src="images/lenet.png" />
 
@@ -400,7 +400,7 @@ consider the previous example. Consider the CONV-1 layer. if suppose instead of 
 
 ## Parameter-sharing<a name="lec11n1"></a>
 
-Once the values of a filter are learned, it can be used with different parts of the same image, i.e. for different sub-matrices of size f$\times$f of the image.
+Once the values of a filter are learned, it can be used with different parts of the same image, i.e. for different sub-matrices of size f![equation](https://latex.codecogs.com/png.latex?%5Ctimes)f of the image.
 
 
 
