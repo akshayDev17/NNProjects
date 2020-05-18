@@ -30,7 +30,7 @@
 2. Object detection: self-driving cars have to not only detect other cars but also their position as well.
 3. Neural Style Transfer: apps that *cartoonify* your face, apply some sort of neural transfer.
 
-<p><span style="color:red;">1 of the few problems with CV </span></p>: inputs can get very big(suppose 64$\times$ 64![equation](https://latex.codecogs.com/png.latex?%5Cdpi%7B150%7D%20%5Ctimes)3 (RGB channel) = 12288 features, but for a high resolution image, like 1000$\times$ 1000$\times$ 3(RGB channel) = 3M features) now if  a fully-connected layer is used, with the first hidden layer contains 1000 hidden units, then total weights = 1000$\times$ 3M matrix = 3B parameters. computational, memory requirements $\uparrow$ , difficult to get enough data to prevent NN from over-fitting.
+<pre><code><span style="color:red;">1 of the few problems with CV </span></code></pre>: inputs can get very big(suppose 64$\times$ 64![equation](https://latex.codecogs.com/png.latex?%5Cdpi%7B150%7D%20%5Ctimes)3 (RGB channel) = 12288 features, but for a high resolution image, like 1000$\times$ 1000$\times$ 3(RGB channel) = 3M features) now if  a fully-connected layer is used, with the first hidden layer contains 1000 hidden units, then total weights = 1000$\times$ 3M matrix = 3B parameters. computational, memory requirements $\uparrow$ , difficult to get enough data to prevent NN from over-fitting.
 
 
 
