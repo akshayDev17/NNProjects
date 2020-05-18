@@ -30,7 +30,7 @@
 2. Object detection: self-driving cars have to not only detect other cars but also their position as well.
 3. Neural Style Transfer: apps that *cartoonify* your face, apply some sort of neural transfer.
 
-![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7B1%20of%20the%20few%20problems%20with%20CV%7D%7D): inputs can get very big(suppose 64![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 64![equation](https://latex.codecogs.com/png.latex?%5Ctimes)3 (RGB channel) = 12288 features, but for a high resolution image, like 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 3(RGB channel) = 3M features) now if  a fully-connected layer is used, with the first hidden layer contains 1000 hidden units, then total weights = 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 3M matrix = 3B parameters. computational, memory requirements $\uparrow$ , difficult to get enough data to prevent NN from over-fitting.
+![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7B1%20of%20the%20few%20problems%20with%20CV%7D%7D): inputs can get very big(suppose 64![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 64![equation](https://latex.codecogs.com/png.latex?%5Ctimes)3 (RGB channel) = 12288 features, but for a high resolution image, like 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 3(RGB channel) = 3M features) now if  a fully-connected layer is used, with the first hidden layer contains 1000 hidden units, then total weights = 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 3M matrix = 3B parameters. computational, memory requirements ![equation](https://latex.codecogs.com/png.latex?%5Cuparrow) , difficult to get enough data to prevent NN from over-fitting.
 
 
 
@@ -56,7 +56,7 @@ To handle such large-res images, convolutions, and in turn CNNs are used.
 
 consider this 6![equation](https://latex.codecogs.com/png.latex?%5Ctimes)6![equation](https://latex.codecogs.com/png.latex?%5Ctimes)1 grayscale image(resolution is 6![equation](https://latex.codecogs.com/png.latex?%5Ctimes)6, number of colour channels = 1)  .
 
-consider this 3![equation](https://latex.codecogs.com/png.latex?%5Ctimes)3 filter(also called the $kernel$, by some research papers):
+consider this 3![equation](https://latex.codecogs.com/png.latex?%5Ctimes)3 filter(also called the *kernel*, by some research papers):
 
 | 1    | 0    | -1   |
 | ---- | ---- | ---- |
@@ -301,13 +301,13 @@ Hence, now multiple low-level feature detection possible in input-image with RGB
 
 adding bias to each convoluted output(1-colour channel) from each filter. apply activation function, for instance Relu, after adding bias to output. Then stack the activated-biased outputs with each other. 
 
-<img src="images/1_layer_CNN.png"/>This computation from ![equation](https://latex.codecogs.com/png.latex?6%5Ctimes%206%5Ctimes%203)to  ![equation](https://latex.codecogs.com/png.latex?4%5Ctimes%204%5Ctimes%202) is 1 layer of CNN(this is what 1 layer of a CNN does).![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7BQuestion%3A%20How%20are%20exceedingly%20large%20or%20highly%20negative%20values%20handled%3F%7D%7D)
+<img src="images/1_layer_CNN.png"/>This computation from ![equation](https://latex.codecogs.com/png.latex?6%5Ctimes%206%5Ctimes%203) to   ![equation](https://latex.codecogs.com/png.latex?4%5Ctimes%204%5Ctimes%202) is 1 layer of CNN(this is what 1 layer of a CNN does).![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7BQuestion%3A%20How%20are%20exceedingly%20large%20or%20highly%20negative%20values%20handled%3F%7D%7D)
 
 The g(O1+B) can be related to g(![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bz%7D%5E%7B%5B1%5D%7D)), hence now imagine how backprop could be used to choose filters(differential equations to optimise ,![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bz%7D%5E%7B%5B1%5D%7D) thus optimise O1, hence optimising the filter-values when taken as parameters).
 
 To mathematically inform regarding the computation needed, suppose filter = 3![equation](https://latex.codecogs.com/png.latex?%5Ctimes)3![equation](https://latex.codecogs.com/png.latex?%5Ctimes)3, and we have 10 such filters. 27 parameters for each filter, hence 270 for filters and 10 for bias(if suppose different biases are to be used for each filter), so total of 280 parameters. 
 
-![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7BNote%3A%20%7D%7D)The optimisation doesn't depend on the image-size, rather the filter size and number of filters.
+![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7BNote%3A%20%7D%7D)The optimisation doesn't depend on the image-size, it rather does on the filter size and number of filters.
 
 Let l denote the ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bl%7D%5E%7B%5Ctextrm%7Bth%7D%7D) convolution layer. ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bf%7D%5E%7B%5Bl%5D%7D) = filter size of the filter used for that layer,  : ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bp%7D%5E%7B%5Bl%5D%7D)padding for that layer. ![equation](https://latex.codecogs.com/png.latex?s%5E%7B%5Bl%5D%7D) =  stride, and so on the superscript is used for all the other quantities. 
 
