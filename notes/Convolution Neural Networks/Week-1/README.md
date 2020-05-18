@@ -1,7 +1,8 @@
 # Table of Contents
 
-1. [Lecture 1 - Computer Vision](#res1lec1)
-2. [Lecture 2 - Edge Detection](#res1lec2)
+1. [Lecture 1 - Computer Vision](#res1lec1):
+  1. [Computer Vision Problems](#lec1r1)
+2. [Lecture 2, 3 - Edge Detection](#res1lec2)
 3. [Lecture 4 - Padding](#res1lec4):
    1. [Valid convolutions](#validconv)
    2. [same convolutions](#sameconv)
@@ -14,22 +15,22 @@
    2. [average-pooling](#res1lec9unit2)
 9. [Lecture-10 : CNN example](#res1lec10)
 10. [Lecture-11 : Why Convolutions?](#res1lec11):
-   1. [Parameter-sharing](#lec11n1)
-   2. [Sparsity of connections](#lec11n2)
+  1. [Parameter-sharing](#lec11n1)
+  2. [Sparsity of connections](#lec11n2)
 
 
 
-# Andrew-NG lectures <a name="resource1"></a>
+# Lecture 1- Computer Vision<a name="res1lec1"></a>
 
-## Lecture 1- Computer Vision<a name="res1lec1"></a>
+## Computer Vision Problems<a name="lec1r1"></a>
 
-### Computer Vision Problems
+[please find the lecture video link here](https://www.youtube.com/watch?v=ulpwvUOH_Ag&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=1)
 
 1. Image classification: cat-identification, mnist number identification.
 2. Object detection: self-driving cars have to not only detect other cars but also their position as well.
 3. Neural Style Transfer: apps that *cartoonify* your face, apply some sort of neural transfer.
 
-<span style="color:red;">1 of the few problems with CV </span>: inputs can get very big(suppose 64$\times$ 64![equation](https://latex.codecogs.com/png.latex?%5Cdpi%7B150%7D%20%5Ctimes)3 (RGB channel) = 12288 features, but for a high resolution image, like 1000$\times$ 1000$\times$ 3(RGB channel) = 3M features) now if  a fully-connected layer is used, with the first hidden layer contains 1000 hidden units, then total weights = 1000$\times$ 3M matrix = 3B parameters. computational, memory requirements $\uparrow$ , difficult to get enough data to prevent NN from over-fitting.
+<pre><span style="color:red;">1 of the few problems with CV </span></pre>: inputs can get very big(suppose 64$\times$ 64![equation](https://latex.codecogs.com/png.latex?%5Cdpi%7B150%7D%20%5Ctimes)3 (RGB channel) = 12288 features, but for a high resolution image, like 1000$\times$ 1000$\times$ 3(RGB channel) = 3M features) now if  a fully-connected layer is used, with the first hidden layer contains 1000 hidden units, then total weights = 1000$\times$ 3M matrix = 3B parameters. computational, memory requirements $\uparrow$ , difficult to get enough data to prevent NN from over-fitting.
 
 
 
@@ -37,7 +38,13 @@ To handle such large-res images, convolutions, and in turn CNNs are used.
 
 
 
-## Lecture 2, 3- Edge-Detection<a name="res1lec2"></a>
+
+
+# Lecture 2, 3- Edge-Detection<a name="res1lec2"></a>
+
+[lecture-2 video link](https://www.youtube.com/watch?v=5lvG3FfP0lg&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=2)
+
+[lecture-3 video link](https://www.youtube.com/watch?v=5lvG3FfP0lg&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=2)
 
 |  3   |  0   |  1   |  2   |  7   |  4   |
 | :--: | :--: | :--: | :--: | :--: | :--: |
@@ -211,7 +218,11 @@ The method of learning $w_1$ to $w_9$ using NNs is much more effective than pick
 
 
 
-## Lecture-4 : Padding<a name="res1lec4"></a>
+
+
+# Lecture-4 : Padding<a name="res1lec4"></a>
+
+[please find the video link here](https://www.youtube.com/watch?v=JWlLkgbEDQM&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=4)
 
 image-$6\times 6$ * filter-$3\times 3$ = output-resolved-$4\times 4$ , or image-$n\times n$ * filter-$f\times f$ = output-resolved-$n-f+1\times n-f+1$
 
@@ -225,11 +236,15 @@ To solve these issues, a *border* of pixels is added to the original image . hen
 
 Two common choices to select p-value, or rather decide whether to pad or not: Valid and Same convolutions.
 
-### Valid Convolutions<a name="validconv"></a>
+
+
+## Valid Convolutions<a name="validconv"></a>
 
 * no padding
 
-### Same Convolutions<a name="sameconv"></a>
+
+
+## Same Convolutions<a name="sameconv"></a>
 
 * pad as much so that output-convoluted image-size is same as that of the original-unpadded image-size.
 * suppose n, f. then choose a p such that, $\textrm{n}\rightarrow\textrm{n+2p}\rightarrow\textrm{n+2p-f+1}$, such that n+2p-f+1 = n, or $\textrm{p =} \frac{\textrm{f-1}}{\textrm{2}}$ .
@@ -240,7 +255,11 @@ By convention in CV, f = odd.<span style="color: red;">find why</span>. one reas
 
 
 
-## Lecture-5 : Strided convolutions<a name="res1lec5"></a>
+
+
+# Lecture-5 : Strided convolutions<a name="res1lec5"></a>
+
+[please find the video link here](https://www.youtube.com/watch?v=eJxFDAKDemA&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=5)
 
 stride=s,it basically means moving the filter by *s* number of steps, while convolution  with the input image. Till now we have been using s =1 . Hence when n=7, f=3, but s =2(instead of 1), our output image has resolution of ( {n - f} / s) +1, i.e. 3.
 
@@ -252,7 +271,9 @@ using n, f, s, p ; output-image size = <font size="5">$\lfloor{\frac{n+2p-f}{s}}
 
 
 
-## Lecture-6 : Convolutions over volume<a name="res1lec6"></a>
+# Lecture-6 : Convolutions over volume<a name="res1lec6"></a>
+
+[please find the video link here](https://www.youtube.com/watch?v=q2U9EPXeRKY&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=6)
 
 convolutions on RGB image, hence input image = $6\times 6\times 3$, hence the filter has to also be $3\times 3\times 3$ . Its obvious that number of channels in filter and input image should be the same. However, the output convoluted image has only **1 colour channel**.
 
@@ -270,7 +291,11 @@ Hence, now multiple low-level feature detection possible in input-image with RGB
 
 
 
-## Lecture-7 : 1-layer of Convolution<a name="res1lec7"></a>
+
+
+# Lecture-7 : 1-layer of Convolution<a name="res1lec7"></a>
+
+[please find the video link here](https://www.youtube.com/watch?v=JPoVqmVcpz0&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=7)
 
 adding bias to each convoluted output(1-colour channel) from each filter. apply activation function, for instance Relu, after adding bias to output. Then stack the activated-biased outputs with each other. 
 
@@ -296,7 +321,9 @@ $n^{[l]}$ = <font size="5">$\lfloor{\frac{n^{[l-1]} + 2p^{[l]} - f^{[l]} }{s^{[l
 
 
 
-## Lecture-8 : example of simple ConvNet<a name="res1lec8" ></a>
+# Lecture-8 : example of simple ConvNet<a name="res1lec8" ></a>
+
+[please find the video link here](https://www.youtube.com/watch?v=jA7G9hKjmFk&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=8)
 
 <img src="images/convNet_example.png" />
 
@@ -308,9 +335,13 @@ Types of layers in a CNN:
 
 
 
-## Lecture-9 : Pooling Layer<a name="res1lec9"></a>
 
-### Max-pooling<a name="res1lec9unit1"></a>
+
+# Lecture-9 : Pooling Layer<a name="res1lec9"></a>
+
+[please find the video link here](https://www.youtube.com/watch?v=XTzDMvMXuAk&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=9)
+
+## Max-pooling<a name="res1lec9unit1"></a>
 
 <img src="images/m1.png" />
 
@@ -328,7 +359,7 @@ Since there is no concept of *number of filters*, number of channels of the inpu
 
 
 
-### Average-Pooling<a name="res1lec9unit2"></a>
+## Average-Pooling<a name="res1lec9unit2"></a>
 
 * take the average of numbers, instead of max-value. 
 * Isn't used very often, when compared to max-pooling.
@@ -339,7 +370,9 @@ common choice of hyperparameters : f=2, s=2, usually padding isn't used here. th
 
 
 
-## Lecture-10 : CNN example<a name="res1lec10"></a>
+# Lecture-10 : CNN example<a name="res1lec10"></a>
+
+[please find the video link here](https://www.youtube.com/watch?v=Nkj9O-kmzjc&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=10)
 
 number-recognition from image, RGB channel used, **inspired from** LeNet5(by Hyan mikun) 
 
@@ -353,15 +386,23 @@ Observe that the number of parameters are very large for fully-connected layers,
 
 
 
-## Lecture-11 : Why convolutions?<a name="res1lec11"></a>
+
+
+# Lecture-11 : Why convolutions?<a name="res1lec11"></a>
+
+[please find the video link here](https://www.youtube.com/watch?v=qLq3mDl_bGk&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=11)
 
 consider the previous example. Consider the CONV1 layer. if suppose instead of convolution, a fully-connected layer had been used, keeping the input-output dimensionality same. then #parameters = 32$\times$32$\times$3$\times$28$\times$28$\times$8 = 19,267,584. Hence fully-connected layer isn't computationally feasible.
 
-### Parameter-sharing<a name="lec11n1"></a>
+
+
+## Parameter-sharing<a name="lec11n1"></a>
 
 Once the values of a filter are learned, it can be used with different parts of the same image, i.e. for different sub-matrices of size f$\times$f of the image.
 
-### Sparsity of connections<a name="lec11n2"></a>
+
+
+## Sparsity of connections<a name="lec11n2"></a>
 
 * number of computations only depend upon the filter-size f. 
 * for each layer the output values depend on only a small number of inputs. 
