@@ -14,6 +14,7 @@
    2. [Defining likelihood function](#likelihood_function)
    3. [Usage in ML](#ml_usage)
 3. [Argmax](#argmax)
+4. [Preprocessing for NLP tasks](#preproc_NLP)
 
 
 
@@ -149,6 +150,37 @@ factoring in, 10ms for request processing, we could handle about 520 requests a 
 
 
 
+## O.L. vs Batch learning
+
+<img src="batch_vs_ol.webp" />
+
+* Batch learning creates  batches of specific sizes, out of training samples, and for each batch, the parameters are updated.
+* in O.L., an initially guessed model takes each sample as an input, and all weights associated with the model are updated.
+* **Computationally much faster and more space efficient**
+  * single pass on each sample, whereas in batch learning, multiple passes, hence faster.
+  * since training happens only on newer examples, no need to store previous examples.
+* **Usually easier to implement**
+  * implementing a one-pass algorithm is pretty easy, as the training samples come from a continous stream.
+* ![equation](https://latex.codecogs.com/gif.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7B%5Ctextbf%7BDifficult%20to%20maintain%20in%20production%7D%7D%7D)
+  * require a service that continously provides the *stream of data* to the model.
+  *  If data changes and feature selectors no longer produce useful output
+  * if major network latency between servers of feature selectors
+  * if server(s) goes down
+  * all this would lead the learner to tank , output is garbage.
+* ![equation](https://latex.codecogs.com/gif.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7B%5Ctextbf%7BDifficult%20to%20evaluate%20online%7D%7D%7D)
+  * primary requirement of this method: no distributional assumptions(about any train/test data)
+  * there is actually no *test data for evaluation*
+  * no way to get a representative set that characterizes your data, 
+    * thus best option to evaluate performance: <u>simply look at how well the algorithm has been doing recently.</u>
+* very hard to get the algorithm to behave “correctly” on an automatic basis. 
+  * It can be hard to diagnose whether your algorithm or your infrastructure is misbehaving.
+
+
+
+
+
+
+
 # Maximum Likelihood estimation<a name="mle"></a>
 
 [All thanks to Jason Brownlee](https://machinelearningmastery.com/what-is-maximum-likelihood-estimation-in-machine-learning/)
@@ -165,7 +197,8 @@ factoring in, 10ms for request processing, we could handle about 520 requests a 
    1. it can also be a list of values X = ![equation](https://latex.codecogs.com/gif.latex?%5C%7B%5Ctextrm%7Bx%7D_%7B%5Ctextrm%7Bi%7D%7D%2C%20%5Ctextrm%7Bx%7D_%7B%5Ctextrm%7Bj%7D%7D%2C%20%5Ctextrm%7Bx%7D_%7B%5Ctextrm%7Bk%7D%7D...%5C%7D) .
    2. this is referred to as *drawing out a sample* from the observation space.
 2. want to estimate probability of X=![equation](https://latex.codecogs.com/gif.latex?%5Ctextrm%7Bx%7D_%7B%5Ctextrm%7Bi%7D%7D) or X = ![equation](https://latex.codecogs.com/gif.latex?%5C%7B%5Ctextrm%7Bx%7D_%7B%5Ctextrm%7Bi%7D%7D%2C%20%5Ctextrm%7Bx%7D_%7B%5Ctextrm%7Bj%7D%7D%2C%20%5Ctextrm%7Bx%7D_%7B%5Ctextrm%7Bk%7D%7D...%5C%7D) using a function which takes in argument the value ![equation](https://latex.codecogs.com/gif.latex?%5Ctextrm%7BX%20%3D%20%7D%5Ctextrm%7Bx%7D_%7B%5Ctextrm%7Bi%7D%7D) or ![equation](https://latex.codecogs.com/gif.latex?%5C%7B%5Ctextrm%7Bx%7D_%7B%5Ctextrm%7Bi%7D%7D%2C%20%5Ctextrm%7Bx%7D_%7B%5Ctextrm%7Bj%7D%7D%2C%20%5Ctextrm%7Bx%7D_%7B%5Ctextrm%7Bk%7D%7D...%5C%7D) *and some additional parameters*, and returns this probability value.
-   1. this resulting function ![equation](https://latex.codecogs.com/gif.latex?%5Crightarrow) p.d.f
+   1. this resulting function ![equation](https://latex.codecogs.com/gif.latex?%5Crightarrow) p.d.f.
+   2. usually, all ![equation](https://latex.codecogs.com/gif.latex?%5Ctextrm%7Bx%7D_%7B%5Ctextrm%7Bi%7D%7D) assumed to be IID, i.e. independent and identically distributed.
 3. this problem becomes more difficult when the size of sample drawn out is small
    1. this leads to a lot of noise, thus causing erroneous probability prediction.
 4. 2 common approaches for estimation:
@@ -236,3 +269,27 @@ for instance:
 then argmax(f(x)) will return 5.
 
 this function means *return the arguments of a function that yield its maximum value*.
+
+
+
+
+
+
+
+# NLP Preprocessing<a name="preproc_NLP"></a>
+
+* stemming.
+  * search stemming *with noise removal*:
+    * punctuation removal
+    * special character removal
+    * numbers removal
+    * HTML formatting removal
+    * domain specific keyword removal(e.g. ‘RT’ for retweet)
+    * source code removal
+    * header removal.
+    * **ETC.**
+  * all the above constitutes noise removal.
+* stop-word removal
+* normalisation
+  * For example, the word “gooood” and “gud” can be transformed to “good”, its canonical form. 
+  * this is referred to as *text normalisation*.
