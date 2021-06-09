@@ -22,6 +22,8 @@
 
 # Lecture-2 : Classic CNNs<a name="res1lec13"></a>
 
+[please click here to watch the lecture]()
+
 ## LeNet - 5<a name="lec13n1"></a>
 
 this was trained on grayscale images of handwritten numbers. main task was to recognise handwritten number. the POOL1 uses average pooling, since back when this paper was being written average pooling was popular, <span style="color:red;">Search why it was so.</span>
@@ -74,6 +76,10 @@ the *16*  = 16 layers with updatable parameters. [CONV 64]$\times $2 means 2 CON
 
 # Lecture-3, 4 :  ResNets<a name="res1lec14"></a>
 
+[please click here to watch the lecture-3]()
+
+[please click here to watch the lecture-4]()
+
 resnet - residual networks. exploding/vanishing gradient: in very deep neural nets, the deeper layers have this problem during the gradient-update step.
 
 ## Residual Block<a name="lec2n1"></a>
@@ -116,6 +122,8 @@ the **,/2** at the start indicates that a halving-pooling layer will be applied 
 
 # Lecture-5 : Network in Network and 1$\times$1 convolutions<a name="res1lec15"></a>
 
+[please click here to watch the lecture]()
+
 the 32-neuron FC layer(with 32 different parameters, for 1 filter(kernel) ) is replaced by a 1$\times$1 convolution(f=1, s=1), for a filter the values used across all channels is the same, we only have 1 value to be trained. 
 
 1$\times$1 convolutions are usually used to reduce number of channels in the input-image.
@@ -131,6 +139,12 @@ the 32-neuron FC layer(with 32 different parameters, for 1 filter(kernel) ) is r
 
 # Lecture-6,7 : Inception Network<a name="res1lec16"></a>
 
+[please click here to watch the lecture-6]()
+
+[please click here to watch the lecture-7]()
+
+
+
 ## Motivation<a name="lec16n1"></a>
 
 * <img src="images/diffKernel.png" />
@@ -140,16 +154,16 @@ the 32-neuron FC layer(with 32 different parameters, for 1 filter(kernel) ) is r
 * [research paper](https://github.com/akshayDev17/NNProjects/blob/master/notes/research_papers/networkInNetwork.pdf)
 * computational cost with the inception layer:
   * <img src="images/inception_cost.png" />
-  * number of multiplications  = total-number-of-output-values $\times$multiplication-cost-for-each-value = (28$\times$28$\times$32) $\times  $ (5$\times$5$\times$192) = 120,422,400.
+  * number of multiplications  = total-number-of-output-values $\times$multiplication-cost-for-each-value = (28$\times$28$\times$32) ![equation](https://latex.codecogs.com/png.latex?%5Ctimes) (5![equation](https://latex.codecogs.com/png.latex?%5Ctimes)5![equation](https://latex.codecogs.com/png.latex?%5Ctimes)192) = 120,422,400.
 * using **1$ \times $1**  convolutions:
   * <img src="images/inception_11conv.png" />
-  * as discussed previously, since 1$\times$1 convolutions are used for decreasing n$_C$, it has been used to reduce n$_C^{[0]}$ =192 to n$_C^{[1]}$ = 16, and then the main 5$\times$5 CONV.
-  * this 1$\times$1 convolution here is referred to as the *bottleneck layer* .
+  * as discussed previously, since 1![equation](https://latex.codecogs.com/png.latex?%5Ctimes)1 convolutions are used for decreasing ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bn%7D_C) it has been used to reduce ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bn%7D_C%5E%7B%5B0%5D%7D) =192 to ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bn%7D_C%5E%7B%5B1%5D%7D) = 16, and then the main 5![equation](https://latex.codecogs.com/png.latex?%5Ctimes)5 CONV.
+  * this 1![equation](https://latex.codecogs.com/png.latex?%5Ctimes)1 convolution here is referred to as the *bottleneck layer* .
   * multiplications:
-    * for the bottle-neck layer :  total-number-of-output-values $\times$multiplication-cost-for-each-value = (28$\times$28$\times$16) $\times  $ (1$\times$1$\times$192) = 2,408,448
-    * for the Main layer :  total-number-of-output-values $\times$multiplication-cost-for-each-value = (28$\times$28$\times$32) $\times  $ (5$\times$5$\times$16) = 20,070,400
+    * for the bottle-neck layer :  total-number-of-output-values $\times$multiplication-cost-for-each-value = (28![equation](https://latex.codecogs.com/png.latex?%5Ctimes)28![equation](https://latex.codecogs.com/png.latex?%5Ctimes)16) ![equation](https://latex.codecogs.com/png.latex?%5Ctimes) (1![equation](https://latex.codecogs.com/png.latex?%5Ctimes)1![equation](https://latex.codecogs.com/png.latex?%5Ctimes)192) = 2,408,448
+    * for the Main layer :  total-number-of-output-values $\times$multiplication-cost-for-each-value = (28![equation](https://latex.codecogs.com/png.latex?%5Ctimes)28![equation](https://latex.codecogs.com/png.latex?%5Ctimes)32) ![equation](https://latex.codecogs.com/png.latex?%5Ctimes) (5![equation](https://latex.codecogs.com/png.latex?%5Ctimes)5![equation](https://latex.codecogs.com/png.latex?%5Ctimes)16) = 20,070,400
     * **total = 12,443,648**
-    * hence using 1$\times$1 convolutions, number of multiplications has become $\approx$ 1/10th.
+    * hence using 1![equation](https://latex.codecogs.com/png.latex?%5Ctimes)1 convolutions, number of multiplications has become ![equation](https://latex.codecogs.com/png.latex?%5Capprox) 1/10th.
     * number of additions is very similar to number of multiplications, hence not mentioned here.
 
 
@@ -157,7 +171,7 @@ the 32-neuron FC layer(with 32 different parameters, for 1 filter(kernel) ) is r
 ## Inception Module<a name="lec16n2"></a>
 
 * <img src="images/inception_module.png" />
-* the 1$\times$1 conv layer is added to the max-pool layer so that the number of channels is reduced, even for that path, to ensure dimension reduction, to ease the number of multiplications.
+* the 1![equation](https://latex.codecogs.com/png.latex?%5Ctimes)1 conv layer is added to the max-pool layer so that the number of channels is reduced, even for that path, to ensure dimension reduction, to ease the number of multiplications.
 * channel concat refers to the clubbing up of the output-volumes from different kernels.
 
 
@@ -166,10 +180,10 @@ the 32-neuron FC layer(with 32 different parameters, for 1 filter(kernel) ) is r
 
 * This is stacking up of various inception modules.
 * <img src="images/inceptionNet.png" />
-* [research paper](https://github.com/akshayDev17/NNProjects/blob/master/notes/research_papers/inception.pdf)
+* [InceptionNet paper](https://arxiv.org/pdf/1409.4842.pdf)
 * each block is the inception module, with the exact same colour coding as that of the module.
-* both the last layers of the  uppermost main-path and those of the 2 side-branches have:  FC$\rightarrow$ softmax-layer$\rightarrow$ prediction
-* <span style="color:green;" >fun fact</span>: the word **inception** actually comes from the movie itself, the research paper given above actually cites a meme made from that movie: 
+* both the last layers of the  uppermost main-path and those of the 2 side-branches have:  FC![equation](https://latex.codecogs.com/png.latex?%5Crightarrow)softmax-layer![equation](https://latex.codecogs.com/png.latex?%5Crightarrow)prediction
+* ![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BDarkGreen%7D%20%5Ctextrm%7Bfun%20fact%7D%7D) : the word **inception** actually comes from the movie itself, the research paper given above actually cites a meme made from that movie: 
   <img src="images/meme.jpeg" />
 
 
@@ -180,7 +194,9 @@ the 32-neuron FC layer(with 32 different parameters, for 1 filter(kernel) ) is r
 
 # Lecture-8 : Transfer Learning<a name="res1lec20"></a>
 
-*classification problem* = cat-detector, to recognise pet-cat, tigger/misty: 2 common cat names,<span style="color: red;"> ignore the case of both tigger and misty appearing at the same time</span>
+[please click here to watch the lecture]()
+
+*classification problem* = cat-detector, to recognise pet-cat, tigger/misty: 2 common cat names, ![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7Bignore%20the%20case%20of%20both%20tigger%20and%20misty%20appearing%20at%20the%20same%20time%7D%7D)
 
 since we don't have that many pictures for either of tigger/misty, what can we do?
 
@@ -188,8 +204,8 @@ since we don't have that many pictures for either of tigger/misty, what can we d
 * scrape that NNs softmax layer off, and put your tigger/misty/neither classifying softmax instead.
 * freeze all parameters of this NN, except those for the ending softmax layer.
 * a small trick that could speed up this training is pre-compute the weights of the frozen-layers:
-  * since the frozen-layers' parameters aren't to be tampered with, it basically means that the frozen layers map input-X to some intermediate output $f$(X).
-  * to compute this $f$(X) again and again is futile, while training the desired softmax layer.
+  * since the frozen-layers' parameters aren't to be tampered with, it basically means that the frozen layers map input-X to some intermediate output ![equation](https://latex.codecogs.com/png.latex?f%28X%29) .
+  * to compute this ![equation](https://latex.codecogs.com/png.latex?f%28X%29) again and again is futile, while training the desired softmax layer.
   * save the activations from the frozen-layers to disk.
 * <img src="images/smallDatasetTL.png" />
 
@@ -203,9 +219,12 @@ As and when the dataset size increases, we could drop a bit more hidden layers, 
 
 # Lecture-9 : Data Augmentation<a name="res1lec21"></a>
 
+[please click here to watch the lecture]()
+
 * <img src="images/aug1.png" />
 * Mirroring on the vertical(Y)-axis:
   * good technique if data is preserved.(for instance, cat-identification-NN, flipping an image containing cat will still have a cat.)
+  * also called flipping, denoted by `horizontal_flip=True` in the `ImageDataGenerator`
 * Random-cropping : 
   * different example to train NN-model.
 * Rotation
@@ -213,10 +232,10 @@ As and when the dataset size increases, we could drop a bit more hidden layers, 
 * Colour shifting :
   * <img src="images/colShift.png" />
   * add some x,y,z to RGB values of the image-pixels.(these x,y,z extracted from a uniform distribution at random.)
-  * good if data is preserved.(if suppose the task if coloured-identification of a cat, i.e. identify if white-cat/black-cat/golden-cat, then <font color="red">don't use this</font> .)
-  * PCA-augmentation : suppose if image is mainly purple and a very little green, add-subtract:(a lot of red, a very little green), to keep the overall colour of the tint the same.[AlexNet paper](https://github.com/akshayDev17/NNProjects/blob/master/notes/research_papers/alexnet.pdf)
+  * good if data is preserved.(if suppose the task if coloured-identification of a cat, i.e. identify if white-cat/black-cat/golden-cat, then ![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7Bthen%20don%27t%20use%20this%7D%7D) .)
+  * PCA-augmentation : suppose if image is mainly purple and a very little green, add-subtract:(a lot of red, a very little green), to keep the overall colour of the tint the same.[AlexNet paper](https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf)
 
-<font color="red">Why does this work?</font>, <font color="blue">Benefits of augmentation?</font>
+![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7BWhy%20does%20this%20work%3F%7D%7D), ![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BBlue%7D%20%5Ctextrm%7BBenefits%20of%20augmentation%3F%7D%7D)
 
 for large-training set:
 
@@ -227,22 +246,24 @@ for large-training set:
 
 
 
-# Lecture-10 : State of Computer Vision<a name="res1lec22"></a>
+# Lecture-11 : State of Computer Vision<a name="res1lec22"></a>
+
+[please click here to watch the lecture](https://www.youtube.com/watch?v=aUvY4cbqT6Y&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=22)
 
 <img src="images/cv_stats.png" />
 
-labelled-data $\downarrow$ , extent of hand-engineering $\uparrow$ . 
+labelled-data ![equation](https://latex.codecogs.com/png.latex?%5Cdownarrow) , extent of hand-engineering ![equation](https://latex.codecogs.com/png.latex?%5Cuparrow) . 
 
 Tips for doing well in benchmarks:
 
 * Ensembling:
   * train several NNs and average their outputs (y). 
-  * <font color="red">Why does this work?</font>
+  * ![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7BWhy%20does%20this%20work%3F%7D%7D)
 * Multi-crop at test-time :
-  * multi-cropping on multiple versions of testing images(these multiple versions could be generated from the aforementioned [augmentation methods](#res1lect21)) .
+  * multi-cropping on multiple versions of testing images(these multiple versions could be generated from the aforementioned [augmentation methods](#res1lec21)) .
   * 10-crop : 
     * generate 3 images from a testing image, via the augmentation methods. hence we have 4 images in total, im1 - original testing image, im2, im3. im4 - augmented ones.
     * for im1 and im3 - crop a major portion and feed that into the classifier. hence 2-images
     * for im2 and im4 - crop upper-left-hand portion,  upper-right-hand portion, lower-left-hand portion, lower-right-hand portion . hence 8-images.
     * average out the results(outputs) from all these 10-images.
-    * <font color="red">Why does this work?</font>
+    * ![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7BWhy%20does%20this%20work%3F%7D%7D)

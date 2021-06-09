@@ -77,7 +77,7 @@ after learning such a function, if suppose a new entrant arrives, just adding th
 * ignore the output softmax layer for classification, focus on the last hidden layer composed of 128 neurons.
 * let this 128-number vectorial representation be called f(X$^{[1]}$) for the input image x$^{[1]}$ , we will refer to this as the encoding of the input image.
 * <img src="images/siamese1.png" />
-* the L2-norm of the encoding of 2 input images is chosen as their similarity score.
+* the L2-norm of the difference in encoding of 2 input images is chosen as their similarity score.
 
 [Taigman et. al., 2014. DeepFace closing the gap to human level performance](https://www.cv-foundation.org/openaccess/content_cvpr_2014/html/Taigman_DeepFace_Closing_the_2014_CVPR_paper.html)
 
@@ -179,7 +179,6 @@ Avoid randomly choosing A, P, N since there is a high chance that randomly chose
 
 * generate artwork from a image
 * <img src="images/lec6_1.png" />
-* apps that can <span style="color:blue;">cartoonify</span> faces use this[Insert link for the intro of such an app]().
 * *redraw* image into a particular style of choice.
 * C - content image, S - style image, G - generated image.
 * 
@@ -222,7 +221,7 @@ Say you use hidden layer **l**
 Use a pre-trained ConvNet(for instance a VGG net):
 
 * if the activations(<span style="color: red">Look what are activations in the week-1 notes</span>) of layer l on the C,G images , i.e. a$^{(C)[l]}$ and a$^{(G)[l]}$ respectively, are similar, both images have similar content.
-* J$_{\textrm{content}}$(C, G) = $\frac{1}{2}\lVert$ a$^{(C)[l]} - $ a$^{(G)[l]}$ $\rVert ^{\textrm{2}}$   sum of squared-element-wise differences.
+* J$_{\textrm{content}}$(C, G) = $\sum\limits_{l}\frac{1}{2}\lVert$ a$^{(C)[l]} - $ a$^{(G)[l]}$ $\rVert ^{\textrm{2}}$   sum of squared-element-wise differences.
 
 
 
