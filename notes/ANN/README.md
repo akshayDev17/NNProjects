@@ -5,8 +5,15 @@
    1. [step](#step)
    2. [sigmoid](#sigmoid)
 3. [Steepest Descent](#sd)
-   1. [Cauchy approach of finding learning rate](#cauchy-find-learning-rate)
-   2. [Barzilai and Borwein approach of finding learning rate](#bb-approach)
+   1. [Convergence Proof](#sd-proof)
+      1. [convexity assumption](#convex)
+      2. [Lipschitz continuous gradient assumption](#lcg)
+      3. [3-point identity proof](#3pointidentityrproof)
+      4. [Descent Lemma ](#descent-lemma)
+      5. [Lemma-5](#lemma-5)
+      6. [Final Convergence Criterion](#cc)
+   2. [Cauchy approach of finding learning rate](#cauchy-find-learning-rate)
+   3. [Barzilai and Borwein approach of finding learning rate](#bb-approach)
 4. [Back-Propagation](#backprop)
 5. [References](#references)
 
@@ -65,9 +72,68 @@ y can either be the final output or the next layer. layer l having n neurons has
 - correctness of this algorithm
 
   - [taylor series involved](https://math.stackexchange.com/questions/4151297/different-form-of-taylor-series-in-leibniz-notation)
-  - [gradient descent convergence](https://www.stat.cmu.edu/~ryantibs/convexopt-F13/scribes/lec6.pdf)
-  - [gradient descent rigorous proof](https://math.stackexchange.com/questions/1746953/how-does-one-rigorously-prove-that-gradient-descent-indeed-decreases-the-functio)
-  - [matrix/direction based proof](https://people.seas.harvard.edu/~yaron/AM221-S16/lecture_notes/AM221_lecture10.pdf)
+  - [Main source for the following proof](https://1202kbs.github.io/GD/) 
+
+- ## Convergence Proof<a name="sd-proof"></a>
+
+  - ### convexity assumption<a name="convex"></a>
+
+    - the error/cost/loss function of the neural network is assumed to be convex in nature.
+    - <img src="display_images/convex_function.png" width="400"/>
+    - this essentially means that the line joining any 2 points on the function will always lie above its own curve in between these 2 points. Mathematically, this means that<img src="display_images/convexity_definition.png" /> ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%5Ctau%20%5Cin%20%5B0%2C1%5D)
+    - in our case, ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?f%3A%20%5Cmathcal%7BR%7D%5Ed%20%5Crightarrow%20R%20%5Ctextrm%7B%20and%20%7D%20%5Cmathbf%7Bx%7D%2C%5Cmathbf%7By%7D%20%5Cin%20%5Cmathcal%7BR%7D%5Ed), i.e. x and y are vectors of dimensionality d and f generates a scalar using a vector as an input.
+      ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?f%20%3D%20f%28x%5E%7B%281%29%7D%2C%20x%5E%7B%282%29%7D%20%5Ccdots%20x%5E%7B%28d%29%7D%29%2C%20x%20%3D%20%5Cbegin%7Bbmatrix%7D%20x%5E%7B%281%29%7D%20%5C%5C%20x%5E%7B%282%29%7D%20%5C%5C%20%5Cvdots%20%5C%5C%20x%5E%7B%28d%29%7D%20%5Cend%7Bbmatrix%7D)
+    - this can also be explained in the following form, also known as the **first-order condition** of a convex function <img src="display_images/convex_function_first_order_condition.png" />
+    - <font color="red">intuitive explanation pending</font>
+      - [first order condition explained graphically](http://www.princeton.edu/~aaa/Public/Teaching/ORF523/S16/ORF523_S16_Lec7_gh.pdf)
+      - <font color="red">prove this for 2 dimensional vectors, you have already done it with 1-D vectors ?</font>
+      - this is called the [first-order condition](http://www.ifp.illinois.edu/~angelia/L3_convfunc.pdf) using the [convex function definition](https://www.tutorialspoint.com/convex_optimization/convex_optimization_differentiable_function.htm).
+    - the following is the proof for the fact that if a function obeys this first-order condition, it is also a convex function
+    - <img src="proofs/first_order_derivation.png" />
+    - 
+
+  - ### Lipschitz continuous gradient assumption<a name="lcg"></a>
+
+    - the gradient of the cost/error/loss function is assumed to be Lipschitz continuous.
+      <img src="display_images/lcg.png" /> , where L is a positive constant known as the **Lipschitz constant**.
+    - a Lipschitz continuous function can be explained in the [following graphical manner](https://www.youtube.com/watch?v=aWQbFU_eXvE)
+      - <img src="display_images/lipschitz.jpeg" width="450"/>
+      - the slope of any line joining two points on the function will have an absolute value of its slope at most L.
+      - this means that if a point is chosen at random and a line of slope greater than L or less than -L is drawn, then **if it is Lipschitz continuous**, the line **will not cut the function at any other point**.
+
+    - <font color="red">how to test if a function holds lipschitz condition or not?</font>
+
+  - ### 3-point identity proof<a name="3pointidentityrproof"></a>
+
+    - Bra-ket notation in vectors<img src="display_images/braket.png" />
+    - <img src="display_images/3-point-identity.png" />
+    - <img src="proofs/3-point-identity-proof.png" />
+
+  - ### Descent Lemma <a name="descent-lemma"></a>
+
+    - <img src="display_images/descent-lemma.png" />
+    - **Proof**
+      <img src="proofs/descent-lemma-proof.png" />
+    - <img src="proofs/g-to-f-proof.png" />
+
+  - ### Lemma-5<a name="lemma-5"></a>
+
+    - Couldn't think of a better name, hence lemma-5.
+    - <img src="display_images/lemma-5.png" />
+    - **Proof**:
+      <img src="proofs/lemma-5-proof.png" />
+    - <font color="red">intuitive explanation remaining!!!!</font>
+    - see, you need ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?x-z) and ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?x-z%5E&plus;) since z and ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?z%5E&plus;) will be substituted with ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?z_k) and ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?z_%7Bk&plus;1%7D) (as will be seen in the [next section](#cc)) , and these will cancel out on summing across all iterations, hence while arriving at this identity, think of these 2 magnitude terms being involved in the inequality.
+
+  - ### Final Convergence Criterion<a name="cc"></a>
+
+    - x\* is the optimal point, i.e. the point at which the loss function is the least.
+    -  <img src="proofs/convergence-proof.png" />
+    - 
+
+  - 
+
+- 
 
 - ## Cauchy approach of finding learning rate<a name="cauchy-find-learning-rate"></a>
 
