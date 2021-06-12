@@ -84,9 +84,9 @@ y can either be the final output or the next layer. layer l having n neurons has
     - in our case, ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?f%3A%20%5Cmathcal%7BR%7D%5Ed%20%5Crightarrow%20R%20%5Ctextrm%7B%20and%20%7D%20%5Cmathbf%7Bx%7D%2C%5Cmathbf%7By%7D%20%5Cin%20%5Cmathcal%7BR%7D%5Ed), i.e. x and y are vectors of dimensionality d and f generates a scalar using a vector as an input.
       ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?f%20%3D%20f%28x%5E%7B%281%29%7D%2C%20x%5E%7B%282%29%7D%20%5Ccdots%20x%5E%7B%28d%29%7D%29%2C%20x%20%3D%20%5Cbegin%7Bbmatrix%7D%20x%5E%7B%281%29%7D%20%5C%5C%20x%5E%7B%282%29%7D%20%5C%5C%20%5Cvdots%20%5C%5C%20x%5E%7B%28d%29%7D%20%5Cend%7Bbmatrix%7D)
     - this can also be explained in the following form, also known as the **first-order condition** of a convex function <img src="display_images/convex_function_first_order_condition.png" />
-    - <font color="red">intuitive explanation pending</font>
-      - [first order condition explained graphically](http://www.princeton.edu/~aaa/Public/Teaching/ORF523/S16/ORF523_S16_Lec7_gh.pdf)
-      - <font color="red">prove this for 2 dimensional vectors, you have already done it with 1-D vectors ?</font>
+    - **Intuitive explanation**
+      - [first order condition explained graphically](https://people.seas.harvard.edu/~yaron/AM221-S16/lecture_notes/AM221_lecture8.pdf)
+      - The first order Taylor expansion at any point(R.H.S.) is a global under-estimator of the function(L.H.S.) .
       - this is called the [first-order condition](http://www.ifp.illinois.edu/~angelia/L3_convfunc.pdf) using the [convex function definition](https://www.tutorialspoint.com/convex_optimization/convex_optimization_differentiable_function.htm).
     - the following is the proof for the fact that if a function obeys this first-order condition, it is also a convex function
     - <img src="proofs/first_order_derivation.png" />
