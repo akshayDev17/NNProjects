@@ -115,6 +115,7 @@ y can either be the final output or the next layer. layer l having n neurons has
     - **Proof**
       <img src="proofs/descent-lemma-proof.png" />
     - <img src="proofs/g-to-f-proof.png" />
+    - <img src="proofs/intermediate.png">
 
   - ### Lemma-5<a name="lemma-5"></a>
 
