@@ -28,6 +28,21 @@
 
 
 
+# Neural Nets - Introduction<a name="nnintro"></a>
+
+- <img src="display_images/neuralNet.png" width="600"/>
+  - ![equation](https://latex.codecogs.com/gif.latex?W_%7Bi%2Cj%7D), `i` means the layer supplying the signal, and `j` means the layer receiving the signal.
+- ![equation](https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20O_%7B%5Ctextrm%7Binput%7D%7D%20%26%3D%20W_%7B%5Ctextrm%7Binput%7D%2C%20%5Ctextrm%7Bhidden%7D%7D%20%5Ccdot%20X_%7B%5Ctextrm%7Binput%7D%7D%20%5C%5C%20X_%7B%5Ctextrm%7Bhidden%7D%7D%20%26%3D%20%5Cfrac%7B1%7D%7B1%20&plus;%20e%5E%7B-O_%7B%5Ctextrm%7Binput%7D%7D%7D%7D%20%5C%5C%20O_%7B%5Ctextrm%7Bhidden%7D%7D%20%26%3D%20W_%7B%5Ctextrm%7Bhidden%7D%2C%20%5Ctextrm%7Boutput%7D%7D%20%5Ccdot%20X_%7B%5Ctextrm%7Bhidden%7D%7D%20%5C%5C%20Y_%7B%5Ctextrm%7Bactual%20output%7D%7D%20%26%3D%20%5Cfrac%7B1%7D%7B1%20&plus;%20e%5E%7B-O_%7B%5Ctextrm%7Bhidden%7D%7D%7D%7D%20%5C%5C%20%5Cend%7Balign*%7D)
+  - in the case above, where the dimensionality of input, hidden and output layers is known(all are 3)
+    ![equation](https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20W_%7Bi%2C%20h%7D%20%26%3D%20%5Cbegin%7Bbmatrix%7D%20w_%7B1%2C1%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B2%2C1%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B3%2C1%7D%5E%7Bi%2Ch%7D%20%5C%5C%20%5C%5C%20w_%7B1%2C2%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B2%2C2%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B3%2C2%7D%5E%7Bi%2Ch%7D%20%5C%5C%20%5C%5C%20w_%7B1%2C3%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B2%2C3%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B3%2C3%7D%5E%7Bi%2Ch%7D%20%5Cend%7Bbmatrix%7D%20%5C%5C%20W_%7Bh%2C%20o%7D%20%26%3D%20%5Cbegin%7Bbmatrix%7D%20w_%7B1%2C1%7D%5E%7Bh%2Co%7D%20%26%20w_%7B2%2C1%7D%5E%7Bh%2Co%7D%20%26%20w_%7B3%2C1%7D%5E%7Bh%2Co%7D%20%5C%5C%20%5C%5C%20w_%7B1%2C2%7D%5E%7Bh%2Co%7D%20%26%20w_%7B2%2C2%7D%5E%7Bh%2Co%7D%20%26%20w_%7B3%2C2%7D%5E%7Bh%2Co%7D%20%5C%5C%20%5C%5C%20w_%7B1%2C3%7D%5E%7Bh%2Co%7D%20%26%20w_%7B2%2C3%7D%5E%7Bh%2Co%7D%20%26%20w_%7B3%2C3%7D%5E%7Bh%2Co%7D%20%5Cend%7Bbmatrix%7D%20%5C%5C%20%5Cend%7Balign*%7D)
+- 
+
+
+
+
+
+
+
 # Activation functions<a name="af"></a>
 
 
@@ -67,12 +82,35 @@ y can either be the final output or the next layer. layer l having n neurons has
 
 
 
+# Back-Propagation<a name="backprop"></a>
+
+- <img src="display_images/backprop_1.png" />
+- <img src="display_images/error_backprop.png" />
+  - error is distributed amongst the nodes of the hidden layer, i.e. the nodes that provide the input signal to the output layer
+  - ![equation](https://latex.codecogs.com/gif.latex?e_%7B%5Ctextrm%7Boutput%7D%2C%201%7D%20%3D%20Y_%7B%5Ctextrm%7Bactual%20output%7D%2C1%7D%20-%20Y_%7B%5Ctextrm%7Btarget%7D%2C1%7D)
+- <img src="display_images/error_hidden.png" />
+- The normalizing is removed for convenience, and the following image(borrowed from [this blogpost](http://makeyourownneuralnetwork.blogspot.com/2016/07/error-backpropagation-revisted.html)), wherein the blue and green are almost indistinguishable , where the former denotes the non-normalized error and the latter the normalized one.
+  <img src="display_images/error_with_without_normalization.png" />
+  - <font color="red">still search WHY this works?</font>
+- ![equation](https://latex.codecogs.com/gif.latex?Err_%7B%5Ctextrm%7Bhidden%7D%7D%20%3D%20w%5ET_%7B%5Ctextrm%7Bhidden%2C%20output%7D%7D%5Ccdot%20err_%7B%5Ctextrm%7Boutput%7D%7D)
+- The way in which these weights are updated is using gradient descent.
+
+
+
+
+
 # Steepest Descent<a name="sd"></a>
+
+- this is the **theoretical way** of using gradient descent.
 
 - correctness of this algorithm
 
   - [taylor series involved](https://math.stackexchange.com/questions/4151297/different-form-of-taylor-series-in-leibniz-notation)
   - [Main source for the following proof](https://1202kbs.github.io/GD/) 
+
+- ![equation](https://latex.codecogs.com/gif.latex?z_%7B%5Ctextrm%7Bnew%7D%7D%20%3D%20z_%7B%5Ctextrm%7Bold%7D%7D%20-%20%5Calpha.%5Cfrac%7B%5Cpartial%20E%7D%7B%5Cpartial%20W%7D)
+
+  - we increase z in the opposite direction to the gradient, i.e. a positive gradient means we reduce z, and a negative gradient means we increase z.
 
 - ## Convergence Proof<a name="sd-proof"></a>
 
@@ -116,6 +154,7 @@ y can either be the final output or the next layer. layer l having n neurons has
       <img src="proofs/descent-lemma-proof.png" />
     - <img src="proofs/g-to-f-proof.png" />
     - <img src="proofs/intermediate.png">
+    - Hence, proving descent lemma requires **gradient of** the error/loss/**cost function** to be **Lipschitz continuous**.
 
   - ### Lemma-5<a name="lemma-5"></a>
 
@@ -128,11 +167,16 @@ y can either be the final output or the next layer. layer l having n neurons has
 
   - ### Final Convergence Criterion<a name="cc"></a>
 
-    - x\* is the optimal point, i.e. the point at which the loss function is the least.
+    - z\* is the optimal point, i.e. the point at which the loss function is the least.
     -  <img src="proofs/convergence-proof.png" />
     - 
 
   - 
+
+- therefore, a cost/error/loss function **requires** 
+
+  - **itself to be convex** and
+  - **its gradient to be Lipschitz continuous**.
 
 - 
 
@@ -154,14 +198,47 @@ y can either be the final output or the next layer. layer l having n neurons has
 
 
 
-# Back-Propagation<a name="backprop"></a>
-
-- <img src="display_images/backprop_1.png" />
 - 
 
 
 
 
+
+# Gradient Descent Practical Approach<a name="gd_practical"></a>
+
+- <img src="display_images/practical_gradient.png" />
+- A similar error slope for the weights between the input and hidden layers.
+- <img src="display_images/gradient_update_generalized.png" />
+  - here the forward prop happens from layer `i` to layer `j` ,and the backprop from` j` to `i`.
+- <img src="display_images/update_equation.png" />
+- ![equation](https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20%5Cbegin%7Bbmatrix%7D%20%5CDelta%20w_%7B1%2C1%7D%20%26%20%5CDelta%20w_%7B2%2C1%7D%20%26%20%5Ccdots%20%26%20w_%7Bk%2C%201%7D%20%5C%5C%20%5CDelta%20w_%7B1%2C2%7D%20%26%20%5Ccdots%20%26%20%5Ccdots%20%5C%5C%20%26%20%5Cvdots%20%26%20%5Cvdots%20%26%20%5C%5C%20%5CDelta%20w_%7B1%2Cj%7D%20%26%20%5CDelta%20w_%7B2%2Cj%7D%20%26%20%5Ccdots%20%26%20w_%7Bk%2C%20j%7D%20%5Cend%7Bbmatrix%7D%20%26%3D%20%5Calpha%20%5Ccdot%20%5Cbegin%7Bbmatrix%7D%20E_1*S_1%281-S_1%29%20%5C%5C%20E_1*S_1%281-S_1%29%20%5C%5C%20%5Cvdots%20%5C%5C%20E_k*S_k%281-S_k%29%20%5Cend%7Bbmatrix%7D%20%5Ccdot%20%5Cbegin%7Bbmatrix%7D%20O_1%20%26%20O_2%20%26%20%5Ccdots%20%26%20O_j%5Cend%7Bbmatrix%7D%20%5C%5C%20%5Cend%7Balign*%7D)
+  - this is the weight matrix update equation.
+  - observe that the partial differential of error(E) w.r.t. the weights has a negative sign, and the weight update equation also has a negative sign, hence these 2 cancel out, and thus we end up with a delta-change on the LHS.
+  - errors are produced from the next(succeeding) layer, whereas the output vector is produced from the input(preceding) layer.
+  - <img src="display_images/shorthand_delta_weights.png" />
+- 
+
+
+
+
+
+
+
+# Problem of saturation due to large weights/inputs/outputs<a name="saturation"></a>
+
+- If the inputs are large, the activation function gets very flat.
+- A very flat activation function is problematic because we use the gradient to learn new weights.
+  <img src="display_images/saturation_gradient_sigmoid.png" />
+-  This is called saturating a neural network. Hence, the inputs should be kept small.
+- even tan(h) suffers from saturation of weights, i.e. gradient tending to 0.<img src="display_images/tan-h-saturation.jpeg" width="700" />
+- A good recommendation is to re-scale inputs into the range 0.0 to 1.0.
+- Even Outputs having large values cause saturation problems.
+
+
+
+# Initializing Weights<a name="weights-init"></a>
+
+- <font color="red">LEFT !!!!</font>
 
 
 
