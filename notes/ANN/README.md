@@ -1,10 +1,12 @@
 # Table of Contents
 
-1. [Biological inspiration of activation Functions](#bio-insp-af)
-2. [Activation Functions](#af)
+1. [Neural Nets - Introduction](#nnintro)
+2. [Biological inspiration of activation Functions](#bio-insp-af)
+3. [Activation Functions](#af)
    1. [step](#step)
    2. [sigmoid](#sigmoid)
-3. [Steepest Descent](#sd)
+4. [Back-Propagation](#backprop)
+5. [Steepest Descent](#sd)
    1. [Convergence Proof](#sd-proof)
       1. [convexity assumption](#convex)
       2. [Lipschitz continuous gradient assumption](#lcg)
@@ -14,17 +16,12 @@
       6. [Final Convergence Criterion](#cc)
    2. [Cauchy approach of finding learning rate](#cauchy-find-learning-rate)
    3. [Barzilai and Borwein approach of finding learning rate](#bb-approach)
-4. [Back-Propagation](#backprop)
-5. [References](#references)
+6. [Gradient Descent Practical Approach](#gd_practical)
+7. [Problem of saturation due to large weights/inputs/outputs](#saturation)
+8. [Initializing Weights](#weights-init)
+9. [References](#references)
 
 
-
-
-
-# Biological inspiration of activation Functions<a name="bio-insp-af"></a>
-
-- in biological neurons, electrical signals are conducted only when  the neuronal membrane potential rises above  a certain threshold potential value.
-- A function that takes the input signal and generates an output signal, but takes into account some kind of threshold is called an activation function. 
 
 
 
@@ -35,7 +32,17 @@
 - ![equation](https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20O_%7B%5Ctextrm%7Binput%7D%7D%20%26%3D%20W_%7B%5Ctextrm%7Binput%7D%2C%20%5Ctextrm%7Bhidden%7D%7D%20%5Ccdot%20X_%7B%5Ctextrm%7Binput%7D%7D%20%5C%5C%20X_%7B%5Ctextrm%7Bhidden%7D%7D%20%26%3D%20%5Cfrac%7B1%7D%7B1%20&plus;%20e%5E%7B-O_%7B%5Ctextrm%7Binput%7D%7D%7D%7D%20%5C%5C%20O_%7B%5Ctextrm%7Bhidden%7D%7D%20%26%3D%20W_%7B%5Ctextrm%7Bhidden%7D%2C%20%5Ctextrm%7Boutput%7D%7D%20%5Ccdot%20X_%7B%5Ctextrm%7Bhidden%7D%7D%20%5C%5C%20Y_%7B%5Ctextrm%7Bactual%20output%7D%7D%20%26%3D%20%5Cfrac%7B1%7D%7B1%20&plus;%20e%5E%7B-O_%7B%5Ctextrm%7Bhidden%7D%7D%7D%7D%20%5C%5C%20%5Cend%7Balign*%7D)
   - in the case above, where the dimensionality of input, hidden and output layers is known(all are 3)
     ![equation](https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20W_%7Bi%2C%20h%7D%20%26%3D%20%5Cbegin%7Bbmatrix%7D%20w_%7B1%2C1%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B2%2C1%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B3%2C1%7D%5E%7Bi%2Ch%7D%20%5C%5C%20%5C%5C%20w_%7B1%2C2%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B2%2C2%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B3%2C2%7D%5E%7Bi%2Ch%7D%20%5C%5C%20%5C%5C%20w_%7B1%2C3%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B2%2C3%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B3%2C3%7D%5E%7Bi%2Ch%7D%20%5Cend%7Bbmatrix%7D%20%5C%5C%20W_%7Bh%2C%20o%7D%20%26%3D%20%5Cbegin%7Bbmatrix%7D%20w_%7B1%2C1%7D%5E%7Bh%2Co%7D%20%26%20w_%7B2%2C1%7D%5E%7Bh%2Co%7D%20%26%20w_%7B3%2C1%7D%5E%7Bh%2Co%7D%20%5C%5C%20%5C%5C%20w_%7B1%2C2%7D%5E%7Bh%2Co%7D%20%26%20w_%7B2%2C2%7D%5E%7Bh%2Co%7D%20%26%20w_%7B3%2C2%7D%5E%7Bh%2Co%7D%20%5C%5C%20%5C%5C%20w_%7B1%2C3%7D%5E%7Bh%2Co%7D%20%26%20w_%7B2%2C3%7D%5E%7Bh%2Co%7D%20%26%20w_%7B3%2C3%7D%5E%7Bh%2Co%7D%20%5Cend%7Bbmatrix%7D%20%5C%5C%20%5Cend%7Balign*%7D)
+  - the 1/... term is the **activation function**.
 - 
+
+
+
+
+
+# Biological inspiration of activation Functions<a name="bio-insp-af"></a>
+
+- in biological neurons, electrical signals are conducted only when  the neuronal membrane potential rises above  a certain threshold potential value.
+- A function that takes the input signal and generates an output signal, but takes into account some kind of threshold is called an activation function. 
 
 
 
@@ -206,15 +213,16 @@ y can either be the final output or the next layer. layer l having n neurons has
 
 # Gradient Descent Practical Approach<a name="gd_practical"></a>
 
-- <img src="display_images/practical_gradient.png" />
+- <img src="display_images/practical_gradient.png" /><a name="gradient_expression"></a>
 - A similar error slope for the weights between the input and hidden layers.
 - <img src="display_images/gradient_update_generalized.png" />
   - here the forward prop happens from layer `i` to layer `j` ,and the backprop from` j` to `i`.
+  - ![equation](https://latex.codecogs.com/gif.latex?t_k%20-%20o_k%20%3D%20e_k%20%2C%20t_j%20-%20o_j%20%3D%20e_j)
 - <img src="display_images/update_equation.png" />
 - ![equation](https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20%5Cbegin%7Bbmatrix%7D%20%5CDelta%20w_%7B1%2C1%7D%20%26%20%5CDelta%20w_%7B2%2C1%7D%20%26%20%5Ccdots%20%26%20w_%7Bk%2C%201%7D%20%5C%5C%20%5CDelta%20w_%7B1%2C2%7D%20%26%20%5Ccdots%20%26%20%5Ccdots%20%5C%5C%20%26%20%5Cvdots%20%26%20%5Cvdots%20%26%20%5C%5C%20%5CDelta%20w_%7B1%2Cj%7D%20%26%20%5CDelta%20w_%7B2%2Cj%7D%20%26%20%5Ccdots%20%26%20w_%7Bk%2C%20j%7D%20%5Cend%7Bbmatrix%7D%20%26%3D%20%5Calpha%20%5Ccdot%20%5Cbegin%7Bbmatrix%7D%20E_1*S_1%281-S_1%29%20%5C%5C%20E_1*S_1%281-S_1%29%20%5C%5C%20%5Cvdots%20%5C%5C%20E_k*S_k%281-S_k%29%20%5Cend%7Bbmatrix%7D%20%5Ccdot%20%5Cbegin%7Bbmatrix%7D%20O_1%20%26%20O_2%20%26%20%5Ccdots%20%26%20O_j%5Cend%7Bbmatrix%7D%20%5C%5C%20%5Cend%7Balign*%7D)
   - this is the weight matrix update equation.
   - observe that the partial differential of error(E) w.r.t. the weights has a negative sign, and the weight update equation also has a negative sign, hence these 2 cancel out, and thus we end up with a delta-change on the LHS.
-  - errors are produced from the next(succeeding) layer, whereas the output vector is produced from the input(preceding) layer.
+  - errors are produced from the next(succeeding) layer, whereas the output vector(![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?O_j)) is produced from the input(preceding) layer.
   - <img src="display_images/shorthand_delta_weights.png" />
 - 
 
@@ -227,18 +235,35 @@ y can either be the final output or the next layer. layer l having n neurons has
 # Problem of saturation due to large weights/inputs/outputs<a name="saturation"></a>
 
 - If the inputs are large, the activation function gets very flat.
+  - large inputs will cause the ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?W%5Ccdot%20X) expression to become large, thus the sigmoid will reach 1, and the expression ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%5Ctextrm%7Bsigmoid%7D%28%5Csum%20W%5Ccdot%20X%29%5Ccdot%20%5Cleft%281%20-%20%5Ctextrm%7Bsigmoid%7D%28%5Csum%20W%5Ccdot%20X%29%20%5Cright%20%29) will tend to 0.
+  - thus, the [expression of the gradient](#gradient_expression) will also tend to 0.
 - A very flat activation function is problematic because we use the gradient to learn new weights.
   <img src="display_images/saturation_gradient_sigmoid.png" />
 -  This is called saturating a neural network. Hence, the inputs should be kept small.
-- even tan(h) suffers from saturation of weights, i.e. gradient tending to 0.<img src="display_images/tan-h-saturation.jpeg" width="700" />
+- even tan(h) suffers from saturation of weights, i.e. gradient tending to 0.
+  ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20%5Ctextrm%7Btanh%28x%29%7D%20%26%3D%20%5Cfrac%7Be%5E%7B2x%7D-1%7D%7Be%5E%7B2x%7D&plus;1%7D%20%5C%5C%20%5Cfrac%7Bd%28%5Ctextrm%7Btanh%28x%29%7D%29%7D%7Bdx%7D%20%26%3D%20%5Cfrac%7B%28e%5E%7B2x%7D&plus;1%29%282e%5E%7B2x%7D%29%20-%20%28e%5E%7B2x%7D-1%29%282e%5E%7B2x%7D%29%20%7D%7B%28e%5E%7B2x%7D&plus;1%29%5E2%7D%20%3D%20%5Cfrac%7B4e%5E%7B2x%7D%7D%7B%28e%5E%7B2x%7D&plus;1%29%5E2%7D%20%5C%5C%20%26%3D%20%5Cfrac%7B2%7D%7Be%5E%7B2x%7D&plus;1%7D%5Ccdot%20%5Cfrac%7B2e%5E%7B2x%7D%7D%7Be%5E%7B2x%7D&plus;1%7D%20%5C%5C%20%5Ctextrm%7B1%20&plus;%20tanh%28x%29%7D%20%26%3D%201%20&plus;%20%5Cfrac%7Be%5E%7B2x%7D-1%7D%7Be%5E%7B2x%7D&plus;1%7D%20%3D%20%5Cfrac%7B2e%5E%7B2x%7D%7D%7Be%5E%7B2x%7D&plus;1%7D%20%5C%5C%20%5Ctextrm%7B1%20-%20tanh%28x%29%7D%20%26%3D%201%20-%20%5Cfrac%7Be%5E%7B2x%7D-1%7D%7Be%5E%7B2x%7D&plus;1%7D%20%3D%20%5Cfrac%7B2%7D%7Be%5E%7B2x%7D&plus;1%7D%20%5C%5C%20%5Ctherefore%5C%2C%2C%5C%2C%20%5Cfrac%7Bd%28%5Ctextrm%7Btanh%28x%29%7D%29%7D%7Bdx%7D%20%26%3D%20%28%5Ctextrm%7B1&plus;tanh%28x%29%7D%29%28%5Ctextrm%7B1%20-%20tanh%28x%29%7D%29%20%5Cend%7Balign*%7D)
+  - too large inputs will cause tanh(x) tend to 1, thus leading the differential to 0.
+  - too negative inputs will cause it to tend to -1, thus leading the differential to 0.
 - A good recommendation is to re-scale inputs into the range 0.0 to 1.0.
 - Even Outputs having large values cause saturation problems.
+- ReLU function on the other hand, **partially saturates**, hence makes a better candidate for an activation function.
+  - ![ReLU function - AILEPHANT](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Failephant.com%2Fwp-content%2Fuploads%2F2018%2F08%2FReLU-function-graph-300x234.png&f=1&nofb=1)
+  - at-least for large positive values of z, the gradient(=1) does not saturate.
+  - ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%7B%5Ccolor%7Bred%7D%20%5Ctextrm%7Balthough%2C%20for%20large%20negative%20values%20of%20z%2C%20the%20gradient%20is%200.%7D%7D)
+- 
 
 
 
 # Initializing Weights<a name="weights-init"></a>
 
-- <font color="red">LEFT !!!!</font>
+- a rough thumb rule is to initialize all weights depending on the total number of links in between the current and the next layer.
+- all the elements of the weight matrix could be sampled from a normal distribution with mean=0 and standard deviation = **inverse** of **square-root** of the number of links.
+  - for instance, in our above example, number of links from input to hidden layer are 3 x 3 = 9.
+  - hence the weight matrix could be randomly sampled from ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?N%5Cleft%280%2C%20%5Cfrac%7B1%7D%7B%5Csqrt%7B9%7D%7D%5Cright%29)
+- the **intuition** behind this is that as the number of links increases, so does the sum ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%5Csum%20W%5Ccdot%20X) .
+  - after normalizing the feature vector, i.e. all values of X in the range \[-1,1\], large values of W are the only one that can cause the sum to explode and the gradients to thus saturate.
+  - hence, scaling the values of W according to the number of links can easily control this saturation.
+- <font color="red">complete history LEFT !!!!</font>
 
 
 
