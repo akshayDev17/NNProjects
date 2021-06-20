@@ -145,8 +145,10 @@ y can either be the final output or the next layer. layer l having n neurons has
       - <img src="display_images/lipschitz.jpeg" width="450"/>
       - the slope of any line joining two points on the function will have an absolute value of its slope at most L.
       - this means that if a point is chosen at random and a line of slope greater than L or less than -L is drawn, then **if it is Lipschitz continuous**, the line **will not cut the function at any other point**.
-
-    - <font color="red">how to test if a function holds lipschitz condition or not?</font>
+    - a bound gradient hints at the fact that the function will never abruptly shoot up or sink down.
+    - for a logistic loss function:
+      ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%5Cmathcal%7BL%7D%28%5Cbeta%3B%20X_i%29%20%3D%20ln%281%20&plus;%20e%5E%7BX_i%5Ccdot%20%5Cbeta%7D%29%5C%2C%2C%5C%2C%20%5Ctextrm%7Bwhere%20%7D%20X_i%5Ccdot%20%5Cbeta%20%3D%20b_0%20&plus;%20%5Csum%5Climits_%7Bj%3D1%7D%5Ep%20x_i%5E%7B%28j%29%7Db_j%20%5Cnewline%20%5Ctextrm%7Bj%27th%20component%20of%20gradient%20vector%20%7D%20%5Cnabla%5Cmathcal%7BL%7D%28%5Cbeta%3B%20X_i%29%20%5CRightarrow%20%5Cnabla_j%20%5Cmathcal%7BL%7D%28%5Cbeta%3B%20X_i%29%20%3D%20%5Cfrac%7B%5Cpartial%20ln%5Cleft%281&plus;e%5E%7BX_i%5Ccdot%20%5Cbeta%7D%20%5Cright%20%29%7D%7B%5Cpartial%20b_j%7D%20%3D%20%5Cfrac%7B1%7D%7B1&plus;e%5E%7BX_i%5Ccdot%20%5Cbeta%7D%7D.e%5E%7BX_i%5Ccdot%20%5Cbeta%7D.x_i%5E%7B%28j%29%7D%20%3D%20%5Cfrac%7Bx_i%5E%7B%28j%29%7D%7D%7B1&plus;e%5E%7B-X_i%5Ccdot%20%5Cbeta%7D%7D%20%3D%20%5Cfrac%7Bx_i%5E%7B%28j%29%7D%7D%7B1&plus;e%5E%7B-b_0%20-%20%5Csum%5Climits_%7Bk%3D1%2C%20k%5Cne%20j%7D%5Ep%20x_i%5E%7B%28k%29%7Db_k%7D.e%5E%7B-x_i%5E%7B%28j%29%7Db_j%7D%7D%20%5Cnewline%20%5Ctextrm%7B%20this%20is%20of%20the%20form%20%7D%20y%20%3D%20%5Cfrac%7BK_1%7D%7B1&plus;K_2.e%5E%7B-K_1.x%7D%7D)
+      - this closely resembles a sigmoid function, and we already know that sigmoid is bound in nature.
 
   - ### 3-point identity proof<a name="3pointidentityrproof"></a>
 
@@ -181,7 +183,7 @@ y can either be the final output or the next layer. layer l having n neurons has
       ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%7B%5Ccolor%7Bblue%7D%20f%28z_n%29%20-%20f%28z%5E*%29%20%5Cle%20%5Cfrac%7BL%7C%7Cz%5E*%20-%20z_0%7C%7C%5E2%7D%7B2n%7D%7D)
     - 
 
-  - 
+  - ***[interesting read - why is the cross-entropy cost function for a neural network convex](https://stats.stackexchange.com/questions/144378/is-cross-entropy-cost-function-for-neural-network-convex)***
 
 - therefore, a cost/error/loss function **requires** 
 
@@ -224,7 +226,7 @@ y can either be the final output or the next layer. layer l having n neurons has
 - <img src="display_images/update_equation.png" />
 - ![equation](https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20%5Cbegin%7Bbmatrix%7D%20%5CDelta%20w_%7B1%2C1%7D%20%26%20%5CDelta%20w_%7B2%2C1%7D%20%26%20%5Ccdots%20%26%20w_%7Bk%2C%201%7D%20%5C%5C%20%5CDelta%20w_%7B1%2C2%7D%20%26%20%5Ccdots%20%26%20%5Ccdots%20%5C%5C%20%26%20%5Cvdots%20%26%20%5Cvdots%20%26%20%5C%5C%20%5CDelta%20w_%7B1%2Cj%7D%20%26%20%5CDelta%20w_%7B2%2Cj%7D%20%26%20%5Ccdots%20%26%20w_%7Bk%2C%20j%7D%20%5Cend%7Bbmatrix%7D%20%26%3D%20%5Calpha%20%5Ccdot%20%5Cbegin%7Bbmatrix%7D%20E_1*S_1%281-S_1%29%20%5C%5C%20E_1*S_1%281-S_1%29%20%5C%5C%20%5Cvdots%20%5C%5C%20E_k*S_k%281-S_k%29%20%5Cend%7Bbmatrix%7D%20%5Ccdot%20%5Cbegin%7Bbmatrix%7D%20O_1%20%26%20O_2%20%26%20%5Ccdots%20%26%20O_j%5Cend%7Bbmatrix%7D%20%5C%5C%20%5Cend%7Balign*%7D)
   - this is the weight matrix update equation.
-  - observe that the partial differential of error(E) w.r.t. the weights has a negative sign, and the weight update equation also has a negative sign, hence these 2 cancel out, and thus we end up with a delta-change on the LHS.
+  - observe that the partial differential of error(E) w.r.t. the weights has a negative sign, and the weight update equation also has a negative sign, hence these 2 cancel out, and thus we end up with a delta-change on the L.H.S.
   - errors are produced from the next(succeeding) layer, whereas the output vector(![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?O_j)) is produced from the input(preceding) layer.
   - <img src="display_images/shorthand_delta_weights.png" />
 - 
