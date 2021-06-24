@@ -15,6 +15,7 @@
    6. [Properties of Eigendecomposition](#eig-prop)
    7. [Singular Value Decomposition](#svd)
    8. [The Moore-Penrose Pseudoinverse](#pseudoinverse)
+   9. [Trace Operator](#trace)
 
 
 
@@ -208,8 +209,11 @@
 ## Properties of Eigendecomposition<a name="eig-prop"></a>
 
 - a vector that is a linear combination of 2 vectors having the same eigenvalues, will also have the exact eigenvalue.![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%5Cpmb%7Bv_1%7D%20%5Ctextrm%7B%20and%20%7D%20%5Cpmb%7Bv_2%7D%20%5Ctextrm%7B%20have%20%7D%20%5Clambda%20%5Ctextrm%7B%20as%20their%20eigenvalues%7D%20%5CRightarrow%20%5Cpmb%7BAv_1%7D%20%3D%20%5Clambda%20%5Cpmb%7Bv_1%7D%20%5C%2C%2C%5C%2C%20%5Cpmb%7BAv_2%7D%20%3D%20%5Clambda%20%5Cpmb%7Bv_2%7D%20%5Cnewline%20%5Cpmb%7Bu%7D%20%3D%20c_1%5Cpmb%7Bv_1%7D%20&plus;%20c_2%5Cpmb%7Bv_2%7D%20%5CRightarrow%20%5Cpmb%7BAu%7D%20%3D%20c_1%5Cpmb%7BAv_1%7D%20&plus;%20c_2%5Cpmb%7BAv_2%7D%20%3D%20c_1%5Clambda%20%5Cpmb%7Bv_1%7D%20&plus;%20c_2%20%5Clambda%20%5Cpmb%7Bv_2%7D%20%3D%20%5Clambda%5Cleft%28c_1%5Cpmb%7Bv_1%7D%20&plus;%20c_2%5Cpmb%7Bv_2%7D%20%5Cright%20%29%20%3D%20%5Clambda%20%5Cpmb%7Bu%7D%20%5Cnewline%20%5Cpmb%7BAu%7D%20%3D%20%5Clambda%20%5Cpmb%7Bu%7D)
-- 
-- an example of [same eigenvalue, different eigenvectors](https://math.stackexchange.com/questions/121035/same-eigenvalues-different-eigenvectors)
+- two different eigenvectors can have the same eigenvalue
+  - an example of [same eigenvalue, different eigenvectors](https://math.stackexchange.com/questions/259017/two-distinct-eigenvectors-corresponding-to-the-same-eigenvalue-are-always-linear)
+  - ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%5Cpmb%7BA%7D%20%3D%20%5Cbegin%7Bpmatrix%7D0%261%261%5C%5C1%260%261%5C%5C1%261%260%5Cend%7Bpmatrix%7D%20%5Ctextrm%7B%20characteristic%20equation%3A%20%7D%20%5Cbegin%7Bvmatrix%7D%20-%5Clambda%20%26%201%20%26%201%5C%5C%201%20%26%20-%5Clambda%20%26%201%5C%5C%201%20%26%201%20%26%20-%5Clambda%20%5Cend%7Bvmatrix%7D%3D0%5Cnewline%20-%5Clambda%5E3%20&plus;%20%5Clambda%20-%28-%5Clambda%20-%201%29%20&plus;%201%281&plus;%5Clambda%29%20%3D%20-%5Clambda%5E3%20&plus;%203%5Clambda%20&plus;2%20%3D%200%20%5CRightarrow%20%5Clambda%3D-1%20%5Ctextrm%7B%20is%20a%20solution%7D%20%5Cnewline%20%5Ctextrm%7B%20remaining%20equation%20is%3A%20%7D%20-%5Clambda%5E2&plus;%5Clambda&plus;2%20%3D%200%20%5CRightarrow%20%5Clambda%5E2-%5Clambda%20-2%20%3D%200%20%5CRightarrow%20%28%5Clambda-2%29%28%5Clambda&plus;1%29%20%3D%200%20%5Cnewline%20%5Cpmb%7B%5Clambda%7D%20%3D%20%5Cpmb%7B-1%2C-1%2C2%7D%20%5CRightarrow%20%5Cbegin%7Bbmatrix%7D%201%20%26%201%20%26%201%5C%5C%201%20%26%201%20%26%201%5C%5C%201%20%26%201%20%26%201%20%5Cend%7Bbmatrix%7D%5Ccdot%20%5Cbegin%7Bbmatrix%7D%20x_1%20%5C%5C%20x_2%20%5C%5C%20x_3%20%5Cend%7Bbmatrix%7D%20%5CRightarrow%20x_1%20%3D%20-%28x_2%20&plus;%20x_3%29%20%5Cnewline%20%5Ctextrm%7B%20for%20%7D%20%5Clambda%3D2%20%5C%2C%2C%5C%2C%20%5Cbegin%7Bbmatrix%7D%20-2%20%26%201%20%26%201%5C%5C%201%20%26%20-2%20%26%201%5C%5C%201%20%26%201%20%26%20-2%20%5Cend%7Bbmatrix%7D%20%5C%2C%2C%5C%2C%20R_1%20%5Crightarrow%20R_1%20-%20R_2%20%5CRightarrow%20%5Cbegin%7Bbmatrix%7D%20-3%20%26%203%20%26%200%20%5C%5C%201%20%26%20-2%20%26%201%5C%5C%201%20%26%201%20%26%20-2%20%5Cend%7Bbmatrix%7D%20%5C%2C%2C%5C%2C%20R_2%20%5Crightarrow%20R_2%20-%20R_3%20%5CRightarrow%20%5Cbegin%7Bbmatrix%7D%20-3%20%26%203%20%26%200%20%5C%5C%200%20%26%20-3%20%26%203%5C%5C%201%20%26%201%20%26%20-2%20%5Cend%7Bbmatrix%7D)
+    ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%5Cbegin%7Bbmatrix%7D%20-3%20%26%203%20%26%200%20%5C%5C%200%20%26%20-3%20%26%203%5C%5C%201%20%26%201%20%26%20-2%20%5Cend%7Bbmatrix%7D%20%5Ccdot%20%5Cbegin%7Bbmatrix%7D%20x_1%20%5C%5C%20x_2%20%5C%5C%20x_3%20%5Cend%7Bbmatrix%7D%20%5CRightarrow%20x_1%20%3D%20x_2%20%5C%2C%2C%5C%2C%20x_2%20%3D%20x_3%20%5C%2C%2C%5C%2C%20%5Cpmb%7Bv_3%7D%20%3D%20%5Cbegin%7Bbmatrix%7D%201%20%5C%5C%201%20%5C%5C%201%20%5Cend%7Bbmatrix%7D%20%5Cnewline%20%5Ctextrm%7B%20the%20corresponding%20unit%20vector%20is%3A%20%7D%20%5Cpmb%7Bv_3%7D%20%3D%20%5Cbegin%7Bbmatrix%7D%20%5Cfrac%7B1%7D%7B%5Csqrt%7B3%7D%7D%20%5C%5C%20%5C%5C%20%5Cfrac%7B1%7D%7B%5Csqrt%7B3%7D%7D%20%5C%5C%20%5C%5C%20%5Cfrac%7B1%7D%7B%5Csqrt%7B3%7D%7D%20%5Cend%7Bbmatrix%7D%20%5Cnewline%20%5Cpmb%7Bv_1%7D%20%3D%20%5Cbegin%7Bbmatrix%7D%20-1%20%5C%5C%200%20%5C%5C%201%20%5Cend%7Bbmatrix%7D%20%5C%2C%2C%5C%2C%20%5Cpmb%7Bv_2%7D%20%3D%20%5Cbegin%7Bbmatrix%7D%201%20%5C%5C%20-1%20%5C%5C%200%20%5Cend%7Bbmatrix%7D%20%5C%2C%2C%5C%2C%20%5Cpmb%7Bv_3%7D%20%3D%20%5Cbegin%7Bbmatrix%7D%20%5Cfrac%7B1%7D%7B%5Csqrt%7B3%7D%7D%20%5C%5C%20%5C%5C%20%5Cfrac%7B1%7D%7B%5Csqrt%7B3%7D%7D%20%5C%5C%20%5C%5C%20%5Cfrac%7B1%7D%7B%5Csqrt%7B3%7D%7D%20%5Cend%7Bbmatrix%7D)
+  - 
 
 
 
@@ -237,3 +241,25 @@
 
 
 [Solving Neural Networks](http://ce.sharif.edu/courses/85-86/2/ce667/resources/root/10%20-%20Ci%20Cho%20Ki/Neura%20Networks%20for%20Solving%20Systems%20of%20Linear.pdf)
+
+
+
+
+
+## Trace Operator<a name="trace"></a>
+
+- the sum of all elements of the principle diagonal of a matrix
+- can be defined for a square or rectangular
+- ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?Tr.%28%5Cpmb%7BA%7D%29%20%3D%20%5Csum%5Climits_%7Bi%3D1%7D%5E%7Bmin%28n%2Cm%29%7D%20A_%7Bii%7D)
+- Frobenius norm is the square root of trace of ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%5Cpmb%7BAA%5ET%7D)
+  - ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%5Ctextrm%7B%20the%20general%20term%20of%20%7D%20%5Cpmb%7BAA%5ET%7D%20%3D%20B_%7Bij%7D%20%3D%20%5Csum%5Climits_%7Bk%3D1%7D%5En%20A_%7Bik%7DA_%7Bkj%7D%27%20%5Ctextrm%7B%20such%20that%20%7D%20A%27_%7Bkj%7D%20%3D%20A_%7Bjk%7D%20%5Cnewline%20Tr.%28%5Cpmb%7BAA%5ET%7D%29%20%3D%20%5Csum%5Climits_%7Bi%3D1%2Cj%3Di%7D%5En%20B_%7Bij%7D%20%3D%20%5Csum%5Climits_%7Bi%3D1%2Cj%3Di%7D%5En%20%5Csum%5Climits_%7Bk%3D1%7D%5En%20A_%7Bik%7DA_%7Bik%7D%20%3D%20%5Csum%5Climits_%7Bi%3D1%7D%5En%20%5Csum%5Climits_%7Bk%3D1%7D%5En%20A_%7Bik%7D%5E2%20%3D%20%7C%7C%5Cpmb%7BA%7D%7C%7C_F%5E2%20%5Cnewline%20%5Ctherefore%20%5C%2C%2C%5C%2C%20%7B%5Ccolor%7Bred%7D%20%7C%7C%5Cpmb%7BA%7D%7C%7C_F%20%3D%20%5Csqrt%7BTr.%28%5Cpmb%7BAA%5ET%7D%29%7D%7D)
+
+
+
+
+
+# Principal Component Analysis
+
+- x
+- <img src="proofs/trace_max_d_1.png" />
+- 
