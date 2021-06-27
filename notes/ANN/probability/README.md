@@ -4,7 +4,6 @@
 2. [Continuous Variables and Probability Density Functions](#pdfs)
 3. [Marginal Probability](#marginal-distribution)
 4. [Conditional Probability](#cp)
-5. [Chain Rule of Conditional Probabilities](#chain_rule)
 6. [Independence and Conditional Independence](#independence)
 7. [Expectation, Variance and Covariance](#expectation)
 8. [Bernoulli Distribution](#bernoulli)
@@ -15,12 +14,11 @@
 13. [Mixtures of Distributions](#mixture)
     - [Latent Variable](#latent)
 14. [Useful Properties of Common Functions](#properties)
-15. [Bayes’ Rule](#bayes-rule)
 16. [Technical Details of Continuous Variables](#details)
 17. [Information Theory](#information_theory)
-18. [Kullback-Liebler Divergence](#kld)
-19. [Cross-Entropy](#cross-entropy)
-20. [Structured Probabilistic Models](#spm)
+16. [Kullback-Liebler Divergence](#kld)
+17. [Cross-Entropy](#cross-entropy)
+18. [Structured Probabilistic Models](#spm)
     1. [Directed Graphical Models](#dgm)
     2. [Un-Directed Graphical Models](#ugm)
 
@@ -30,7 +28,7 @@
 
 
 
-# Continuous Variables and Probability Density Functions<a name="pdfs"></a>
+# [Continuous Variables and Probability Density Functions<a name="pdfs"></a>](https://docs.google.com/document/d/1hwV8jragvdL-sDUv8RsOHtB83iBXWJIKCcvu-DjHc38/edit#heading=h.pmbracoxoabf)
 
 
 
@@ -46,17 +44,13 @@
 
 
 
-# Conditional Probability<a name="cp"></a>
+# [Conditional Probability<a name="cp"></a>](https://docs.google.com/document/d/1hwV8jragvdL-sDUv8RsOHtB83iBXWJIKCcvu-DjHc38/edit#heading=h.n9648tjdwlzw)
 
 
 
 
 
-# Chain Rule of Conditional Probabilities<a name="chain_rule"></a>
-
-
-
-# Independence and Conditional Independence<a name="independence"></a>
+# [Independence and Conditional Independence<a name="independence"></a>](https://docs.google.com/document/d/1hwV8jragvdL-sDUv8RsOHtB83iBXWJIKCcvu-DjHc38/edit#heading=h.s9rvpbuz3ej4)
 
 
 
@@ -73,7 +67,7 @@
 
 
 
-# Bernoulli Distribution<a name="bernoulli"></a>
+# [Bernoulli Distribution<a name="bernoulli"></a>](https://docs.google.com/document/d/1hwV8jragvdL-sDUv8RsOHtB83iBXWJIKCcvu-DjHc38/edit#heading=h.8nal59hd5qah)
 
 
 
@@ -142,12 +136,6 @@
   - this is a smoothened version of the ReLU function, ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?f%28x%29%20%3D%20max%280%2C%20x%29)
   - <img src="softened.png" />, red = softplus, blue = ReLU.
 - <img src="properties.png" />
-
-
-
-
-
-# Bayes’ Rule<a name="bayes-rule"></a>
 
 
 
