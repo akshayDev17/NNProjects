@@ -180,12 +180,12 @@
   - Likely events should have low information content, and in the extreme case, events that are  guaranteed to happen should have no information content whatsoever. 
   - Less likely events should have higher information content. 
   - Independent events should have additive information. 
-  - For example, finding out that a tossed coin has come up as heads twice should convey twice as
-    much information as finding out that a tossed coin has come up as heads once.
+  - For example, finding out that a tossed coin has come up as heads twice should convey twice as much information as finding out that a tossed coin has come up as heads once.
 - Accordingly, **self-information** of an event x = x is ![https://latex.codecogs.com/gif.latex?I%28x%29%20%3D%20-log%28P%28x%29%29](https://latex.codecogs.com/gif.latex?I%28x%29%20%3D%20-log%28P%28x%29%29)
   - this is written in units of *<u>nats</u>*. 
   - One nat is the amount of information gained by observing an event of probability 1/e. 
   - Other texts use base-2 logarithms and units called bits or shannons.
+  - <img src="information.png" /> -log(x) for x in the range [0,1]
 - The amount of uncertainty is quantified in an entire probability distribution using the Shannon entropy
   ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?H%28x%29%20%3D%20%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20P%7D%20%5Cleft%5BI%28x%29%5Cright%5D%20%3D%20-%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20P%7D%20%5Cleft%5Blog%28P%28x%29%29%20%5Cright%5D%20%3D%20H%28P%29)
 - this is the expected amount of information in an event drawn from that distribution.
@@ -197,7 +197,7 @@
 # Kullback-Liebler Divergence<a name="kld"></a>
 
 - for measuring **deviation amongst probability distributions**, the KL-divergence is used
-  - ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?D_%7BKL%7D%28%7B%5Ccolor%7Bred%7DP%7D%7C%7CQ%29%20%3D%20%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20%7B%5Ccolor%7Bred%7DP%7D%7D%20%5Cleft%5Blog%20%5Cfrac%7B%7B%5Ccolor%7Bred%7DP%28x%29%7D%7D%7BQ%28x%29%7D%20%5Cright%5D%20%3D%20%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20P%7D%20%5Cleft%5B%20log%28P%28x%29%29%20-log%28Q%28x%29%29%20%5Cright%5D%20%5Cnewline%20D_%7BKL%7D%28%7B%5Ccolor%7Bred%7DQ%7D%7C%7CP%29%20%3D%20%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20%7B%5Ccolor%7Bred%7DQ%7D%7D%20%5Cleft%5Blog%20%5Cfrac%7B%7B%5Ccolor%7Bred%7DQ%28x%29%7D%7D%7BP%28x%29%7D%20%5Cright%5D%20%3D%20%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20Q%7D%20%5Cleft%5B%20log%28Q%28x%29%29%20-log%28P%28x%29%29%20%5Cright%5D%20%5Cnewline)
+  - ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?D%28%7B%5Ccolor%7Bred%7DP%7D%7C%7CQ%29_%7BKL%7D%20%3D%20%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20%7B%5Ccolor%7Bred%7DP%7D%28x%29%7D%20%5Cleft%5Blog%20%5Cfrac%7B%7B%5Ccolor%7Bred%7DP%28x%29%7D%7D%7BQ%28x%29%7D%20%5Cright%20%5D%20%3D%20%5Cint%20P%28x%29%5Cleft%5B%20log%28P%28x%29%29%20-%20log%28Q%28x%29%29%20%5Cright%5D%20dx%20%5Cnewline%20D%28%7B%5Ccolor%7Bred%7DQ%7D%7C%7CP%29_%7BKL%7D%20%3D%20%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20%7B%5Ccolor%7Bred%7DQ%7D%28x%29%7D%20%5Cleft%5Blog%20%5Cfrac%7B%7B%5Ccolor%7Bred%7DQ%28x%29%7D%7D%7BP%28x%29%7D%20%5Cright%20%5D%20%3D%20%5Cint%20Q%28x%29%5Cleft%5B%20log%28Q%28x%29%29%20-%20log%28P%28x%29%29%20%5Cright%5D%20dx)
   -  the extra amount of information  needed to send a message containing symbols drawn from probability distribution P , when we use a code that was designed to minimize the length of messages drawn from probability distribution Q <font color="Red">remaining !!! </font>
 - as it is obvious from the formula, the divergence is **not commutative**, hence it matters whether you optimize ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%7B%5Ccolor%7Bred%7DD_%7BKL%7D%28P%7C%7CQ%29%20%7D%20%5Ctextrm%7B%20vs.%20%7D%20%7B%5Ccolor%7Bblue%7D%20D_%7BKL%7D%28Q%7C%7CP%29%20%7D)
 
