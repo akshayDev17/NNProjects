@@ -17,11 +17,16 @@
 14. [Useful Properties of Common Functions](#properties)
 15. [Bayes’ Rule](#bayes-rule)
 16. [Technical Details of Continuous Variables](#details)
-17. [Kullback-Leibler Divergence and Information Theory](#information_theory)
+17. [Information Theory](#information_theory)
+18. [Kullback-Liebler Divergence](#kld)
+19. [Cross-Entropy](#cross-entropy)
+20. [Structured Probabilistic Models](#spm)
+    1. [Directed Graphical Models](#dgm)
+    2. [Un-Directed Graphical Models](#ugm)
 
 
 
-# Random Variables<a name="rv"></a>
+# [Random Variables<a name="rv"></a>](https://docs.google.com/document/d/1hwV8jragvdL-sDUv8RsOHtB83iBXWJIKCcvu-DjHc38/edit#heading=h.76ktuxjm8bxo)
 
 
 
@@ -174,7 +179,7 @@
 
 
 
-# Kullback-Leibler Divergence and Information Theory<a name="information_theory"></a>
+# Information Theory<a name="information_theory"></a>
 
 - basic intuition behind information theory is that learning that an unlikely event has occurred is more informative than learning that a likely event has occurred
 - We would like to quantify information in a way that formalizes this intuition.
@@ -192,8 +197,61 @@
 - this is the expected amount of information in an event drawn from that distribution.
 - as we can conclude from the expression, highly probable event(or distributions which are nearly deterministic for a given value of x, the r.v.) will have low Shannon entropy, and a less likely event(or distributions much closer to the uniform, i.e. all events are equally likely) will have high entropy
 - **Shannon entropy** for **continuous** R.V. is called **differential entropy**.
+
+
+
+# Kullback-Liebler Divergence<a name="kld"></a>
+
 - for measuring **deviation amongst probability distributions**, the KL-divergence is used
   - ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?D_%7BKL%7D%28%7B%5Ccolor%7Bred%7DP%7D%7C%7CQ%29%20%3D%20%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20%7B%5Ccolor%7Bred%7DP%7D%7D%20%5Cleft%5Blog%20%5Cfrac%7B%7B%5Ccolor%7Bred%7DP%28x%29%7D%7D%7BQ%28x%29%7D%20%5Cright%5D%20%3D%20%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20P%7D%20%5Cleft%5B%20log%28P%28x%29%29%20-log%28Q%28x%29%29%20%5Cright%5D%20%5Cnewline%20D_%7BKL%7D%28%7B%5Ccolor%7Bred%7DQ%7D%7C%7CP%29%20%3D%20%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20%7B%5Ccolor%7Bred%7DQ%7D%7D%20%5Cleft%5Blog%20%5Cfrac%7B%7B%5Ccolor%7Bred%7DQ%28x%29%7D%7D%7BP%28x%29%7D%20%5Cright%5D%20%3D%20%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20Q%7D%20%5Cleft%5B%20log%28Q%28x%29%29%20-log%28P%28x%29%29%20%5Cright%5D%20%5Cnewline)
   -  the extra amount of information  needed to send a message containing symbols drawn from probability distribution P , when we use a code that was designed to minimize the length of messages drawn from probability distribution Q <font color="Red">remaining !!! </font>
 - as it is obvious from the formula, the divergence is **not commutative**, hence it matters whether you optimize ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%7B%5Ccolor%7Bred%7DD_%7BKL%7D%28P%7C%7CQ%29%20%7D%20%5Ctextrm%7B%20vs.%20%7D%20%7B%5Ccolor%7Bblue%7D%20D_%7BKL%7D%28Q%7C%7CP%29%20%7D)
+
+
+
+
+
+# Cross-Entropy<a name="cross-entropy"></a>
+
+- ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?H%28P%2C%20Q%29%20%3D%20H%28P%29%20&plus;%20D_%7BKL%7D%28P%7C%7CQ%29%20%3D%20-%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20P%7D%20log%28Q%28x%29%29)
+- Minimizing the cross-entropy with respect to Q is equivalent to minimizing the KL divergence, because Q does not participate in the omitted term.
+  - ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?H%28%7B%5Ccolor%7Bred%7DP%7D%2C%20Q%29%20%3D%20H%28%7B%5Ccolor%7Bred%7DP%7D%29%20&plus;%20D_%7BKL%7D%28%7B%5Ccolor%7Bred%7DP%7D%7C%7CQ%29%20%3D%20-%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20%7B%5Ccolor%7Bred%7DP%7D%7D%20log%28Q%28x%29%29%20%5Cnewline%20H%28%7B%5Ccolor%7Bred%7DQ%7D%2C%20P%29%20%3D%20H%28%7B%5Ccolor%7Bred%7DQ%7D%29%20&plus;%20D_%7BKL%7D%28%7B%5Ccolor%7Bred%7DQ%7D%7C%7CP%29%20%3D%20-%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20%7B%5Ccolor%7Bred%7DQ%7D%7D%20log%28P%28x%29%29%20%5Cnewline%20min._%7BQ%7D%5Cleft%28%20H%28%7B%5Ccolor%7Bred%7DP%7D%2C%20Q%29%20%5Cright%20%29%20%3D%20min_%7BQ%7D%20%5Cleft%28%20-%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20%7B%5Ccolor%7Bred%7DP%7D%7D%20log%28Q%28x%29%29%20%5Cright%20%29%20%5Cnewline%20min._%7BQ%7D%5Cleft%28D_%7BKL%7D%28%7B%5Ccolor%7Bred%7DP%7D%7C%7CQ%29%20%5Cright%20%29%20%3D%20min._%7BQ%7D%5Cleft%28%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20%7B%5Ccolor%7Bred%7DP%7D%7D%20log%28P%28x%29%29-%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20%7B%5Ccolor%7Bred%7DP%7D%7D%20log%28Q%28x%29%29%20%5Cright%20%29%20%5Cnewline%20%5Ctextrm%7B%20as%20the%20first%20term%20is%20independent%20of%20%7D%20Q%28x%29%20%5C%5C%20min._%7BQ%7D%5Cleft%28D_%7BKL%7D%28%7B%5Ccolor%7Bred%7DP%7D%7C%7CQ%29%20%5Cright%20%29%20%3D%20min._%7BQ%7D%5Cleft%28-%5Cmathbb%7BE%7D_%7Bx%20%5Ctextrm%7B%20from%20%7D%20%7B%5Ccolor%7Bred%7DP%7D%7D%20log%28Q%28x%29%29%20%5Cright%29)
+
+
+
+
+
+# Structured Probabilistic Models<a name="spm"></a>
+
+- Often, the multivariate probability distributions involve direct interactions between relatively few variables. 
+
+  - Using a single function to describe the entire joint probability distribution can be very inefficient (both computationally and statistically).
+  - Instead of using a single function to represent a probability distribution, we can split a probability distribution into many factors that we multiply together.
+  - for instance, for 3 r.v.'s a,b,c, ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?p%28a%2Cb%2Cc%29%20%3D%20p%28a%29.p%28b%7Ca%29.p%28c%7Cb%29)
+
+- When we represent this factorization of a probability distribution with a graph, we call it a structured probabilistic model, or graphical model.
+
+- there are 2 main kinds: directed and undirected.
+
+- ## Directed Graphical Models<a name="dgm"></a>
+
+  - directed edges define parent and child node relationship, wherein the origin of the edge is the parent node and the node to which the arrow-head points is the child node.
+  - ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%5Ctextrm%7Bthe%20conditional%20distribution%20over%20%7D%20x_i%20%5Ctextrm%7B%20given%20the%20parents%20of%20%7D%20x_i%20%5Ctextrm%7B%2C%20denoted%20by%20%7D%20Pa_%7B%5Cmathcal%7BG%7D%7D%28x_i%29%20%5Cnewline%20p%28x%29%20%3D%20%5Cprod_%7Bi%7D%20p%28x_i%20%7C%20Pa_%7B%5Cmathcal%7BG%7D%7D%28x_i%29%29)
+  - <img src="dgm.png" />
+    ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?p%28a%2Cb%2Cc%2Cd%2Ce%29%20%3D%20p%28a%29.p%28b%7Ca%29.p%28c%7Ca%2Cb%29.p%28d%7Cb%29.p%28e%7Cc%29)
+
+  - 
+
+- ## Un-Directed Graphical Models<a name="ugm"></a>
+
+  - no notion of parent and child node.
+  - **Clique**:  Any set of nodes that are all connected to each other in the graph ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%5Cmathcal%7BG%7D)
+  - each clique ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%5Cmathcal%7BC%7D%5E%7B%28i%29%7D) is associated with a function, ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%5Cphi%5E%7B%28i%29%7D%20%28%5Cmathcal%7BC%7D%5E%7B%28i%29%7D%29)
+  - These factors are just functions, **not probability distributions**. 
+  - The **output** of each factor **must be non-negative**, but there is no constraint that the factor must sum or integrate to 1 like a probability distribution.
+  - <img src="ugm.png" />
+  - as we can see, the cliques are (a,b,c), (b,d) , (c,e), hence the probability distribution function is 
+    ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?p%28a%2Cb%2Cc%2Cd%2Ce%29%20%3D%20%5Cfrac%7B1%7D%7BZ%7D%20%5Cphi%5E%7B%281%29%7D%28a%2Cb%2Cc%29.%5Cphi%5E%7B%282%29%7D%28b%2Cd%29.%5Cphi%5E%7B%283%29%7D%28c%2C%20e%29%20%5CRightarrow%20%5Cint%20%5Cphi%5E%7B%281%29%7D%28a%2Cb%2Cc%29.%5Cphi%5E%7B%282%29%7D%28b%2Cd%29.%5Cphi%5E%7B%283%29%7D%28c%2C%20e%29%20da%5C%2C%20db%5C%2C%20dc%5C%2C%20dd%5C%2C%20de%5C%2C%20%3D%20Z)
+  - <font color="red">find usage !!!</font>
+
 - 
