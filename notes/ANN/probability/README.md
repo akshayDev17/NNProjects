@@ -62,6 +62,7 @@
 
 - Covariance matrix
   ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?x%20%5Cin%20%5Cmathbb%7BR%7D%5E%7Bn%7D%20%5C%2C%2C%5C%2C%20cov%28%5Cpmb%7Bx%7D%29_%7Bi%2C%20j%7D%20%3D%20cov%28x_i%2C%20x_j%29%20%5C%2C%2C%5C%2C%20cov%28x_i%2C%20x_i%29%20%3D%20var%28x_i%29)
+  - i.e. x is a vector of dimensionality n.
 
 
 
@@ -75,6 +76,7 @@
 
 - this has a total of k states are possible, as opposed to only 2 states(x = 0 and x = 1) in Bernoulli distribution .
 - ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%5Ctextrm%7B%20state%20%7D%20%5Cpmb%7Bx%7D%20%3D%20%5Cbegin%7Bbmatrix%7D%20x_1%20%5C%5C%20x_2%20%5C%5C%20%5Cvdots%20%5C%5C%20x_k%20%5Cend%7Bbmatrix%7D%20%5Ctextrm%7B%20has%20probability%20vector%20%7D%20%5Cpmb%7Bp%7D%20%3D%20%5Cbegin%7Bbmatrix%7D%20p_1%20%5C%5C%20p_2%20%5C%5C%20%5Cvdots%20%5C%5C%20p_k%20%5Cend%7Bbmatrix%7D%20%5Ctextrm%7B%20such%20that%20%7D%20p_i%20%5Ctextrm%7B%20is%20the%20probability%20of%20state%20%7D%20x_i%20%5Cin%20%5B0%2C%201%5D)
+- ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%5Csum%5Climits_%7Bi%3D1%7D%5En%20p_i%20%3D%201%20%5Ctextrm%7B%2C%20i.e.%20the%20sum%20of%20all%20components%20of%20the%20probability%20vector%20%3D%201%7D)
 - The Bernoulli and Multinoulli distributions are sufficient to describe any distribution over their domain.
   - both are very generic descriptions of a p.d.f. since we don't exactly know how p,q(in Bernoulli) and p_1,p_2..p_k (in Multinoulli) are generated, they may very well be even complicated p.d.f.'s
 
@@ -94,6 +96,10 @@
 
 - place a sharp peak of probability mass at an arbitrary point ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?%5Cmu) is the Laplace distribution
 - ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?L%28x%3B%20%5Cmu%20%5Cgamma%29%20%3D%20%5Cfrac%7B1%7D%7B2%5Cgamma%7D%20exp%20%5Cleft%28-%5Cfrac%7B%7Cx%20-%20%5Cmu%7C%7D%7B%5Cgamma%7D%20%5Cright%20%29)
+- on increasing mu:
+  <img src="change_mu.gif" />
+- on increasing gamma:
+  <img src="change_gamma.gif" />
 
 
 
