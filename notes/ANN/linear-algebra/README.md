@@ -29,10 +29,11 @@
    2. [Deriving the decoding matrix](#decoding_matrix)
 
       1. [Solving for l=1](#solving_basic_case)
+2. [General Proof using Mathematical Induction](#general-proof)
+   
+5. [Questionnaire](#questionnaire)
 
-      2. [General Proof using Mathematical Induction](#general-proof)
-
-         
+    
 
 
 
@@ -406,4 +407,24 @@
 
 - 
 
-- 
+
+
+
+
+
+# Questionnaire<a name="questionnaire"></a>
+
+- what is broadcasting a vector?
+- orthogonal matrix? singular matrix *main definition*.
+- L-infinity and L-0 norms
+- physical meaning of determinant? 
+- determinant and adjoint matrix
+- singular matrix and eigenvalue
+- having n < m is a sufficient condition for ensuring a perfect solution exists??
+- what are right vs left eigenvectors?
+- eigendecomposition with an example.
+- Statement: a real symmetric matrix can have imaginary eigenvalues. Comment with proof.
+- what are positive definite and positive semi-definite? their interesting properties?
+- why what how - SVD?, special type ?? pseudoinverse?? solutions for n > m and m > n??
+- trace and frobenius norm?
+- derive complete PCA - hint 1: assume something about decoding function, hint 2: optimize 2 kinds of *distances*.
