@@ -1,12 +1,7 @@
 # Table of Contents
 
-1. [Neural Nets - Introduction](#nnintro)
-2. [Biological inspiration of activation Functions](#bio-insp-af)
-3. [Activation Functions](#af)
-   1. [step](#step)
-   2. [sigmoid](#sigmoid)
-4. [Back-Propagation](#backprop)
-5. [Steepest Descent](#sd)
+1. [Back-Propagation](#backprop)
+2. [Steepest Descent](#sd)
    1. [Convergence Proof](#sd-proof)
       1. [convexity assumption](#convex)
       2. [Lipschitz continuous gradient assumption](#lcg)
@@ -16,74 +11,11 @@
       6. [Final Convergence Criterion](#cc)
    2. [Cauchy approach of finding learning rate](#cauchy-find-learning-rate)
    3. [Barzilai and Borwein approach of finding learning rate](#bb-approach)
-6. [Gradient Descent Practical Approach](#gd_practical)
-7. [Problem of saturation due to large weights/inputs/outputs](#saturation)
-8. [Initializing Weights](#weights-init)
-9. [References](#references)
+3. [Gradient Descent Practical Approach](#gd_practical)
+4. [Problem of saturation due to large weights/inputs/outputs](#saturation)
+5. [Initializing Weights](#weights-init)
+6. [References](#references)
 
-
-
-
-
-# Neural Nets - Introduction<a name="nnintro"></a>
-
-- <img src="display_images/neuralNet.png" width="600"/>
-  - ![equation](https://latex.codecogs.com/gif.latex?W_%7Bi%2Cj%7D), `i` means the layer supplying the signal, and `j` means the layer receiving the signal.
-- ![equation](https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20O_%7B%5Ctextrm%7Binput%7D%7D%20%26%3D%20W_%7B%5Ctextrm%7Binput%7D%2C%20%5Ctextrm%7Bhidden%7D%7D%20%5Ccdot%20X_%7B%5Ctextrm%7Binput%7D%7D%20%5C%5C%20X_%7B%5Ctextrm%7Bhidden%7D%7D%20%26%3D%20%5Cfrac%7B1%7D%7B1%20&plus;%20e%5E%7B-O_%7B%5Ctextrm%7Binput%7D%7D%7D%7D%20%5C%5C%20O_%7B%5Ctextrm%7Bhidden%7D%7D%20%26%3D%20W_%7B%5Ctextrm%7Bhidden%7D%2C%20%5Ctextrm%7Boutput%7D%7D%20%5Ccdot%20X_%7B%5Ctextrm%7Bhidden%7D%7D%20%5C%5C%20Y_%7B%5Ctextrm%7Bactual%20output%7D%7D%20%26%3D%20%5Cfrac%7B1%7D%7B1%20&plus;%20e%5E%7B-O_%7B%5Ctextrm%7Bhidden%7D%7D%7D%7D%20%5C%5C%20%5Cend%7Balign*%7D)
-  - in the case above, where the dimensionality of input, hidden and output layers is known(all are 3)
-    ![equation](https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20W_%7Bi%2C%20h%7D%20%26%3D%20%5Cbegin%7Bbmatrix%7D%20w_%7B1%2C1%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B2%2C1%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B3%2C1%7D%5E%7Bi%2Ch%7D%20%5C%5C%20%5C%5C%20w_%7B1%2C2%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B2%2C2%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B3%2C2%7D%5E%7Bi%2Ch%7D%20%5C%5C%20%5C%5C%20w_%7B1%2C3%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B2%2C3%7D%5E%7Bi%2Ch%7D%20%26%20w_%7B3%2C3%7D%5E%7Bi%2Ch%7D%20%5Cend%7Bbmatrix%7D%20%5C%5C%20W_%7Bh%2C%20o%7D%20%26%3D%20%5Cbegin%7Bbmatrix%7D%20w_%7B1%2C1%7D%5E%7Bh%2Co%7D%20%26%20w_%7B2%2C1%7D%5E%7Bh%2Co%7D%20%26%20w_%7B3%2C1%7D%5E%7Bh%2Co%7D%20%5C%5C%20%5C%5C%20w_%7B1%2C2%7D%5E%7Bh%2Co%7D%20%26%20w_%7B2%2C2%7D%5E%7Bh%2Co%7D%20%26%20w_%7B3%2C2%7D%5E%7Bh%2Co%7D%20%5C%5C%20%5C%5C%20w_%7B1%2C3%7D%5E%7Bh%2Co%7D%20%26%20w_%7B2%2C3%7D%5E%7Bh%2Co%7D%20%26%20w_%7B3%2C3%7D%5E%7Bh%2Co%7D%20%5Cend%7Bbmatrix%7D%20%5C%5C%20%5Cend%7Balign*%7D)
-  - the 1/... term is the **activation function**.
-- 
-
-
-
-
-
-# Biological inspiration of activation Functions<a name="bio-insp-af"></a>
-
-- in biological neurons, electrical signals are conducted only when  the neuronal membrane potential rises above  a certain threshold potential value.
-- A function that takes the input signal and generates an output signal, but takes into account some kind of threshold is called an activation function. 
-
-
-
-
-
-
-
-# Activation functions<a name="af"></a>
-
-
-
-## step<a name="step"></a>
-
-- once the threshold input is reached, output jumps up.
-
-
-
-
-
-## sigmoid<a name="sigmoid"></a>
-
-- smoother than the step function 
-- ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?y%20%3D%20%5Cfrac%7B1%7D%7B1&plus;e%5E%7B-x%7D%7D)
-  - e = 2.71828
-  - x = w1x1 + w2x2 ... wnxn , if this sum is smaller than some threshold, the *neuron* will *not fire*, if its larger, then 
-- 
-
-
-
-
-
-y = WX , X is n x 1 input and W is m x n weight matrix, since y can have dimensions that are different in number than that of X.
-
-y can either be the final output or the next layer. layer l having n neurons has to be connected to layer l+1 having m neurons, hence the weight is  a matrix(unlike a vector in linear regression).
-
-- after generating this matrix , X (l+1) , apply the activation function on each element, and the obtained vector is passed in as input to the next layer.
-  ![This is the rendered form of the equation. You can not edit this directly. Right click will give you the option to save the image, and in most browsers you can drag the image onto your desktop or another program.](https://latex.codecogs.com/gif.latex?X%5E%7B%28l&plus;1%29%7D%20%3D%20O%5El%20%3D%20g%5Cleft%28%5Cmathbf%7BW%5E%7Bl%2C%20l&plus;1%7D.X%5El%7D%20%5Cright%20%29)
-
-
-
-- The middle layers are also known as hidden layers, and the name just stuck because the outputs of the middle layer are not necessarily made apparent as (final)outputs, so are *hidden*.
 
 
 
