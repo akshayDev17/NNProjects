@@ -43,23 +43,42 @@
     - for the same layer, all params will either be increased or decreased (as explained in the [tanh](#tanh) section), depending on the sign of all common terms in the expanded form of gradient using chain rule.
 
 ## Hyperbolic Tan (tanh)<a id="tanh"></a>
-- $tanh(x) = \frac{e^{2x}-1}{e^{2x}+1} = \frac{1-e^{-2x}}{1+e^{-2x}}$
-- <img src="tan_hyperbolic.jpeg" />
+- $tanh(x) = \frac{e^{2x}-1}{e^{2x}+1} = \frac{1-e^{-2x}}{1+e^{-2x}}$  ,   <img src="tan_hyperbolic.jpeg" width="400"/>
 - this is zero centred, i.e. mean = 0
     - $\bar{f(x)} = \frac{1}{b-a}\int\limits_a^b tanh(x) = \frac{1}{b-a} tanh^{-1}(x) |_a^b = \frac{1}{b-a} \frac{1}{2}ln\left( \frac{1+x}{1-x}\right) |_a^b = \frac{1}{2(b-a)} ln\left( \frac{(1+b)(1-a)}{(1-b)(1+a)}\right)$
     - $b \rightarrow +\infty, a \rightarrow -\infty \Rightarrow = \frac{1}{2\times 2\times \infty} \times 0 = 0$
-    - due to this, some gradients (on expanding the chain rule and expressing gradients as $a_{21}, a_{22}$, outputs from previous layer) can be positive and others negative due to these O values being + or - due to the range of tanh. this ensures updates in different directions for all parameters, which may be required as per their location in the loss-curve.
+    - due to this, some gradients (on expanding the chain rule and expressing gradients as $a_{21}, a_{22}$, outputs from previous layer) can be positive and others negative due to these O values being + or - due to the range of tanh. this ensures updates in different directions for all parameters, which may be required as per their location in the loss-curve. \
     <img src="tanh_zero_centred.png" width="200" />
 - vanishing gradient is only seen for large absolute values of x, since the gradient tends to 0.
 
 ## Rectified Linear (ReLU)
-- $f(x) = max(0, x)$
-- <img src="relu.png" />
+- $f(x) = max(0, x)$   ,   <img src="relu.png" width="300" />
 - gradient doesn't vanish always
 - faster convergence.<font color="red" size="5">HOW?</font>
 
+### Dying ReLU Problem
+- dead neurons, i.e. irrespective of input $O^{k-1,k}$ to $k^{th}$ ReLU activated layer, output $O^{k, k+1}$ has some columns as $\mathbf{0}$ vectors.
+    - a dead neuron will stay dead forever: <img src="dying_relu.png" width="400" />
+- Reasons
+    - high learning rate, thus causing faster reductions in weights, making them negative and possibly $Z_1$ negative.
+    - high negative bias, making $Z_1$ negative.
+- hence, use variants of ReLU instead.
+
+## Leaky ReLU
+- $f(x) = max(0.01x, x)$
+- now even if learning rate is high or bias is highly negative, activation would just spew a small negative number, and the gradient will be non-zero(0.01).
+
+## Parametric ReLU
+- $f(x) = \begin{cases} x & x > 0 \\ ax & \textrm{otherwise} \end{cases}$
+- a : trainable hyperparameter.
+
+## Exponential Linear Unit
+- $f(x) = \begin{cases} x & x > 0 \\ \alpha \left(e^x-1\right) & \textrm{otherwise} \end{cases}$ <img src="elu-derivative.png" width="400" />
+- this is differentiable as well (at x=0), $lt._{x\rightarrow 0} \left( \frac{e^x-1}{x}\right)$
+- evaluation of exponential makes this comparatively more computationally expensive.
+
 # Loss Functions
-<img src="loss_functions.png" />
+<img src="loss_functions.png" width="600" />
 
 1. Loss Function = evaluated over a single sample, **Cost function** = over the entire batch, hence the *1/n* and *summation* terms appear.
 
