@@ -104,3 +104,23 @@
 
 # Back Propagation
 1.  
+
+# Gradient Descent Types
+
+## Batch
+1. all samples taken per epoch update.
+2. is faster in terms of algorithmic speed, since lesser number of updates to be performed( = `n_epochs`)
+3. is slower in terms of convergence, i.e. reaching an optimum.
+4. validation loss decreased in a smooth manner.
+
+## Stochastic
+1. for each epoch, a loop = `n_samples` is run wherein the training data is shuffled and a random sample is drawn.
+    1. gradient update is carried out on this drawn sample.
+2. is slower in terms of algorithmic speed, since higher number of updates to be performed( = `n_epochs * n_samples`).
+3. is faster in terms of convergence, i.e. reaching an optimum, due to those higher number of updates being performed.
+4. validation loss decreased in a jagged manner.
+  1. advantage: avoids being trapped within a local basin.
+
+## Mini-batch
+1. `n_samples` divided into `n_batches`, each containing `batch_size` samples.
+2. for each batch, perform batch GD.
