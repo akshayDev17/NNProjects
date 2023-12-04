@@ -124,3 +124,69 @@
 ## Mini-batch
 1. `n_samples` divided into `n_batches`, each containing `batch_size` samples.
 2. for each batch, perform batch GD.
+
+# Improving performance of an NN
+
+## Vanishing Gradient problem
+1. gradient becomes extremely small, hence weight doesn't *change*. (basically seeming as if gradient=0, i.e. reached optimum point)
+2. sigmoid and tanh activations suffer from this.
+
+### How to spot
+1. loss doesn't change
+2. weights don't change
+
+### How to avoid/solve this
+1. reduce model complexity (reduce depth, make a shallow NN)
+2. avoid using sigmoid/tanh activations, use something instead.
+3. proper weight initialization (glorat, xavier initialization)
+4. batch normalization.
+5. using a residual network.
+
+## Number of hidden layers
+1. each successive hidden layer usually recognizes patterns more complex than its preceding layer.
+    1. for instance, say a face recognition model has 3 layers.
+    2. layer-1: captures lines
+    3. layer-2: captures shapes created by an arrangement of those lines
+    3. layer-3: captures a face like complex shape created by its component shapes (nose, eyes, lips etc.)
+2. more hidden layers could cause overfitting, hence the point where overfitting appears is where we stop adding more hidden layers.
+
+## Batch size
+1. large --> faster training, but poor convergence.
+2. for large batch-size, *warming up* the learning rate can be used.
+    1. for initial epochs, use a small learning rate, for later ones use a large value.
+
+## Early Stopping
+1. prevention of overfitting
+2. monitored metric shouldn't stop changing by a delta value(shouldn't stop improving)
+
+## Batch normalization
+1. normalization makes the loss function surface symmetrical across dimensionality space.
+2. <img src="batch_normalization_intuition.png" height="200" />
+3. normalize $\Rightarrow$ between 0 and 1.
+4. normalization performed when min and max values are known beforehand, i.e. don't depend on data.
+    1. for instance, `salary` as a feature does depend on data, max salary and min salary could be anything.
+    2. `marks out of 100` is a feature suitable for normalization since max = 100, min = 0.
+5. for features where min-max is unknown, use standardization instead. ($x \rightarrow \frac{x-\mu}{\sigma} $)
+
+## Dropout
+1. randomly shutoff neurons of selected layers.
+2. usually done at each epoch.
+3. this works/is done so that heavy importance on a particular neuron is penalised.
+    1. which is anyways what regularization(L1, L2) aimed at as well.
+4. weights while testing/prediction is `(1-p)xtraining_weights` , `p = dropout_ratio`.
+    1. p = probability of dropping out, 1-p : probability of staying.
+5. small p --> overfit , large p --> underfit.
+6. <img src="effect_of_dropout_ratio.png" height="400" />
+7. slower convergence.
+8. training_loss calcuated while fitting $\ne$ actual loss of NN on the same dataset.
+    1. this will cause issues in knowing the derivative values exactly, hence cause issue in debugging the entire NN.
+
+
+# Keras 
+- Sequential model ---> Model (is the base class) --> Trainable, Layer (are the bases of Model)
+    - Trainable is keras.backend dependent.
+        - = [Tensorflow Keras Engine Model](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/python/keras/engine/training.py#L131) for `from tensorflow.keras.models import Sequential`
+            - `fit()`--> `make_train_function()` --> `one_step_on_data()` (usually) --> `train_step()` --> `trainable_variables` of a layer are updated.
+- the Layer class has weights, of which some are `trainable=True`, others `trainable=False`.
+- after importing a module, use the .__file__ property to know the file location.
+    - for instance `import tensorflow.keras.models as tfkm; tfsq.__file__` gives `/usr/local/lib/python3.10/dist-packages/keras/api/_v2/keras/models/__init__.py` as output.
