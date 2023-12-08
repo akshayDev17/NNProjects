@@ -103,7 +103,66 @@
 1. target variable supplied while training needs to be label encoded.
 
 # Back Propagation
-1.  
+
+## Notations
+1. $\mathcal{L}$: loss function, i.e. evaluated for a sample.
+2. $\mathcal{C}$: cost function, i.e. evaluated for all samples, arithmetic mean of loss across all samples.
+3. superscript l $\Rightarrow ^l$ : for l $^{th}$ layer.
+4. subscript (j, k) $\Rightarrow _{j, k}$ : from j $^{th}$ input to k $^{th}$ output neuron.
+5. parenthesized subscript ((i)) $\Rightarrow _{(i)}$ : for training sample i.
+6. input matrix for layer l: $I^l$
+    1. term $I^l_{j, (i)}$ represents the j $^{th}$ input to layer l from training sample i. this is the i $^{th}$ row j $^{th}$ column term in this matrix.
+7. g: activation function , g' : derivative of this activation function.
+8. output matrix for layer l: $O^l$
+    1. term $O^l_{k, (i)}$ represents the k $^{th}$ output to layer l from training sample i. this is the i $^{th}$ row k $^{th}$ column term in this matrix.
+9. Weight matrix for layer l: $W^l$
+    1. term $W^l_{j, k}$ represents the weight from j $^{th}$ input to k $^{th}$ output at layer l. this is the j $^{th}$ row k $^{th}$ column term in this matrix.
+    2. this is of order $in^l, out^l$
+10. Z: pre-activate neuron output, represented by $Z^l$
+    1. term $Z^l_{k, (i)}$ represents the k $^{th}$ output to layer l from training sample i. this is the i $^{th}$ row k $^{th}$ column term in this matrix.
+    1. $O^l_{k, (i)} = g^L\left(Z^l_{k, (i)} \right)$
+11. \# input-dimensions at layer l: $in^l$ , \# output-dimensions at layer l: $out^l$ , input to layer l is matrix $I^l$.
+
+
+## At Last Layer
+
+**Steps to calculate gradients of weights at the last layer.**
+1. Considering last layer will have only 1 neuron.
+2. $\nabla W^L = \begin{bmatrix} \frac{\partial \mathcal{C}}{\partial w^L_{1,1}} \\ \frac{\partial \mathcal{C}}{\partial w^L_{2,1}} \\ \vdots \\ \frac{\partial \mathcal{C}}{\partial w^L_{in_l,1}} \end{bmatrix}$ , $\frac{\partial \mathcal{C}}{\partial w^L_{1,1}} = \frac{1}{n}\sum\limits_{i=1}^n \frac{\partial \mathcal{L}}{\partial \hat{y}_i}.\frac{\partial \hat{y}_i}{\partial z_i}.\frac{\partial z_i}{\partial w^L_{1,1}}$ (chain rule)
+3. Compute gradient of loss w.r.t. $\hat{y}$, based on derivative of loss function w.r.t. $\hat{y}$.
+    1. for instance, w.r.t. MSE, $\frac{\partial \mathcal{L}}{\partial \hat{y}} = -2(y-\hat{y})$.
+    2. $\frac{\partial \mathcal{C}}{\partial w^L_{1,1}} = \frac{1}{n}\sum\limits_{i=1}^n -2(y_i - \hat{y}_i).\frac{\partial \hat{y}_i}{\partial z_i}.\frac{\partial z_i}{\partial w^L_{1,1}}$ (chain rule)
+    3. the matrix $\frac{\partial \mathcal{L}}{\partial \hat{y}}$ = $\begin{bmatrix} -2(y_1-\hat{y}_1) \\ -2(y_2-\hat{y}_2) \\ \vdots \\ -2(y_n-\hat{y}_n)  \end{bmatrix}$
+4. Compute $\left(\frac{\partial \hat{y}}{\partial z} \right)$ derivative of output ($\hat{y}$) w.r.t. pre-activated z from the last layer(L $^{th}$ layer).
+    1. this is simply g'(z), wherein $z^L_{1, (i)} = \sum\limits_{j=1}^{in^L} I^L_{j, (i)} w^L_{j, 1}$ (output from 1st neuron for training sample i)
+    2. $\frac{\partial \mathcal{C}}{\partial w^L_{1,1}} = \frac{1}{n}\sum\limits_{i=1}^n -2(y_i - \hat{y}_i).g'^L(z^L_{1, (i)}).\frac{\partial z^L_{1, (i)}}{\partial w^L_{1,1}}$ (chain rule)
+    3. the matrix $\frac{\partial \mathcal{\hat{y}}}{\partial z}$ = $\begin{bmatrix} g'^L(z^L_{1, (1)}) \\ g'^L(z^L_{1, (2)}) \\ \vdots \\ g'^L(z^L_{1, (n)})  \end{bmatrix}$ , where (,i) notation means quantity for the i $^{th}$ training sample.
+5. Compute $\left(\frac{\partial z}{\partial w^L_{1,1}} \right)$ : derivative of pre-activated z w.r.t. weights of the last layer(L $^{th}$ layer).
+    1. $z^L_{1, (i)} = \sum\limits_{j=1}^{in^L} I^L_{j, (i)} w^L_{j, 1} \Rightarrow \frac{\partial z^L_{1, (i)}}{\partial w^L_{1,1}} = I^L_{1, (i)} $
+    2. $\frac{\partial \mathcal{C}}{\partial w^L_{1,1}} = \frac{1}{n}\sum\limits_{i=1}^n -2(y_i - \hat{y}_i).g'^L(z^L_{1, (i)}).I^L_{1, (i)}$ (chain rule)
+6. $\therefore, \nabla W^L = \begin{bmatrix} \frac{1}{n}\sum\limits_{i=1}^n -2(y_i - \hat{y}_i).g'^L(z^L_{1, (i)}).I^L_{1, (i)} \\ \frac{1}{n}\sum\limits_{i=1}^n -2(y_i - \hat{y}_i).g'^L(z^L_{1, (i)}).I^L_{2, (i)} \\ \vdots \\ \frac{1}{n}\sum\limits_{i=1}^n -2(y_i - \hat{y}_i).g'^L(z^L_{1, (i)}).I^L_{in^L, (i)} \end{bmatrix} $, $\nabla \hat{Y} = \begin{bmatrix} -\frac{2}{n}(y_1-\hat{y}_1) \\ -\frac{2}{n}(y_2-\hat{y}_2) \\ \vdots \\ -\frac{2}{n}(y_n-\hat{y}_n)  \end{bmatrix} , g'^L(Z^L) = \begin{bmatrix} g'^L(z^L_{1, (1)}) \\ g'^L(z^L_{1, (2)}) \\ \vdots \\ g'^L(z^L_{1, (n)}) \end{bmatrix}$
+    1. Element-wise matrix multiplication $F^L = \nabla \hat{Y} \odot g'^L(Z^L) = \begin{bmatrix} -\frac{2}{n}(y_1-\hat{y}_1)g'^L(z^L_{1, (1)}) \\ -\frac{2}{n}(y_2-\hat{y}_2)g'^L(z^L_{1, (2)}) \\ \vdots \\ -\frac{2}{n}(y_n-\hat{y}_n)g'^L(z^L_{1, (n)}) \end{bmatrix} $, with $I^L = \begin{bmatrix} I^L_{1, (1)} & I^L_{2, (1)} & \cdots & I^L_{in^L, (1)} \\ I^L_{1, (2)} & I^L_{2, (2)} & \cdots & I^L_{in^L, (2)} \\ \vdots & \vdots & \cdots & \vdots \\ I^L_{1, (n)} & I^L_{2, (n)} & \cdots & I^L_{in^L, (n)}  \end{bmatrix}$
+    2. $(I^L)^T.F^L = \nabla W^L$
+7. **The steps**
+    1. Compute $\hat{Y}$ during forward pass
+    2. during forward pass at layer L, store input $I^L$ and activation-derivative matrix $g'^L(Z^L)$
+    3. $\nabla W^L = (I^L)^T.F^L$
+
+## At previous layers, for eg. (L-1)'th layer
+1. $W^{L-1} = \begin{bmatrix} w^{L-1}_{1,1} & w^{L-1}_{1,2} & \cdots & w^{L-1}_{1, out^{L-1}} \\ w^{L-1}_{2,1} & w^{L-1}_{2,2} & \cdots & w^{L-1}_{2, out^{L-1}} \\ \vdots \\ w^{L-1}_{in^{L-1},1} & w^{L-1}_{in^{L-1},2} & \cdots & w^{L-1}_{in^{L-1}, out^{L-1}} \end{bmatrix}, \nabla W^{L-1} = \begin{bmatrix} \frac{\partial \mathcal{C}}{\partial w^{L-1}_{1,1}} &  \frac{\partial \mathcal{C}}{\partial w^{L-1}_{1,2}} & \cdots & \frac{\partial \mathcal{C}}{\partial w^{L-1}_{1, out^{L-1}}} \\ \frac{\partial \mathcal{C}}{\partial w^{L-1}_{2,1}} & \frac{\partial \mathcal{C}}{\partial w^{L-1}_{2,2}} & \cdots & \frac{\partial \mathcal{C}}{\partial w^{L-1}_{2, out^{L-1}}} \\ \vdots \\ \frac{\partial \mathcal{C}}{\partial w^{L-1}_{in^{L-1},1}} & \frac{\partial \mathcal{C}}{\partial w^{L-1}_{in^{L-1},2}} & \cdots & \frac{\partial \mathcal{C}}{\partial w^{L-1}_{in^{L-1}, out^{L-1}}} \end{bmatrix}, \frac{\partial \mathcal{C}}{\partial w^{L-1}_{j,k}} = -\frac{1}{n}\sum \limits_{i=1}^n \frac{\partial \mathcal{L}}{\partial \hat{y}_i}.\frac{\partial \hat{y}_i}{\partial z_i^L}.\frac{\partial z_i^L}{\partial I^L_{k,(, i)}}.\frac{\partial I^L_{k,(, i)}}{\partial w^{L-1}_{j, k}}$ (chain rule)
+    1. why $I^L_{k,(, i)}$ ? : because the k'th neuron of (L-1)'th layer also contributes to only the first(and only) neuron of L'th layer.
+
+2. $z^L_i = \sum\limits_{j=1}^{in^L} I^L_{j, (i)} w^L_{j, 1} $, we need derivative for at value k, which is $w^L_{k,1}$
+3. $I^L_{k,(i)} = g^{L-1}(z^{L-1}_{k, (i)})$ and $z^{L-1}_{k, (i)} = \sum\limits_{j=1}^{in^{L-1}} I^{L-1}_{j, (i)} w^{L-1}_{j, k} , \therefore \, , \, \frac{\partial I^L_{k,(, i)}}{\partial w^{L-1}_{j, k}} = g'^{L-1}(z^{L-1}_{k, (i)}).I^{L-1}_{j, (i)} \Rightarrow \frac{\partial \mathcal{C}}{\partial w^{L-1}_{j,k}} = -\frac{2}{n}\sum \limits_{i=1}^n (y_i - \hat{y}_i) g'^L(z^L_{1,(i)})w^{L}_{k, 1}g'^{L-1}(z^{L-1}_{k, (i)}).I^{L-1}_{j, (i)}$
+4. we already have $F^L$, now look at the same-row (say first row) terms of $\nabla W^{L-1}$, the $w^L_{k, 1}$ term is different only when the column changes, it doesn't depend on which row of $\nabla W^{L-1}$ we are at.
+    1. Take a look at $P^{L-1} = F^L.(W^L)^T = \begin{bmatrix} -\frac{2}{n}(y_1-\hat{y}_1)g'^L(z^L_{1, (1)}) \\ -\frac{2}{n}(y_2-\hat{y}_2)g'^L(z^L_{1, (2)}) \\ \vdots \\ -\frac{2}{n}(y_n-\hat{y}_n)g'^L(z^L_{1, (n)}) \end{bmatrix}. \begin{bmatrix} w^L_{1,1} & w^L_{2,1} & \cdots & w^L_{in^L,1} \end{bmatrix} = \begin{bmatrix} -\frac{2}{n}(y_1-\hat{y}_1)g'^L(z^L_{1, (1)}).w^L_{1,1} & -\frac{2}{n}(y_1-\hat{y}_1)g'^L(z^L_{1, (1)}).w^L_{2,1} & \cdots & -\frac{2}{n}(y_1-\hat{y}_1)g'^L(z^L_{1, (1)}).w^L_{in^L,1} \\ -\frac{2}{n}(y_2-\hat{y}_2)g'^L(z^L_{1, (2)}).w^L_{1,1} & -\frac{2}{n}(y_2-\hat{y}_2)g'^L(z^L_{1, (2)}).w^L_{2,1} & \cdots & -\frac{2}{n}(y_2-\hat{y}_2)g'^L(z^L_{1, (2)}).w^L_{in^L,1} \\ \vdots \\ -\frac{2}{n}(y_n-\hat{y}_n)g'^L(z^L_{1, (n)}).w^L_{1,1} & -\frac{2}{n}(y_n-\hat{y}_n)g'^L(z^L_{1, (n)}).w^L_{2,1} & \cdots & -\frac{2}{n}(y_n-\hat{y}_n)g'^L(z^L_{1, (n)}).w^L_{in^L,1} \end{bmatrix} $
+    2. **Note: All of this is calculated in Layer L itself.**, P = matrix from previous layer , here previous layer for layer l is layer l+1 since backprop happens in the reverse direction.
+    3. $P^{L-1}$ is of order n x $in^L$ = n x $out^{L-1}$
+5. Observe $Z^{L-1} = (n, out^{L-1})$, which means $g'^{L-1}(Z^{L-1}) = \begin{bmatrix} g'^{L-1}(z^{L-1}_{1, (1)}) & g'^{L-1}(z^{L-1}_{2, (1)}) & \cdots & g'^{L-1}(z^{L-1}_{out^{L-1}, (1)}) \\ g'^{L-1}(z^{L-1}_{1, (2)}) & g'^{L-1}(z^{L-1}_{2, (2)}) & \cdots & g'^{L-1}(z^{L-1}_{out^{L-1}, (2)}) \\ & & \vdots & \\ g'^{L-1}(z^{L-1}_{1, (n)}) & g'^{L-1}(z^{L-1}_{2, (n)}) & \cdots & g'^{L-1}(z^{L-1}_{out^{L-1}, (n)}) \end{bmatrix}$ is of the same order, and $I^{L-1} = (n, in^{L-1})$
+6. compute $F^{L-1} = g'^{L-1}(Z^{L-1})\odot P^{L-1}$
+7. compute $\nabla W^{L-1} = (I^{L-1})^T.F^{L-1}$
+
+**Note:** $P^L = \begin{bmatrix} -\frac{2}{n}(y_1-\hat{y}_1) \\ -\frac{2}{n}(y_2-\hat{y}_2) \\ \vdots \\ -\frac{2}{n}(y_n-\hat{y}_n)  \end{bmatrix}$
 
 # Gradient Descent Types
 
@@ -181,6 +240,24 @@
 8. training_loss calcuated while fitting $\ne$ actual loss of NN on the same dataset.
     1. this will cause issues in knowing the derivative values exactly, hence cause issue in debugging the entire NN.
 
+## Weight initialization
+1. why **0 initialization** is a **problem**
+    1. Consider ReLU activation
+        1. dead neurons (z in g(z) is 0, hence g(z) is also 0, hence g'(z) is 0)
+    2. Consider Tanh activation
+        1. z in g(z) is 0, hence g(z) is also 0($e^0$ and $e^{-0}$), hence g'(z) is 1.
+        2. 
+    3. Consider Sigmoid activation
+        1. z in g(z) is 0, hence g(z) is 0.5, hence g'(z) is 0.25.
+        2. hidden layer becomes a single-neuron layer.
+        3. 
+2. why **constant number initialization** is a **problem** - for any layer
+    1. weights from the same input neuron/input are trained in the same way, hence have same values.
+    2. again, the hidden layer becomes like a single-neuron layer.
+    3. <font color="red">Doesn't seem like a problem here, code this and see</font>.
+3. <font color="red">lookout for random initilization between -1 to 1.</font>
+    1. <font color="red">plot distributions of activations per layer(store them as callbacks) for a epoch. (or better, first 5 and last 5 epochs)</font>
+    2. small and large random initializations are to be avoided, since they shift the values to 0/1/-1 depending upon activation = sigmoid,tanh,relu.
 
 # Keras 
 - Sequential model ---> Model (is the base class) --> Trainable, Layer (are the bases of Model)
