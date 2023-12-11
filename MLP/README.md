@@ -226,6 +226,34 @@
     1. for instance, `salary` as a feature does depend on data, max salary and min salary could be anything.
     2. `marks out of 100` is a feature suitable for normalization since max = 100, min = 0.
 5. for features where min-max is unknown, use standardization instead. ($x \rightarrow \frac{x-\mu}{\sigma} $)
+6. Not just the input feature matrix, but activation matrix output from each layer is also normalized before feeding into the subsequent layer.
+    1. Tanh and sigmoid activations already take care of this.
+    2. Needed implementation for activation functions not having a fixed range of values.
+
+### Covariate Shift
+1. shift in the distribution of features going from train to test set.
+    1. in other words, the behavior of samples in test set never seen in train set.
+
+### Internal Covariate Shift
+1. The distribution of inputs to hidden layers changes constantly, with each epoch.
+2. Hence, for some epochs a particular deeper hidden layer might see a particular distribution of activations, and the same layer can then see a different distributions owing to its previous layers undergoing weight updates.
+3. to tackle this, **lower learning rate** should be used.
+
+### Technique
+1. per layer, standardize the outputs, i.e. $\mu^l = 0, \sigma^l = 1$. ($z^l \rightarrow g^l(z^l) \rightarrow g^{l, N}(z^l) = I^{l+1}$)
+2. we can also standardize the unactivated outputs, and then apply activation and send to next layer. ($z^l \rightarrow z^{l, N} \rightarrow g^l(z^{l, N}) = I^{l+1}$)
+3. We need to use a `BatchNormalization()` layer in keras.
+4. $\mu^l_{B, j} = \frac{1}{m} \sum\limits_{i=1}^m z^l_{j, (i)}$ (mean of activations for this batch)
+    1. $\sigma^l_{B, j} = \sqrt{\frac{1}{m} \sum\limits_{i=1}^m \left(z^l_{j, (i)} - \mu^l_{B, j} \right)}$ (standard deviation of activations for this batch)
+5. $z^{l, N}_{j, (i)} = \frac{z^l_{j, (i)} - \mu^l_{B, j}}{\sigma^l_{B, j} + \epsilon}$ , where $\epsilon$ is a small number to avoid making the denominator 0.
+6. For each batch, an exponential moving average and exponential moving standard deviation are maintained per neuron.
+    1. These values are then **used as $\mu$ and $\sigma$ per layer per neuron while batch-normalizing on data to be predicted**.
+
+### Scaling and Shifting normalized value
+1. $z^{l, N}_{j, (i)} \rightarrow \Gamma^l_jz^l_{j, (i)} + \Beta^l_j$
+2. this is scaling and shifting the obtained normalized value.
+3. introducing the scaling factor offers the network the capability to fine-tune activations beyond just mean and variance adjustment, potentially aiding in more effective representation learning and regularization.
+4. 
 
 ## Dropout
 1. randomly shutoff neurons of selected layers.
@@ -279,6 +307,18 @@
     9. Therefore, if constant number initialization is used, regardless of number of units specified per layer, all layers become as if they only have 1 neuron.
 
 3. small and large random initializations are to be avoided, since they shift the values to 0/1/-1 depending upon activation = sigmoid,tanh,relu.
+
+## Xavier Normal Initialization
+1. a.k.a. Glorot Normal Initialization
+2. apt with tanh activation as hidden layer
+3. variance of randomly initialized weights should be $\frac{1}{in^l + out^l}$.
+
+## Xavier/Glorot Uniform Initialization
+1. the default initilization technique used in `keras Dense` layer.
+
+## He Normal Initialization
+1. apt with ReLU activation as hidden layer
+2. variance of randomly initialized weights should be $\frac{1}{in^l}$.
 
 # Keras 
 - Sequential model ---> Model (is the base class) --> Trainable, Layer (are the bases of Model)
