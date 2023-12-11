@@ -244,20 +244,41 @@
 1. why **0 initialization** is a **problem**
     1. Consider ReLU activation
         1. dead neurons (z in g(z) is 0, hence g(z) is also 0, hence g'(z) is 0)
-    2. Consider Tanh activation
+    2. Consider Tanh and Sigmoid activations
         1. z in g(z) is 0, hence g(z) is also 0($e^0$ and $e^{-0}$), hence g'(z) is 1.
-        2. 
-    3. Consider Sigmoid activation
-        1. z in g(z) is 0, hence g(z) is 0.5, hence g'(z) is 0.25.
-        2. hidden layer becomes a single-neuron layer.
-        3. 
+        2. z in g(z) (Sigmoid) is 0, hence g(z) is 0.5, hence g'(z) is 0.25.
+        3. hence, derivatives aren't a problem.
+    3. Recall the backpropagation steps.
+        1. The inputs to all layers except the input layer are null matrices.
+        2. Hence the matrix $\nabla W^l = (I^l)^T.F^l$ also becomes a null matrix.
+        3. Gradient is 0, means all hyperparameters will stay the same, i.e. 0.
 2. why **constant number initialization** is a **problem** - for any layer
     1. weights from the same input neuron/input are trained in the same way, hence have same values.
     2. again, the hidden layer becomes like a single-neuron layer.
-    3. <font color="red">Doesn't seem like a problem here, code this and see</font>.
-3. <font color="red">lookout for random initilization between -1 to 1.</font>
-    1. <font color="red">plot distributions of activations per layer(store them as callbacks) for a epoch. (or better, first 5 and last 5 epochs)</font>
-    2. small and large random initializations are to be avoided, since they shift the values to 0/1/-1 depending upon activation = sigmoid,tanh,relu.
+    3. Input matrix to the first layer ($I^1$) is the feature matrix.
+        1. input to 2nd layer: $I^2 = \begin{bmatrix} g^1(w^1 \sum\limits_{j=1}^{in^1} x_{j, (1)}) & g^1(w^1 \sum\limits_{j=1}^{in^1} x_{j, (1)}) & \cdots & g^1(w^1 \sum\limits_{j=1}^{in^1} x_{j, (1)}) \\ g^1(w^1 \sum\limits_{j=1}^{in^1} x_{j, (2)}) & g^1(w^2 \sum\limits_{j=1}^{in^1} x_{j, (2)}) & \cdots & g^1(w^1 \sum\limits_{j=1}^{in^1} x_{j, (2)}) \\ & & \vdots & \\ g^1(w^1 \sum\limits_{j=1}^{in^1} x_{j, (n)}) & g^1(w^1 \sum\limits_{j=1}^{in^1} x_{j, (n)}) & \cdots & g^1(w^1 \sum\limits_{j=1}^{in^1} x_{j, (n)}) \end{bmatrix} $
+        2. input to 3rd layer: $I^3 = \begin{bmatrix} g^2 \left(w^2 in^2 g^1(w^1 \sum\limits_{j=1}^{in^1} x_{j, (1)}) \right) & g^2 \left(w^2 in^2 g^1(w^1 \sum\limits_{j=1}^{in^1} x_{j, (1)})\right) & \cdots & g^2 \left(w^2 in^2 g^1(w^1 \sum\limits_{j=1}^{in^1} x_{j, (1)})\right) \\ g^2 \left(w^2 in^2 g^1(w^1 \sum\limits_{j=1}^{in^1} x_{j, (2)})\right) & g^2 \left(w^2 in^2 g^1(w^2 \sum\limits_{j=1}^{in^1} x_{j, (2)})\right) & \cdots & g^2 \left(w^2 in^2 g^1(w^1 \sum\limits_{j=1}^{in^1} x_{j, (2)})\right) \\ & & \vdots & \\ g^2 \left(w^2 in^2 g^1(w^1 \sum\limits_{j=1}^{in^1} x_{j, (n)})\right) & g^2 \left(w^2 in^2 g^1(w^1 \sum\limits_{j=1}^{in^1} x_{j, (n)})\right) & \cdots & g^2 \left(w^2 in^2 g^1(w^1 \sum\limits_{j=1}^{in^1} x_{j, (n)})\right) \end{bmatrix} $
+        
+        3. So the pattern is that all elements of the same row are the same.
+    4. Now, consider the last layer, L.
+        1. $F^L = \begin{bmatrix} f^L_{(1)} \\ f^L_{(2)} \\ \vdots \\ f^L_{(n)} \end{bmatrix}, I^L = \begin{bmatrix} -- & I^L_{(1)} & --  \\ -- & I^L_{(2)} & --  \\ & \vdots & \\ -- & I^L_{(n)} & --  \end{bmatrix}, \nabla W^L = (I^L)^T.F^L = \begin{bmatrix} \sum\limits_{i=1}^n I^L_{(i)}f^L_{(i)} \\ \sum\limits_{i=1}^n I^L_{(i)}f^L_{(i)} \\ \vdots \\ \sum\limits_{i=1}^n I^L_{(i)}f^L_{(i)} \end{bmatrix}$
+        2. since the initial weights for matrix $W^L$ were the same, the final weights are also the same.
+    5. Now, consider the second last layer , L-1
+        1. $P^{L-1} = F^L.(W^L)^T = \begin{bmatrix} f^L_{(1)} \\ f^L_{(2)} \\ \vdots \\ f^L_{(n)} \end{bmatrix} \begin{bmatrix} w^L & w^L & \cdots & w^L \end{bmatrix} = \begin{bmatrix} -- & w^Lf^L_{(1)} & --  \\ -- & w^Lf^L_{(2)} & --  \\ & \vdots & \\ -- & w^Lf^L_{(n)} & --  \end{bmatrix}_{n \times out^{L-1}} $,   Let $\, p^{L-1}_{(i)} = w^Lf^L_{(i)}$
+        2. Even $g'^{Z-1}(Z^{L-1})$ has the pattern of all elements of the same row being the same.
+        3. $F^{L-1} = g'^{L-1}(Z^{L-1})\odot P^{L-1} = \begin{bmatrix} ---f^{L-1}_{(1)}--- \\ ---f^{L-1}_{(2)}--- \\ \vdots \\ ---f^{L-1}_{(n)}--- \end{bmatrix} $
+        4. $\nabla W^{L-1} = (I^{L-1})^T.F^{L-1} = \begin{bmatrix} -- & I^{L-1}_{(1)} & --  \\ -- & I^{L-1}_{(2)} & --  \\ & \vdots & \\ -- & I^{L-1}_{(n)} & --  \end{bmatrix}^T.F^{L-1} = \begin{bmatrix} \sum\limits_{i=1}^n I^{L-1}_{(i)}f^{L-1}_{(i)} \\ \sum\limits_{i=1}^n I^{L-1}_{(i)}f^{L-1}_{(i)} \\ \vdots \\ \sum\limits_{i=1}^n I^{L-1}_{(i)}f^{L-1}_{(i)} \end{bmatrix}$
+
+        2. since the initial weights for matrix $W^{L-1}$ were the same, the final weights are also the same.
+    6. Now, consider the first layer, l=1
+        1. $\nabla W^{1} = (I^{1})^T.F^{1} = \begin{bmatrix} x_{1, 1} & \cdots & x_{1, in^1}  \\ x_{2, 1} & \cdots & x_{2, in^1}  \\ & \vdots & \\ x_{n, 1} & \cdots & x_{n, in^1}  \end{bmatrix}^T.F^{1} = \begin{bmatrix} \sum\limits_{i=1}^n x_{i, 1}f^{1}_{(i)} & \sum\limits_{i=1}^n x_{i, 1}f^{1}_{(i)} & \cdots & \sum\limits_{i=1}^n x_{i, 1}f^{1}_{(i)} \\ \sum\limits_{i=1}^n x_{i, 2}f^{1}_{(i)} & \sum\limits_{i=1}^n x_{i, 2}f^{1}_{(i)} & \cdots & \sum\limits_{i=1}^n x_{i, 2}f^{1}_{(i)} \\ & & \vdots & \\ \sum\limits_{i=1}^n x_{i, in^1}f^{1}_{(i)} & \sum\limits_{i=1}^n x_{i, in^1}f^{1}_{(i)} & \cdots & \sum\limits_{i=1}^n x_{i, in^1}f^{1}_{(i)} \end{bmatrix}$
+        2. Here, the gradient matrix of the first layer shows the input-matrix pattern of all elements of a row being the same, but elements of the same column can very well be different.
+        3. Post weight-update, each row of the weight matrix will be different from each other, but within row all elements are the same.
+    7. This makes outputs from all neurons the same, for a given training sample.
+    8. Hence all neurons can basically be replaced by a single neuron.
+    9. Therefore, if constant number initialization is used, regardless of number of units specified per layer, all layers become as if they only have 1 neuron.
+
+3. small and large random initializations are to be avoided, since they shift the values to 0/1/-1 depending upon activation = sigmoid,tanh,relu.
 
 # Keras 
 - Sequential model ---> Model (is the base class) --> Trainable, Layer (are the bases of Model)
