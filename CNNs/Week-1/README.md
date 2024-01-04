@@ -30,15 +30,14 @@
 2. Object detection: self-driving cars have to not only detect other cars but also their position as well.
 3. Neural Style Transfer: apps that *cartoonify* your face, apply some sort of neural transfer.
 
-![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7B1%20of%20the%20few%20problems%20with%20CV%7D%7D): inputs can get very big(suppose 64![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 64![equation](https://latex.codecogs.com/png.latex?%5Ctimes)3 (RGB channel) = 12288 features, but for a high resolution image, like 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 3(RGB channel) = 3M features) now if  a fully-connected layer is used, with the first hidden layer contains 1000 hidden units, then total weights = 1000![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 3M matrix = 3B parameters. computational, memory requirements ![equation](https://latex.codecogs.com/png.latex?%5Cuparrow) , difficult to get enough data to prevent NN from over-fitting.
+<font color="red">One of the few problems with CV related tasks</font>: inputs can get very big(suppose $64\times 64\times 3$ (RGB channel) = 12288 features, but for a high resolution image, like $1000\times 1000\times 3$ = 3M features) now if  a fully-connected layer is used, with the first hidden layer contains 1000 hidden units, then total weights = $1000\times 3M$ matrix = 3B parameters. computational, memory requirements ![equation](https://latex.codecogs.com/png.latex?%5Cuparrow) , difficult to get enough data to prevent NN from over-fitting.
+
+To handle such large-res images, convolutions(the convolutional operation), and in turn CNNs are used.
 
 
-
-To handle such large-res images, convolutions, and in turn CNNs are used.
-
-
-
-
+<img src="../cnn_layerwise_recognition.png" width=400/>
+- as shown in the above image, simple $\rightarrow$ complex $\rightarrow$ more complex patterns are detected as we go deeper.
+- 
 
 # Lecture 2, 3- Edge-Detection<a name="res1lec2"></a>
 
@@ -224,54 +223,41 @@ The method of learning ![equation](https://latex.codecogs.com/png.latex?%5Ctextr
 
 [please find the video link here](https://www.youtube.com/watch?v=JWlLkgbEDQM&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=4)
 
-image = 6![equation](https://latex.codecogs.com/png.latex?%5Ctimes)6 , filter-3 ![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 3 = output-resolved-4 ![equation](https://latex.codecogs.com/png.latex?%5Ctimes) 4 , or image-n ![equation](https://latex.codecogs.com/png.latex?%5Ctimes) n ,  filter-f ![equation](https://latex.codecogs.com/png.latex?%5Ctimes) f ,  output-resolved = (n-f+1) ![equation](https://latex.codecogs.com/png.latex?%5Ctimes) (n-f+1)
+image = 6 $\times$ 6 , filter-3 $\times$ 3 = output-resolved-4 $\times$ 4 , or image-n $\times$ n ,  filter-f $\times$ f ,  output-resolved = (n-f+1) $\times$ (n-f+1)
 
-hence as the filter becomes bigger(f![equation](https://latex.codecogs.com/png.latex?%5Cuparrow)) , the output-resolved image becomes smaller. for the 6![equation](https://latex.codecogs.com/png.latex?%5Ctimes)6 image, the filter can be applied only for a few iterations, ![equation](https://latex.codecogs.com/png.latex?6%5Crightarrow4%5Crightarrow2) . It wouldn't be practical if every-time some low-level features like edges are detected(i.e. the filter is convoluted with the input image and the output resolved image obeys the edge-detection pattern) the input image shrinks.  This shrinking would be particularly troublesome in Deep-neural nets.
-
-A lot of information is thrown away when the corner-pixels and edge-pixels of the image are used only once to obtain the convoluted output, whereas inner pixels are found to be overlapped in many f![equation](https://latex.codecogs.com/png.latex?%5Ctimes)f sub-matrices of the input-image. 
-
-To solve these issues, a *border* of pixels is added to the original image . hence an n![equation](https://latex.codecogs.com/png.latex?%5Ctimes)n image becomes an n+2 ![equation](https://latex.codecogs.com/png.latex?%5Ctimes)  n+2 image. Padding is usually done with 0's. Hence the convoluted output becomes n+2-f+1 = (n-f+3![equation](https://latex.codecogs.com/png.latex?%5Ctimes)n-f+3).  This is for when **p=1**. If suppose padding is with **p** number of borders, input = ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bn&plus;2p%7D%5Ctimes%20%5Ctextrm%7Bn&plus;2p%7D)convoluted image is ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bn&plus;2p-f&plus;1%7D%5Ctimes%20%5Ctextrm%7Bn&plus;2p-f&plus;1%7D) . For our n=6, p=1,f=3, we can now operate as: , if ![equation](https://latex.codecogs.com/png.latex?%28%5Ctextrm%7B6%7D%5Crightarrow%5Ctextrm%7B8%7D%29%5Crightarrow%20%5Ctextrm%7B6%7D%5Crightarrow%20%5Ctextrm%7B4%7D%5Crightarrow%20%5Ctextrm%7B2%7D) suppose we use padding only once, i.e. *just for the input image*. This results in an increased contribution of the corner and edge pixels in the output-convoluted image.
-
-
+- hence, as the filter becomes bigger, the output-resolved image becomes smaller. 
+- for the 6 $\times$ 6 image, the filter can be applied only for a few iterations, $6\rightarrow4\rightarrow2$. 
+    - It wouldn't be practical whenever some low-level features like edges are detected (i.e. the filter is convoluted with the input image and the output resolved image obeys the edge-detection pattern) the input image shrinks.
+- This shrinking would be particularly troublesome in Deep-neural nets.
+- A lot of information is thrown away when the corner-pixels and edge-pixels of the image are used only once to obtain the convoluted output, whereas inner pixels are found to be overlapped in many f $\times$ f sub-matrices of the input-image.
+- To solve these issues, a *border* of pixels is added to the original image. 
+- hence, an n $\times$ n image becomes an n+2p-f+1 $\times$ n+2p-f+1, here p = 1.
+- Padding is usually done with 0's. 
+- This results in an increased contribution of the corner and edge pixels in the output-convoluted image.
 
 Two common choices to select p-value, or rather decide whether to pad or not: Valid and Same convolutions.
 
-
-
 ## Valid Convolutions<a name="validconv"></a>
-
-* no padding
-
-
+* no padding, **p = 0**
 
 ## Same Convolutions<a name="sameconv"></a>
 
 * pad as much so that output-convoluted image-size is same as that of the original-unpadded image-size.
-* suppose n, f. then choose a p such that, ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bn%7D%5Crightarrow%5Ctextrm%7Bn&plus;2p%7D%5Crightarrow%5Ctextrm%7Bn&plus;2p-f&plus;1%7D) such that n+2p-f+1 = n, or  ![equation](https://latex.codecogs.com/png.latex?%5Ctextrm%7Bp%20%3D%7D%20%5Cfrac%7B%5Ctextrm%7Bf-1%7D%7D%7B%5Ctextrm%7B2%7D%7D).
-
-
-
-By convention in CV, f = odd.![equation](https://latex.codecogs.com/png.latex?%7B%5Ccolor%7BRed%7D%20%5Ctextrm%7Bfind%20why%7D%7D). 
-
-one reason might be because of the above equation for p, if f = even, we would need some sort of asymmetric padding(fractional p means padding is asymmetric.)
-
-
-
-
+* suppose n, f. then choose a p such that, n+2p-f+1 = n, i.e. p = $\frac{f-1}{2}$.
 
 # Lecture-5 : Strided convolutions<a name="res1lec5"></a>
 
 [please find the video link here](https://www.youtube.com/watch?v=eJxFDAKDemA&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=5)
 
-stride=s,it basically means moving the filter by *s* number of steps, while convolution  with the input image. Till now we have been using s =1 . Hence when n=7, f=3, but s =2(instead of 1), our output image has resolution of ( {n - f} / s) +1, i.e. 3.
-
-using n, f, s, p ; output-image size = ![equation](https://latex.codecogs.com/png.latex?%5Clfloor%7B%5Cfrac%7Bn&plus;2p-f%7D%7Bs%7D%7D%5Crfloor&plus;1). Round this fraction **down**, in case its not an integer. this indicates that if part of the image couldn't convolve with the filter, then we ignore that entire f![equation](https://latex.codecogs.com/png.latex?%5Ctimes)f sub-matrix .
+- stride=s,it basically means moving the filter by *s* number of steps, while convolution with the input image. 
+    - Till now we have been using s =1 . 
+    - Hence when n=7, f=3, but s =2 (instead of 1), our output image has resolution of: $1+ \frac{n - f}{s}$, i.e. 3.
+- using n, f, s, p ; output-image size = $1 + \lfloor \frac{n+2p-f}{s} \rfloor$.
+- Round this fraction **down**, in case its not an integer. 
+- this indicates that if part of the image couldn't convolve with the filter, then we ignore that entire f $\times$ f sub-matrix.
+- This obviously causes information loss, **but** is typically used to locate **high-level features**, and **saving on compute-power** when **larger/higher images** are to be used for training.
 
 <img src="images/stridConv.png" />
-
-
-
-
 
 # Lecture-6 : Convolutions over volume<a name="res1lec6"></a>
 
@@ -343,15 +329,30 @@ Types of layers in a CNN:
 
 [please find the video link here](https://www.youtube.com/watch?v=XTzDMvMXuAk&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=9)
 
+## Pre-pooling issue
+1. Say there are 100 filters used to extract features/information from an input image, such that the resultant convoluted image(s) will have 100 in their dimensionality.
+    - this will explode memory requirements.
+2. To combine these 100 output images into a single image is where pooling is used.
+3. Translation variance is also another issue.
+    1. features spotted as part of convolving with filters become location based.
+        1. imagine 2 training samples of a cat detection task.
+        2. 1 sample has a cat in the left portion of the frame, the other on the right.
+        3. on convolving with filters, one sample will have say *ear* detected on the left, the second will have it detected on the *right*.
+        4. although the same body part is being detected, its location w.r.t. the image,frame orientation is being mis-translated into a new feature. \
+        <img src="../translation_variance.png" height="200" />
+4. Even pooling has 2 parameters associated: size and stride.
+    1. for instance, a size of 2x2 means in a grid of 2x2, w.r.t. the convoluted image, perform the pooling operation.
+    2. the pooling operation could be min/max/average/l2/global.
+    3. this 2x2 is traversed throughout the convoluted image at a given stride parameter value.
+5. pooling is done to capture most dominant features on a low-level.
+
 ## Max-pooling<a name="res1lec9unit1"></a>
 
 <img src="images/m1.png" />
 
-Think of the 4![equation](https://latex.codecogs.com/png.latex?%5Ctimes)4 input as a middle-layer or activation-layer for some features, a large number means that some particular features is detected(recall that if an edge existed, the output would have either the negatively or positively highest value, and if a feature doesn't exist or isn't detected by the current filter, the output-cell value for that feature would be  very small.) 
-
-Hence, it may be that the **9** represents some sort of a stark feature. 
-
-Hence if a feature is detected, then its value for that sub-matrix is high, and max-pooling would be used to preserved that *high value detected, which actually corresponds to that particular feature*. 
+- Think of the 4![equation](https://latex.codecogs.com/png.latex?%5Ctimes)4 input as a middle-layer or activation-layer for some features, a large number means that some particular features are detected(recall that if an edge existed, the output would have either the negatively or positively highest value, and if a feature doesn't exist or isn't detected by the current filter, the output-cell value for that feature would be  very small.) 
+- Hence, it may be that the **9** represents some sort of a stark feature (**enhanced feature detection**). 
+- Hence if a feature is detected, then its value for that sub-matrix is high, and max-pooling would be used to preserved that *high value detected, which actually corresponds to that particular feature*. 
 
 Any low values might indicate that some feature isn't detected, or is very minutely present.
 
@@ -368,8 +369,10 @@ Since there is no concept of *number of filters*, number of channels of the inpu
 
 common choice of hyperparameters : f=2, s=2, usually padding isn't used here. this reduces the input-image size to half of its original value(use the n-f/s equation.)
 
-
-
+## Concerns related to pooling
+1. sometimes, the problem might need translational variance to exist/persist.
+    1. usage of pooling will eliminate that, resulting in bad model/learning.
+    2. image segmentation + object detection.
 
 
 # Lecture-10 : CNN example<a name="res1lec10"></a>

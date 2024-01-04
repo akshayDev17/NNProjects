@@ -17,22 +17,43 @@
 
 
 # Lecture-1 : Object Localisation<a name="res1lec23"></a>
+- localization by definition means that within a bounding box, only 1 object will exist.
+  - the case where more than 1 object could exist is called object detection.
+  - this basically denotes all objects found within an image.
+- draw a bounding box to indicate the position of the identified object.
+- usually 1 object in input-image while performing localisation.
+- Modify the final layer s.t. it outputs a bounding box(b $_x$ , b $_y$, b $_h$, b $_w$), along with outputting the class of object. 
+  - Hence the **labels** of the **training set** need to be appropriately **modified** to **have** the bounding-box values (b $_x$, b $_y$, b $_h$, b $_w$)  as well. 
+  - Convention of coordinates:
+    - usually top-left corner = (0, 0)
+    - bottom-right : (1, 1)
+    - b $_x$ , b $_y$, b $_h$, b $_w$ all are real numbers in range \[0, 1\].
+    - (b $_x$ , b $_y$) - location of centre of bounding box.
+    - (b $_h$, b $_w$) - height, width of bounding box.
+    - this means that bounding box is defined by region enclosed in these 4 points
+      - (b $_x$ - $\frac{b_w}{2}$ , b $_y$)
+      - (b $_x$ + $\frac{b_w}{2}$ , b $_y$)
+      - (b $_x$ , b $_y$ - $\frac{b_h}{2}$)
+      - (b $_x$ , b $_y$ + $\frac{b_h}{2}$)
+- $\begin{bmatrix}p_c\\b_x\\b_y\\b_h\\b_w\\c_1\\c_2\\c_3 \end{bmatrix}$ = target-label (y) , where p_c = probability that an object of class c exists., if c $\epsilon$ {valid-objects}, then bounding boxes are given by (b $_x$ , b $_y$, b $_h$, b $_w$)
+  - .here $c_1, c_2, c_3$ represent the elements of valid class-set. 
+  - $p_c$ = 0 means no object could be identified within the bounding box defined by (b $_x$ , b $_y$, b $_h$, b $_w$). 
+  - $p_c$ = 1, $\exists \, c_i$ , $ c_i \epsilon$ C(valid class set), such that  $c_i = 1 $, meaning there exists exactly 1 object within the bounding box defined by (b $_x$ , b $_y$, b $_h$, b $_w$).
+    - this could now mean that , for instance $c_1, c_2, c_3 = (1, 0, 0)$ means the bounding box contains an object of class 1.
+- this entire vector becomes the target vector to be learnt/predicted.
 
-draw a bounding box to indicate the position of the identified object.
+## Loss-function 
 
-usually 1 object in input-image while performing localisation.
+- $\mathcal{L} \left(\hat{y}, y \right) = \begin{cases} \sum\limits_{i=1}^8 (\hat{y_i}-y_i)^{2} ,\, \quad if \; y_1 \ne 0\\ (\hat{y_1}-y_1)^{2} ,\qquad if \; y_1 = 0\end{cases}$ ,  i ranges from 1 to size of target-label-vector.
+- $y_1 = 0$ means no class instance found in the image/bounding box.
 
-background - neither of 3 classes detected. add the layer to output a bounding box(b<font size="5">$_x$</font>, b<font size="5">$_y$</font>, b<font  size="5">$_h$</font>, b<font  size="5">$_w$</font>), along with outputting the class of object. Hence the **labels** of the **training set** need to be appropriately **modified** to **have** the bounding-box values**(b<font size="5">$_x$</font>, b<font size="5">$_y$</font>, b<font  size="5">$_h$</font>, b<font  size="5">$_w$</font>)**  as well. 
-
-$\begin{bmatrix}p_c\\b_x\\b_y\\b_h\\b_w\\c_1\\c_2\\c_3 \end{bmatrix}$ = target-label (y) , where p_c = probability that an object of class c exists., if c $\epsilon$ {valid-objects}, then bounding boxes are given by (b<font size="5">$_x$</font>, b<font size="5">$_y$</font>, b<font  size="5">$_h$</font>, b<font  size="5">$_w$</font>). here c<font size="5">$_\textrm{1}$</font>,c<font size="5">$_\textrm{2}$</font>,c<font size="5">$_\textrm{3}$</font> represent the elements of valid class-set. p<font size="5">$_{\textrm{c}}$</font>=0 means no object could be identified. if p<font size="5">$_{\textrm{c}}$</font>=1, $\exists$ $ \textrm{c}_\textrm{i}$ , c<font size="4.5">$_\textrm{i} \epsilon$</font> C(valid class set), such that  c<font size="4.5">$_\textrm{i} $</font> = 1 .
-
-Loss-function $\mathcal{L} $(<font size="4">$\hat{\textrm{y}}$</font>, y) = <font size="5"> $\begin{cases} \sum\limits_{i}(\hat{y_i}-y_i)^{2} ,\, \quad if \; y_1 \ne 0\\ (\hat{y_1}-y_1)^{2} ,\qquad if \; y_1 = 0\end{cases}$</font> ,  i ranges from 1 to size of target-label-vector.
-
-Loss-functions suggested:
+## Loss-functions suggested:
 
 * log-likelihood loss to softmax output for class-prediction.
+  - all $c_i$ terms add to 1.
 * squared-error for bounding box coordinates
-* logistic-loss for p<font size="4.7">$_\textrm{c}$</font> 
+* logistic-loss for $p_c$.
+  - binary classification target, either 0 or 1.
 
 
 

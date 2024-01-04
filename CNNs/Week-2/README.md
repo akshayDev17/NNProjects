@@ -34,7 +34,7 @@ total number of parameters = (150+6)+0+(400+16)+0+(48000+1)+(10080+1) = 58,653.
 
 Observations:
 
-* n$_H$, n$_W \downarrow$ n$_C \uparrow$ 
+* n $_H$, n $_W \downarrow$ n $_C \uparrow$ 
 
 [Le-Cuhn et. al, 1998](https://github.com/akshayDev17/NNProjects/blob/master/notes/research_papers/Lecun98.pdf)
 

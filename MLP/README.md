@@ -320,6 +320,75 @@
 1. apt with ReLU activation as hidden layer
 2. variance of randomly initialized weights should be $\frac{1}{in^l}$.
 
+# Optimizers in Keras
+
+## Exponentially Weighted Moving Average(EWMA)
+1. $V_{t} = \beta V_{t-1} + (1-\beta)\theta_t$
+2. variation of $V_t$ with $\beta$: <img src="beta_vs_ewma.png" />
+    1. higher $\beta$: more importance given to previous moving average, 
+    2. lower $\beta$: more importance given to current new term, 
+
+## Momentun Optimization
+1. used to handle non-convex loss functions
+    1. loss function is a function of al hyperparams across all layers.
+    2. this can easily make the loss function, whose formula may be convex, a non-convex function
+        1. but the plot of the function be as if it contains several local minima and/or maxima.
+    3. to optimize this created *non-convex* loss function is where momentum is used.
+2. Compute an EWMA of past gradients.
+    1. gradients for each hyperparam is the $\theta_t$ expression in the formula for EWMA in the previous subsection.
+3. Hence, the update equation for hyperparams becomes $W_t = W_{t-1} - V_{t-1}$
+    1. $V_{t} = \beta V_{t-1} + \eta\nabla W_t$
+    2. This $\beta$ term is called the ***decaying factor***.
+        1. the smaller it is, the bigger the decay.
+        2. the reason behind calling it decay is that if the search starts going in the opposite direction, effects of much earlier values will be controlled by it, and newer values(responsible for bringing the search back to optimum) will have a greater contribution towards velocity.
+        This *decreased/negative* velocity will bring a reverse change to the weights.
+        2. the more closer to 1 it is, the lesser the decay.
+        3. at =1, there's no decay, all EWMA terms have the same weightage.
+        4. $\beta$ can be imagined as an inverse of the friction coefficient, i.e., higher the $\beta$ lower is the friction. 
+           
+           <img src="gradient_descent_with_momentum.gif" />
+        5. In the following scenario, momentum is disadvantagous because the optimizer cross the optimum, oscillates back into the optima, crossing it again from the other side, and *wastes time* in this oscillating before final convergence.
+4. Observe that if momentum is 0($\beta = 0$), the update equations becomes the vanilla gradient descent.
+5. Reduction in decay factor(from 1) increases friction thereby decreasing the repeated oscillations, but an increased friction means lesser capability/higher tendency to cross/stay in a local minima.
+
+
+## Nesterov Accelerated Gradient (NAG)
+1. $W_{la}$ (look-ahead) $ = W_t - \beta V_{t-1}$
+2. $V_t  = \beta V_{t-1} + \eta \nabla W_{la}$
+    1. $\nabla W_{la}$ means calculate the gradient when the hyperparams are updated to their respective look-ahead values.
+3. On combining the above 2 requations, we get: $V_t = (W_t - W_{la}) + \eta \nabla W_{la}$
+4. $W_{t+1} = W_t - V_t$
+5. This can be understood as looking ahead where the search lands up with momentum(velocity) = $V_{t-1}$ , calculating velocity at this new point, and using this to arrive at the actual next point the search should end up at.
+
+## Geometrical intuition of why NAG has lesser convergence time than vanilla momentum
+1. <img src="nag_geomtric_intuition.png" width=500 />
+2. The *look ahead* value beforehand decreases the *velocity/momentum* hence the search instead of experiencing the 4a+4b in 2 different jumps, directly experiences it in a single step.
+    1. This means less time spent in futile oscillations $\rightarrow$ faster convergence.
+3. But this could also mean that **it has a higher tendency of being stuck in a local optima**.
+
+## Adaptive Gradient (AdaGrad)
+1. Learning rate is adapted as per *situation*.
+2. Works better when features have sparsity.
+3. different learning rates for different params(within the same layer)
+    1. if the update step is larger ($\nabla W$) , then $\eta$ is smaller
+4. $W_{t+1} = W_t - \eta \frac{\nabla W_t}{\sqrt{V_t + \epsilon}}$
+    1. **Before this**, $V_t = V_{t-1} + (\nabla W_t)^2$
+    2. this is how the learning rate gets scaled as per gradient value for that hyperparam.
+5. A vanishing gradient like situation can be seen for non-sparse datasets.
+    1. with a higher number of epochs, the $V_t$ becomes huge, hence the learning rate is scaled down which causes minimal update in hyperparam value.
+
+## Root Mean-Square Prop
+1. $V_t = \beta V_{t-1} + (1-\beta)(\nabla W_t)^2$
+2. $W_{t+1} = W_t - \eta \frac{\nabla W_t}{\sqrt{V_t + \epsilon}}$
+3. The older the epoch at which the gradient was calculated, the lesser $(1-\beta)^t$ will be its contribution to the momentum term $V_t$.
+    1. this controls the value of $V_t$, thus controlling the denominator and the *effective learning rate*.
+
+## Adam
+1. Using first and second moments of gradient.
+2. $W_{t+1} = W_t - \eta \frac{\hat{m_t}}{\sqrt{\hat{V_t} + \epsilon}}$
+    1. $\hat{m_t} = \frac{m_t}{1-\beta_1^t} \,\,\, , \,\,\, m_t = \beta_1 m_{t-1} + (1-\beta_1)\nabla W_t \,\, , \,\, \beta_1^t = 1-(1-\beta_1)^t $
+    2. $\hat{V_t} = \frac{V_t}{1-\beta_2^t} \,\,\, , \,\,\, V_t = \beta_2 V_{t-1} + (1-\beta_2)\nabla W_t \,\, , \,\, \beta_2^t = 1-(1-\beta_2)^t $
+
 # Keras 
 - Sequential model ---> Model (is the base class) --> Trainable, Layer (are the bases of Model)
     - Trainable is keras.backend dependent.
@@ -328,3 +397,8 @@
 - the Layer class has weights, of which some are `trainable=True`, others `trainable=False`.
 - after importing a module, use the .__file__ property to know the file location.
     - for instance `import tensorflow.keras.models as tfkm; tfsq.__file__` gives `/usr/local/lib/python3.10/dist-packages/keras/api/_v2/keras/models/__init__.py` as output.
+
+## Keras Tuner
+1. used to search for best hyperparameter values.
+2. Uses entire dataset as a single batch while performing `tuner.search()` function, hence slow and takes more resources for larger datasets.
+3. [API url](https://keras.io/api/keras_tuner/)
