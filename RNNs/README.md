@@ -1,5 +1,9 @@
 # Table of Contents
 1. [Introduction](#intro)
+2. [Forward Propagation](#forward_prop)
+3. [Many to One RNN Arch](#many_to_one_arch)
+4. [One to Many RNN Arch](#one_to_many_arch)
+5. [Many to many RNN Arch](#many_to_many_arch)
 
 # Introduction<a name="intro"></a>
 
@@ -16,8 +20,30 @@
         - **for the first word, this input happens to be random/null vector**.
 - the layer also possesses activation function.
 
-# Forward Propagation
+# Forward Propagation<a name="forward_prop"></a>
 1. <img src="RNNForwardProp.png" />
     1. sigmoid because sentiment analysis is binary classification.
 2. $O_1$ : output from 1st word of a given sample(sentence).
 3.  <img src="RNNForwardProp_2.png" />
+
+# Many to One RNN Arch<a name="many_to_one_arch"></a>
+1. Sequence of words(many) is fed, and output is a single integer/scalar value(one)(as opposed to a vector).
+2. Sentiment Analysis
+    1. based on text, predict sentiment of text
+3. Rating
+    1. based on movie review, star-rating prediction
+
+# One to Many RNN Arch<a name="one_to_many_arch"></a>
+1. Non-sequential data as input(it doesn't have  a sense of timesteps)
+2. Output is a time-step based value, i.e. a vector.
+    1. an example of `return_sequences=True`
+3. Image captioning
+    1. given an image(time-less, stationery data), output a caption, i.e. a sequence of words.
+
+# Many to many RNN Arch<a name="many_to_many_arch"></a>
+1. Seq2Seq model
+2. same and variable length many to many
+    1. output may or may not have the same number of timesteps as the input sequence. 
+    2. Machine translation = variable length many to many task.
+        1. read the entire input sequence, then start outputing the output sequence.
+        2. solved using encoder-decoder architecture.
