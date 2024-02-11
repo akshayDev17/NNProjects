@@ -7,6 +7,10 @@
 6. [Problems with RNN](#rnn_problems)
     1. [Long term dependencies](#long_term_dep)
     2. [Unstable gradients](#unstable_grad)
+7. []
+8. []
+9.
+10. [Bi-directional RNNs](#bi_rnn)
 
 # Introduction<a name="intro"></a>
 
@@ -68,9 +72,17 @@
 - exploding gradient in RNNs.
 - if the partial-derivatives in the expanded expression of $\nabla(\mathcal{L}(W))$ relevant for the early sequences are larger(rather than being smaller), then this problem arises.
 
+# GRUs
+- Gated Recurring Unit.
+- only maintains hidden state.
+- Reset gate output has same dimensionality as that of $h_{t-1}$, hence the termwise product is possible.
+- although the calculations involved in generating reset gate and $z_t$ are the same, they are purposely used as different layers.
+- <img src="gru.png" width="500" />
+
 # LSTMs
 - **Long-Short term memory**: retention of short-term and long-term context(STC, LTC).
 - <img src="rnn_vs_lstm.png" />
+- <img src="lstm-cell.svg" />
 - $h_{t-1}$: short-term memory , $c_{t-1}$: cell state(long-term memory) , 
 - each layer-conputation now returns 2 *things*(as opposed to 1 in a simpleRNN): \[hidden_state, cell_state\].
     - this is per input-sequence.
@@ -94,3 +106,31 @@
     - sigmoid on $\left[X_t, h_{t-1}\right]$ generates another d-dimensional vector
     - these 2 d-dimensional vectors undergo elementwise product.
     - *how much* of current cell state goes into output vector.
+
+
+# Stacked RNNs
+- stacked LSTMs/GRUs
+- <img src="stackedLSTMs.png" width="500">
+    - the $h_t$ of LSTM-1 becomes the $x_t$ for LSTM-2.
+- lower layers - basic features, upper layers - high-level features. much similar to early vs later Conv-layers.
+
+# Bi-directional RNNs<a name="bi_rnn"></a>
+- when future inputs affect past outputs
+    - 5 $^{th}$ input sequence affects the 3 $^{rd}$ output sequence.
+- NER is a relevant task.
+    - more particularly, what kind of named entity.
+    - for instance:
+        - sent1: I love amazon, its a great river.
+        - sent2: I love amazon, its an amazing website.
+        - sent1: amazon is a place, sent2: its an ORG.
+- POS tagging is another application.
+- Machine translation.
+- Sentiment analysis.
+    - compare performance with uni-directional RNNs.
+- <font color="red">Time series forecasting is a relevant application. How?</font>
+- <img src="bi_directional_rnn.png" />
+- output sequences from both directions are used to generate the predicted output.
+
+# How does dropout work in RNNs?
+
+# 
