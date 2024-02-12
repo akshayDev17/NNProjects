@@ -11,6 +11,11 @@
 8. []
 9.
 10. [Bi-directional RNNs](#bi_rnn)
+11. [Sequence to Seqeunce](#seq2seq)
+    1. []
+    2. []
+    3. []
+    4. [BLEU Score](#bleu)
 
 # Introduction<a name="intro"></a>
 
@@ -133,4 +138,53 @@
 
 # How does dropout work in RNNs?
 
-# 
+# Sequence to Seqeunce<a name="seq2seq"></a>
+- process a seqeunce completely and then output a new sequence, which could have a different length than that of the input sequence.
+- examples
+    - Machine translation
+    - text summarization
+    - Question-answer
+    - chatbot
+    - speech to text
+
+## Encoder-Decoder Arch
+1. Encoder: generates a training vector, called **context vector**, per input sequence.
+2. Decoder: processes this vector and generates an output sequence
+3. <img src="encoder_decoder_simple.png" width="400" />
+4. The $h_t$ and $c_t$ generated at the final timestep from the encoder processing the input sequence constitutes the **context vector**.
+5. The \<start\> token is sent as the first timestep input to the decoder.
+    1. Ideally the output generated from timestep $t$ is sent to timestep $t+1$, till the \<end\> token is produced as the output.
+4. Teacher Forcing
+    1. Occurs in the decoder.
+    2. act of sending the one-hot vector of the true next word, as opposed to that of the predicted next word by the decoder.
+    3. in the example below, for the sample translating "Think about it" $\Rightarrow$ "सोच लो", rather than sending the one-hot encoding of **लो**(prediction) to the next timestep, that of **सोच**(true/target) is sent.
+    5. This is done because the decoder shouldn't learn in an incorrect/wrong manner.
+5. Hence, during training, Teacher Forcing in decoder prevents output of timestep $t-1$ to be used as input for timestep $t$.
+
+## Improvements
+
+### Embeddings
+<img src="embedding_improvement_seq2seq.png" />
+
+### Deep LSTMs
+- <img src="deepLSTMs_improvement_seq2seq.png" />
+- Each level will send/receive $h_t,c_t$ to the same level in/from the other network.
+- Summary is stored in a denser manner, hence this works for large-text inputs.
+
+## BLEU(BiLingual Evaluation Understudy) Score<a name="bleu"></a>
+- evaluating prediction against multiple valid/good translations(target) for the same input sentence.
+- Task: French to English, input: "Le chat est sur le tapis"
+    - Ref 1: "The cat is on the mat"
+    - Ref 2: "There is a cat on the mat"
+    - Ref means possibly correct target output.
+-  understudy to humans.
+- Machine Translation prediction: "the the the the the the the"
+    - for a given n-gram, precision is defined as:
+        - $count$: frequency of that n-gram in the prediction.
+        - $count_{clip}$: highest frequency of that n-gram across all references.
+        - for the above prediction, $\frac{count_{clip}}{count} \left(\textrm{the}\right) = \frac{2}{7}$, 2 since the first reference has the unigram *the* occurring twice.
+- for an n-gram, the precision is given by $p_n$.
+- for a given MT prediction with sequence length $c$, BLEU score is given by $exp.\left(\frac{1}{W} \left(\sum\limits_{n=1}^c w_n p_n\right)\right); W = \sum w_n$:
+    - $w_n$: weight of that n-gram precision value.
+- it was observed that for smaller c, i.e. smaller generated sequences, BLEU score was generally high, hence a length-based penalty term, **brevity penalty**,  was also added.
+- **Modified BLEU** = $exp.\left(BP\right) exp.\left(\frac{1}{W} \left(\sum\limits_{n=1}^c w_n p_n\right)\right); BP = \begin{cases}1 & c > r \\ 1-\frac{c}{r} & c \le r\end{cases}$, where r = length of reference/target sequence.
