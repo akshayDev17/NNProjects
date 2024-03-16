@@ -245,3 +245,16 @@
     - But the increase is only for the first layer of this feed-forward network, as opposed to having a completely new feed-forward NN as observed in Bahdanau Attention.
 - Due to the scalar/dot-product used, this attention mechanism is called *Multiplicative Attention*.
 - Hence, **the computational efficiency benefits still stay**.
+
+# Limitations of Attention Mechanism
+- Sequential training, i.e. training by sending each token one after the other.
+- Slows down performance when trained on huge datasets.
+    - in usual ANN/CNNs , the training time is $O(batch\_size)$ (samples within a batch processed parallely)
+    - in Seq2Seq+Attention however, the training time is actually $O(batch\_size \times (train\_seq\_len + test\_seq\_len))$
+    - addition because first the train_seq will be processed token-by-token, generating the hidden states.
+        - after that the test-sequence will be processed token-by-token, using these generated hidden states.
+        - hence, even encoder and decoder cannot be parallelized, encoder will always precede decoder.
+    - This issue is why the training time on huge datasets is computationally infeasible/not worth the effort.
+    - This again means *transfer learning* cannot be used for this architecture.
+        - i.e. train a big CNN on a big dataset such as ImageNet, and then use this to fine-tune on a particular task.
+    

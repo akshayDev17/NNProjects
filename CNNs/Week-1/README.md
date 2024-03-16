@@ -261,9 +261,14 @@ Two common choices to select p-value, or rather decide whether to pad or not: Va
 
 # Lecture-6 : Convolutions over volume<a name="res1lec6"></a>
 
-[please find the video link here](https://www.youtube.com/watch?v=q2U9EPXeRKY&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=6)
-
-convolutions on RGB image, hence input image = ![equation](https://latex.codecogs.com/png.latex?6%5Ctimes%206%5Ctimes%203) hence the filter has to also be = ![equation](https://latex.codecogs.com/png.latex?3%5Ctimes%203%5Ctimes%203). Its obvious that number of channels in filter and input image should be the same. However, the output convoluted image has only **1 colour channel**.
+- [please find the video link here](https://www.youtube.com/watch?v=q2U9EPXeRKY&list=PL1w8k37X_6L9YSIvLqO29S9H0aZ1ncglu&index=6)
+- convolutions on RGB image, hence input image = $6\times 6\times 3$ 
+- here, the 3 represents the number of input channels.
+- it could be that the number of output channels (the `c` in `a x b x c`) is different from that of the input channels.
+    - in such cases, the actual kernels' shape would be `n_input_channels x kernel_size x kernel_size x n_output_channels`.
+    - in other words, for each output-channel, we would have n_input_channels kernels which would be convolved per input_channel pixel array and then results are added up to form that output-channel pixel array.
+    - <img width=500 src="convolving_volume_different_input_output_channels.png" />
+hence the filter has to also be = ![equation](https://latex.codecogs.com/png.latex?3%5Ctimes%203%5Ctimes%203). Its obvious that number of channels in filter and input image should be the same. However, the output convoluted image has only **1 colour channel**.
 
 <img src="images/rgb_convolution.png" />
 

@@ -60,7 +60,7 @@
 # Lecture-2 : Landmark Detection <a name="res1lec24"></a>
 
 * consider the problem of **face recognition** , suppose a *sub-problem* is to *locate corner of the eye* :
-  * modify the final-output layer to output (x, y) for the corner, as values l<font size="4.6">$_x$</font>, l<font size="4.6">$_y$</font>. 
+  * modify the final-output layer to output (x, y) for the corner, as values $l_x, l_y$. 
 
 * This is referred to as a **<font color="green" weight="bold">landmark</font>**. 
 * For L number of landmarks, output 2L values. 
