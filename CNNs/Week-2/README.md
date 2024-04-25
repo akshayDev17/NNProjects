@@ -219,7 +219,9 @@ As and when the dataset size increases, we could drop a bit more hidden layers, 
 
 # Lecture-9 : Data Augmentation<a name="res1lec21"></a>
 
-[please click here to watch the lecture]()
+- **checkout the [DataAugmentation_PyTorch.ipynb](./src/DataAugmentation_PyTorch.ipynb) notebook.**
+  - this covers demo of almost all image-transformations offered by torchvision.
+  - also details the advantages + limitations of each.
 
 * <img src="images/aug1.png" />
 * Mirroring on the vertical(Y)-axis:
