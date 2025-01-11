@@ -156,14 +156,14 @@
     1. Ideally the output generated from timestep $t$ is sent to timestep $t+1$, till the \<end\> token is produced as the output.
 4. Teacher Forcing
     1. Occurs in the decoder.
-    2. act of sending the one-hot vector of the true next word, as opposed to that of the predicted next word by the decoder.
+    2. act of sending the one-hot vector/embedding of the true next word, as opposed to that of the predicted next word by the decoder.
     3. in the example below, for the sample translating "Think about it" $\Rightarrow$ "सोच लो", rather than sending the one-hot encoding of **लो**(prediction) to the next timestep, that of **सोच**(true/target) is sent.
-    5. This is done because the decoder shouldn't learn in an incorrect/wrong manner.
+    4. This is done because the decoder, if given its own predictions,could learn incorrect patterns.
 5. Hence, during training, Teacher Forcing in decoder prevents output of timestep $t-1$ to be used as input for timestep $t$.
 6. Notice that there's a softmax layer from the output of the decoder.
     1. this is basically the representation of a Dense layer that has \#neurons = vocabulary size of sequence to be predicted.
-    2. The hidden state of each decoder-cell passes through this and a vocab-size,1) shaped vector is generated.
-    3. The activation used is softmax, so that probabilities for each token in the output-sequence vocabulary can be computed.
+    2. The hidden state of each decoder-cell passes through this and a `(vocab-size,1)` shaped vector, called **logits**,  is generated.
+    3. **logits** is then activated using a softmax layer/function, so that probabilities for each token in the output-sequence vocabulary can be computed.
     4. The sequence-ID with the highest likelihood: predicted token.
 
 ## Improvements
