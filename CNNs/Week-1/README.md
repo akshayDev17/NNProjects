@@ -419,6 +419,7 @@ Once the values of a filter are learned, it can be used with different parts of 
 * for eg. consider the vertical-edge detection case, any output-pixel depends only on the 9-values of the sub-matrix of the input-image, and not the *entire image*. 
 * hence connections are sparse, as in not all pixels are used to calculate value of 1 cell of output. 
 
-
-
-this operation is *immune to shifting of images*, or technically referred to as **translational invariance**.[Refer here](https://medium.com/@ageitgey/machine-learning-is-fun-part-3-deep-learning-and-convolutional-neural-networks-f40359318721)
+## Translational Variance
+* also read up the [translational variance notebook](./src/translationalVariance.ipynb) to know:
+    - what's translation invariance/variance?
+    - which of these layers are which? and why.
