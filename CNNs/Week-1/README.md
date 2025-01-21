@@ -11,10 +11,12 @@
 6. [Lecture-7 : 1-layer of Convolution](#res1lec7)
 7. [Lecture-8 : convnet example](#res1lec8)
 8. [Lecture-9: Max-pooling](#res1lec9) 
-   1. [max-pooling procedure](#res1lec9unit1)
-   2. [average-pooling](#res1lec9unit2)
-9. [Lecture-10 : CNN example](#res1lec10)
-10. [Lecture-11 : Why Convolutions?](#res1lec11):
+    1. [max-pooling procedure](#res1lec9unit1)
+    2. [average-pooling](#res1lec9unit2)
+    3. [Purpose of a pooling layer](#pooling_layer_purpose)
+    4. [Concerns related to pooling](#pooling_layer_concerns)
+10. [Lecture-10 : CNN example](#res1lec10)
+11. [Lecture-11 : Why Convolutions?](#res1lec11):
   1. [Parameter-sharing](#lec11n1)
   2. [Sparsity of connections](#lec11n2)
 
@@ -374,7 +376,13 @@ Since there is no concept of *number of filters*, number of channels of the inpu
 
 common choice of hyperparameters : f=2, s=2, usually padding isn't used here. this reduces the input-image size to half of its original value(use the n-f/s equation.)
 
-## Concerns related to pooling
+## Purpose of a pooling layer <a name="pooling_layer_purpose"></a>
+- translational(spatial) invariance
+- compression layer: compress local features so that subsequent convolutional-layers can extract global patterns.
+- successive pooling layers: may not be a good idea, since too much compression ---> loss of local information in the subsequent feature maps which might've carried a way of classifying the image/detecting some object to be detected/accurate regression prediction.
+- reduce risk of overfitting: smaller feature maps contain less redundant information.
+
+## Concerns related to pooling <a name="pooling_layer_concerns"></a>
 1. sometimes, the problem might need translational variance to exist/persist.
     1. usage of pooling will eliminate that, resulting in bad model/learning.
     2. image segmentation + object detection.
