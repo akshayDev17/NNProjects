@@ -1,5 +1,5 @@
 *.pickle
-*.jpg 
+# *.jpg 
 *.zip
 *.docx
 PetImages/

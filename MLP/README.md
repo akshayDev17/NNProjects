@@ -1,12 +1,17 @@
 # Perceptron
 1. single layer NN
 2. activation = Step function S; S = (`sum >= 0 ? 1 : 0`)
-    1. sum = $\sum w_ix_i$
+    1. sum = $\left(\sum\limits_{i=1}^{d} w_ix_i\right) + b$, i: $i^{th}$ feature
+    2. the original single layer perceptron, introduced by Frank Rosenblatt in 1953, used step function as its activation function
 3. basically a binary classifier.
-4. **Drawback** : can only work in problems where the samples are distributed in a cluster format, i.e. all positive samples are on one side of the d-dimensional space, and the negative on the other.
-    1. this can be verified as a 2D feature set problem, such that the perceptron becomes z = (Ax + By) >= 0 , x and y are the features.
-    2. would fail/perform poorly, say when positive samples are inside a d-dimensional closed region(such as a sphere) and all negative samples are outside of it.
-5. for binary classification, hinge-loss (seen in SVM) is used, with y = (-1, 1) and step function as (-1, 1) \[instead of (0,1)\].
+4. observe that this activation function is non-differentiable at x = 0. $\begin{align} RHD: \mathcal{f'}(0) = \lim\limits_{h\to 0^+}\dfrac{\mathcal{f}(0+h) - \mathcal{f}(0)}{h} = \frac{1-1}{h} = \frac{0}{0} \text{ indeterminate form, using L'Hopital's rule } = \frac{0}{1} = 0 \\ LHD: \mathcal{f'}(0) = \lim\limits_{h\to 0^-}\dfrac{\mathcal{f}(0+h) - \mathcal{f}(0)}{h} = \frac{0 - 1}{h} = +\infty \end{align}$
+    1. hence, gradient descent wasn't used in the parameter update equation
+    2. they instead calculated the error: $e = y - S$, then used this in place of the gradient in the update equation: $w_{new} = w_{old} - \eta e\mathbf{x}$, $\mathbf{x}$ being the feature vector used of the current sample whose prediction and error was just calculated. 
+    3. Note: **update step** is calculated for each **individual sample**.
+5. **Drawback** : can only work in problems where the samples are distributed in a cluster format, i.e. all positive samples are on one side of the d-dimensional space, and the negative on the other.
+    1. this can be verified as a 2D feature set problem, such that the perceptron becomes z = (Ax + By) >= 0 , x and y are the features. (when d = 2, i.e. x-axis : feature-1, y-axis: feature-2, then this SLP functions like a hyperplane dividing the feature space into 2 regions: class 1 and class 0)
+    2. would fail/perform poorly, say when positive samples are inside a d-dimensional closed region(such as a sphere) and all negative samples are outside of it (just like a hyperplane, as was observed in SVMs).
+6. for binary classification, hinge-loss (seen in SVM) is used, with y = (-1, 1) and step function as (-1, 1) \[instead of (0,1)\]. (since SVMs also had classes as +1 and -1, hinge loss suited there, and suits w.r.t. this new step function definition)
     1. $\mathcal{L} = \sum\limits_{i=1}^n max(0, -y_i f(x_i))$ , $f(x_i) = \sum\limits_{j=1}^d w_jx_{i, j}$
     2. when $y_i f(x_i) \ge 0$ then $\mathcal{L} = 0$ (meaning both are of the same sign, i.e. perfect binary classification).
     3. when $y_i f(x_i) \lt 0$ then $\mathcal{L} = -y_i f(x_i)$ (meaning both are of the opposite sign, i.e. perfect mislabelling).
@@ -15,46 +20,93 @@
         2. If $y_i f(x_i) \lt 0$, $\frac{\partial \mathcal{L}}{\partial w_j} = \frac{\partial \mathcal{L}}{\partial f(x_i)}\times \frac{\partial f(x_i)}{\partial w_j}  = -y_i x_{i, j}$
         3. for this perceptron, f(x) is assumed to be Linear function.
 6. Perceptron can morph into classic ML models as follows:
-    1. by itself, if the step function is used in the -1,1 format, then its a linear SVM.
+    1. when the step function is used in the -1,1 format, they behave similar to linear SVM(not identical because SVMs are based on the maximum margin principle, whereas no such basis for single layer perceptrons with this step function).
     2. if instead of step function, sigmoid is used for activation, with hinge-loss replaced by binary cross entropy, this becomes a logistic regressor.
     3. if softmax is used for activation, with categorical cross-entropy as loss, this becomes a multi-class classifier.
     4. if MSE if used as loss, this becomes a linear regressor (assuming linear activation).
 
 # Multi-Layer Perceptron
-- rather than the `out_dim = 1` , here `out_dim` can be anything.
+- Frank Rosenblatt's definition only support 1 output neuron, but for an MLP, the `out_dim` can be anything.
+- Frank Rosenblatt's definition only supported 1 layer, here there can be multiple layers.
 - for each layer, total trainable parameters = `out_dim x in_dim + out_dim`, since each neuron of this layer is outputing a term, it will have its bias term as well.
     - `out_dim` = #neurons in this layer.
-- perceptrons linked one after the other, outputting either a softmax (classification) or ReLU (regression) activation layer.
 - loss function is task dependent.
 
 # Activation Functions
-- all layers are linearly activated --> solving a linear regression/classification, where the weight matrix can be expressed as the params of all layers.
-- these help capture non-linearity, catering to **non-linearly separable problems**.
+
+## Why activation functions?
+- absence of an activation function $\rightarrow$ all layers are linearly activated $\rightarrow$ solving like a linear regressor/classifier, where the weight matrix of this effective linear regressor/classifier can be expressed in terms of the parameters (weights, biases) of all layers.
+- **non-linear activation** functions help **capture non-linearity**, catering to **non-linearly separable problems**.
 - should be differentiable since in backprop step gradient calculation is required.
 - it helps if its zero-centred(mean = 0) , as explained in the [tanh](#tanh) section, it makes gradients have different signs which ensures different kinds of updates(increment/decrement) experienced per parameter.
-- saturating functions (range is confined, for instance sigmoid -> (0,1), tanh -> (-1,1)), might lead to vanishing gradient problem.
+- saturating functions (range is confined, for instance sigmoid -> (0,1), tanh -> (-1,1)) might lead to vanishing gradient problem.
 
 ## Sigmoid
-- $\sigma(x) = \frac{1}{1+e^{-x}}$
-- this is how gradients vanish (larger values of x) \
-<img src="sigmoid.jpeg" />
+- $\sigma(x) = \frac{1}{1+e^{-x}} \quad , \nabla\sigma(x) = \sigma(x)(1-\sigma(x))$, 
+- this is how gradients vanish (larger values of x, **vanishing gradient problem in sigmoid**) \
+<img src="sigmoid.jpeg" width=300/>
 - non-zero centred (mean isn't 0, rather integrating from $-\infty$ to $+\infty$ gives almost $+\infty$).
 - even using this in a single early layer can lead to slow convergence due to its nature of pushing x closer to extremes(0 or 1).
     - for the same layer, all params will either be increased or decreased (as explained in the [tanh](#tanh) section), depending on the sign of all common terms in the expanded form of gradient using chain rule.
+- also notice that the gradient ranges from 0 to 0.25
+    - don't forget multiplication with the learning rate, which itself is quite small.
+    - **0.25** is itself **quite small**, hence the **product of learning rate and the max. gradient** of sigmoid may still be very **small**, thus causing **small updates**, thus leading to **slower convergence**.
+    - and if say multiple layers have sigmoid activation, this 0.25 will be multiplied those many times, hence the weight updates become even slower.
 
 ## Hyperbolic Tan (tanh)<a id="tanh"></a>
-- $tanh(x) = \frac{e^{2x}-1}{e^{2x}+1} = \frac{1-e^{-2x}}{1+e^{-2x}}$  ,   <img src="tan_hyperbolic.jpeg" width="400"/>
-- this is zero centred, i.e. mean = 0
+- $tanh(x) = \frac{e^{2x}-1}{e^{2x}+1} = \frac{1-e^{-2x}}{1+e^{-2x}} \quad , \nabla tanh(x) = \dfrac{-1}{(1+e^{2x})^2}\left(\left(1+e^{2x}\right)\left(2e^{2x}\right) - \left(e^{2x}-1\right)\left(2e^{2x}\right) \right) = -\dfrac{4e^{2x}}{(1+e^{2x})^2} = -\dfrac{2.2e^{2x}}{(1+e^{2x})^2} = \dfrac{(  (e^{2x}+1) - (e^{2x} - 1) )((e^{2x}+1) + (e^{2x} - 1) )}{(1+e^{2x})^2} = -\dfrac{((1+e^{2x})^2)-((e^{2x}-1)^2)}{(1+e^{2x})^2} = 1 - \dfrac{(e^{2x}-1)^2}{(1+e^{2x})^2} = 1-tanh(x)^2 $  ,  \
+ <img src="tan_hyperbolic.jpeg" width="400"/>
+- vanishing gradient is attained much faster than sigmoid
+    - compare the slope of the two activation functions: <img src="sigmoid_vs_tanh.png" width=300/>
+    - since tanh is steeper, for much smaller values of x, its gradient reaches 0 compared to that of sigmoid.
+- this is zero centred, i.e. mean = 0 (simply put area under the curve = 0)
     - $\bar{f(x)} = \frac{1}{b-a}\int\limits_a^b tanh(x) = \frac{1}{b-a} tanh^{-1}(x) |_a^b = \frac{1}{b-a} \frac{1}{2}ln\left( \frac{1+x}{1-x}\right) |_a^b = \frac{1}{2(b-a)} ln\left( \frac{(1+b)(1-a)}{(1-b)(1+a)}\right)$
     - $b \rightarrow +\infty, a \rightarrow -\infty \Rightarrow = \frac{1}{2\times 2\times \infty} \times 0 = 0$
     - due to this, some gradients (on expanding the chain rule and expressing gradients as $a_{21}, a_{22}$, outputs from previous layer) can be positive and others negative due to these O values being + or - due to the range of tanh. this ensures updates in different directions for all parameters, which may be required as per their location in the loss-curve. \
     <img src="tanh_zero_centred.png" width="200" />
-- vanishing gradient is only seen for large absolute values of x, since the gradient tends to 0.
+
+### Importance of mean-centering
+- mean centering ensure that the gradient can take both positive and negative values, which is useful for balanced weight updates.
+
+### Importance of different-direction exploration
+- point of optimisation is to explore the loss landscape as much as possible and as efficiently as possible
+- if gradients are such that they force to explore only in a fixed direction,
+    - say the gradient is always negative, thus forcing us to always increase $w$ in the update equation $w_{new} = w_{old} - \eta\times \dfrac{\partial \mathcal{L}}{w}$ (always go to right)
+    - assume the following loss landscape <img src="different_direction_via_signed_gradient.jpg" width=400/>
+    - the problem with having always negative gradient is as we move right , the step size will decrease because the magnitude of the gradient becomes small, hence we will be stuck in this local minima.
+    - if say we had the ability to explore the other direction, i.e. moving left, we could've found the 2nd minima, which is better than the current minima we are stuck at.
+- we get this ability on choosing an activation function that is mean centered
+    - being mean centered allows for positive and negative activation function values, in turn allowing for positive and negative gradients
+    - weights can be updated in both directions, allowing the model to learn more flexibly. 
+    - For example, in some parts of the network, the weights should increase, and in other parts, they should decrease, leading to a more effective and diverse search of the weight space.
+- especially in deeper layers where opposite changes in weights might be necessary for learning more nuanced representations, having this ability becomes critical. 
+- Example-1: sigmoid in deeper layer <img src="sigmoid_deeper_layer_mean_centering_1.jpg" width=400 /> <img src="sigmoid_deeper_layer_mean_centering_2.jpg" width=400/>
+- Example-2: tanh in deeper layer <img src="tanh_deeper_layer_mean_centering.jpg" width=400 />
+- Example-3: sigmoid in early layer
+    - won't be affecting weight updates of subsequent layers
+    - for the previous layers, the same explanation as seen in example-1 will hold.
+- Example-4: tanh in early layer <img src="tanh_early_layer_mean_centering.jpg" width=400 />
+    - essentially will/could affect the weight update direction of subsequent deeper layers as well
+- Example-5: tanh followed by sigmoid <img src="tanh_followed_by_sigmoid.jpg" width=400 />
+- Example-6: sigmoid followed by tanh
+    - the inputs to the tanh layer will always be positive.
+    - so, the **weights of** the `tanh` **matter** here, if they are somehow able to make the sum effectively negative, then tanh and all subsequent and preceding layers get to enjoy the ability of different-direction updates.
+- all sigmoid,tanh possibilities will be repeated in ReLU,tanh pairs as well.
+    - but for Leaky ReLU, since it can output negative values, it itself behaves similar to a mean-centered activation function, and doesn't restrict tanh's different-direction update granting ability.
+- keep in mind, even the linear activation function is mean-centered.
+
+    
+
 
 ## Rectified Linear (ReLU)
 - $f(x) = max(0, x)$   ,   <img src="relu.png" width="300" />
 - gradient doesn't vanish always
-- faster convergence.<font color="red" size="5">HOW?</font>
+- faster convergence.
+    - keep in mind, faster convergence also includes total computation time to achieve that convergence, and not just the no. of gradient descent steps required.
+    - since ReLU mitigates the vanishing gradient problems, the *updates* will be significant, thus theoretically bringing the model weights to their optimal value
+    - since ReLU is basically computing maximisation, it is computationally much faster than sigmoid or tanh, that compute exponentiation of e.
+        - this is because $e$ can be raised to whatever during forward pass and backpropagation.
+        - 
 
 ### Dying ReLU Problem
 - dead neurons, i.e. irrespective of input $O^{k-1,k}$ to $k^{th}$ ReLU activated layer, output $O^{k, k+1}$ has some columns as $\mathbf{0}$ vectors.
@@ -76,6 +128,9 @@
 - $f(x) = \begin{cases} x & x > 0 \\ \alpha \left(e^x-1\right) & \textrm{otherwise} \end{cases}$ <img src="elu-derivative.png" width="400" />
 - this is differentiable as well (at x=0), $lt._{x\rightarrow 0} \left( \frac{e^x-1}{x}\right)$
 - evaluation of exponential makes this comparatively more computationally expensive.
+
+## The science of layer index vs activation function to use
+<font color="red">Finish this</font>
 
 # Loss Functions
 <img src="loss_functions.png" width="600" />
