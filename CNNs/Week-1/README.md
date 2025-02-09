@@ -19,6 +19,7 @@
 11. [Lecture-11 : Why Convolutions?](#res1lec11):
   1. [Parameter-sharing](#lec11n1)
   2. [Sparsity of connections](#lec11n2)
+12. [Kernel Initialisation](#ki)
 
 
 
@@ -431,3 +432,8 @@ Once the values of a filter are learned, it can be used with different parts of 
 * also read up the [translational variance notebook](./src/translationalVariance.ipynb) to know:
     - what's translation invariance/variance?
     - which of these layers are which? and why.
+
+# Kernel Initialisation <a name="ki"></a>
+- by default, `tensorflow` uses `glorot_initialiser`
+
+## Why does Glorot initialisation work with CNN kernels?
