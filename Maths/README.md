@@ -15,6 +15,20 @@
 - $(B^TA^T)_{ij} = \sum\limits_{k=1}^{n} B^T_{ik}.A^T_{kj} = \sum\limits_{k=1}^{n} B_{ki}.A_{jk}$
 - $\therefore \,\,,\, (B^TA^T)_{ij} = (AB)^T_{ij} \Rightarrow \mathbf{(AB)^T = B^TA^T}$
 
+## rank(AB) $\le$ min.(rank(A), rank(B))
+- $A_{m \ times n} \,,\, B_{n\times p} \Rightarrow AB_{m \times p}$.
+- the product will have its columns as linear combination of columns of $A$
+    - hence the max no. of linearly independent columns(its column rank) will never exceed that of $A$
+- the product will have its rows as linear combination of rows of $B$
+    - hence the max no. of linearly independent rows(its row rank) will never exceed that of $B$
+- additionally, w.r.t. the columns of $AB$
+    - each column of $AB$ is a linear combination of columns of $A$, where the weights are the corresponding column elements of B
+    - <img src="images/Column rank of AB due to B-1.jpg" width=400 /><img src="images/Column rank of AB due to B-2.jpg" width=400/>
+    - if B has some linearly dependent columns, when such a column is used as weights for creating the corresponding column in $AB$
+        - this corresponding column of $AB$ can easily be expressed as the linear combination of some other columns of $AB$ that were formed from linearly independent columns of both $A$ and $B$
+    - hence, the column rank of $AB$ gets limited by that of $B$ as well.
+- this is the fundamental principle behind LoRA optimisation in LLMs
+
 # Mathematical Relations (Functions)
 - $\mathcal{f}: \mathbb{R}^n \rightarrow \mathbb{R}^m$
 - this can be thought of as an n-dimensional vector being transformed to an m-dimensional vector: $x \,\epsilon\, \mathbb{R}^n \rightarrow b \,\epsilon\, \mathbb{R}^m$
@@ -57,8 +71,17 @@
         - a span of this `m` linearly independent columns, i.e. `m` linearly independent m-dimensional vectors will have a span equal to $\mathbb{R}^m$ (Because dimension is the maximal number of linearly independent vectors—by its very construction, and this set of linearly independent vectors that *span* the vector space is called the **basis**.)
         - $A$ can have multiple groups of linearly independent columns, each group with varying sizes, but to solve the system of equations it should have at least 1 m-sized group.
     - **the third expectation** is that $A$ should **have a true inverse**
-        - $\since \, Ax = b \Rightarrow x = A^{-1}b$. this necessitates the inverse requirement.
+        - $\because \, Ax = b \Rightarrow x = A^{-1}b$. this necessitates the inverse requirement.
         - for the system of linear equations that usually represent some real world process, the transformation function (A) should be **injective and surjective** (one-to-one and onto mapping, i.e. the mapping covers the whole co-domain)
         - for instance, consider n = 3 and m = 2, 
             - there are infinitely many 3D points that can be mapped to the same 2D point, 
             - but the inverse relation has no reproducibility because it wouldn't know which specific 3D point should be mapped to a given 2D point (inverse relation will have inputs and outputs inverted)
+            This is called the **non-trivial null space** because at least 1 non-null vector resides in the null space.
+        - mathematically
+            - if $n > m$ , $Ax = b$ will have a null space where $Ax_{null}=0 \,\, (x_{null} \textrm{ is not a null vector })$ , and thus for unique solutions $x_p$ s.t. $Ax_p = b$, we end up having infinitely many solutions of type $x = x_{null} + x_p$
+            - 
+        - hence if $\mathbf{A}$ is to be injective, then $\mathbf{n \le m}$
+        - hence, $A$'s injectivity requirement necessitates the requirement of a unique inverse.
+        - this corresponds to having **at most `m` columns**.
+    - since $n \le m \textrm{ and } n \ge m \Rightarrow n = m$
+    - hence, **for the transformation** $\mathbf{A}$ to be **injective and surjective**, it should be a **square matrix**
