@@ -1,3 +1,33 @@
+# Introduction
+- the point of ML/DL is not only finding $f(X) \rightarrow Y$, i.e. the relationship/mapping between a representation and the output, 
+    - its also to *learn* a *new representation* based on the given representation, which could potentially be more useful to learn the mapping to the final output.
+- for example, in the given image, Cartesian coordinates is the given representation, Polar coordinates is the learned representation, which has a clearer relationship with the output , i.e. color (class): <img src="learned_rep.png" width=300/>
+- **why is deep learning *deep***
+    - depth implies depth of the computational graph. this is basically the no. of computations done sequentially, and not parallely. In the following logistic regression's computational graph, observe that the multiplications of $w_1$ with $x_1$ and $w_2$ with $x_2$ are not placed one after the other (sequential) instead are placed s.t. they will occur simultaenously, i.e. are parallel. \
+    It has a depth of 2 <img src="images/logreg_computational_graph.png" width=300/>
+    - depth could also imply the *depth of the graph describing the concepts are related to each other*. This is called depth by *deep probabilistic modeling*.\
+    This will be much lower than the above computational graph.
+        - take a CNN for instance, say the first layer detects edges and the other detects corners.
+        - corners are formed by 2 intersecting edges, hence the concept-based depth = 2, whereas the computational graph depth = 2n.
+- <img src="images/AI_system_different_parts.png" />
+
+# Expected Dataset size
+- As of 2016, a rough rule of thumb is that a supervised deep learning algorithm will generally achieve acceptable performance with around 5,000 labeled examples per category, and will match or exceed human performance when trained with a dataset containing at least 10 million labeled examples. 
+
+# Matrices
+- $f(A)_{ij}$ = i,j'th element of the matrix obtained after applying function $f$ to matrix $A$.
+
+## Addition of a vector with a matrix
+- $\mathbf{C}, \mathbf{A}$ : matrix, $\mathbf{b}$: vector (upper-case: matrices, lower-case: vectors, vectors will be always of shape (n,) , single dimensional, but a columnar representation)
+- $\mathbf{C}= \mathbf{A} + \mathbf{b} \Rightarrow C_{ij} = A_{ij} + b_j$
+- This implicit copying of b to many locations is called *broadcasting*.
+
+## Element-wise product, i.e. *Hadamard* Product
+- $\mathbf{C}= \mathbf{A}\odot \mathbf{B} \Rightarrow C_{ij} = A_{ij} \times B_{ij}$
+
+# Tensors
+- array with variable no. of axes, represented by $\mathcal{A}$ 
+
 # Perceptron
 1. single layer NN
 2. activation = Step function S; S = (`sum >= 0 ? 1 : 0`)
@@ -54,12 +84,15 @@
     - and if say multiple layers have sigmoid activation, this 0.25 will be multiplied those many times, hence the weight updates become even slower.
 
 ## Hyperbolic Tan (tanh)<a id="tanh"></a>
-- $tanh(x) = \frac{e^{2x}-1}{e^{2x}+1} = \frac{1-e^{-2x}}{1+e^{-2x}} \quad , \nabla tanh(x) = \dfrac{-1}{(1+e^{2x})^2}\left(\left(1+e^{2x}\right)\left(2e^{2x}\right) - \left(e^{2x}-1\right)\left(2e^{2x}\right) \right) = -\dfrac{4e^{2x}}{(1+e^{2x})^2} = -\dfrac{2.2e^{2x}}{(1+e^{2x})^2} = \dfrac{(  (e^{2x}+1) - (e^{2x} - 1) )((e^{2x}+1) + (e^{2x} - 1) )}{(1+e^{2x})^2} = -\dfrac{((1+e^{2x})^2)-((e^{2x}-1)^2)}{(1+e^{2x})^2} = 1 - \dfrac{(e^{2x}-1)^2}{(1+e^{2x})^2} = 1-tanh(x)^2 $  ,  \
- <img src="tan_hyperbolic.jpeg" width="400"/>
+- $tanh(x) = \frac{e^{2x}-1}{e^{2x}+1} = \frac{1-e^{-2x}}{1+e^{-2x}} \quad , \nabla tanh(x) = \dfrac{-1}{(1+e^{2x})^2}\left(\left(1+e^{2x}\right)\left(2e^{2x}\right) - \left(e^{2x}-1\right)\left(2e^{2x}\right) \right) = -\dfrac{4e^{2x}}{(1+e^{2x})^2} = -\dfrac{2.2e^{2x}}{(1+e^{2x})^2} = \dfrac{(  (e^{2x}+1) - (e^{2x} - 1) )((e^{2x}+1) + (e^{2x} - 1) )}{(1+e^{2x})^2} = -\dfrac{((1+e^{2x})^2)-((e^{2x}-1)^2)}{(1+e^{2x})^2} = 1 - \dfrac{(e^{2x}-1)^2}{(1+e^{2x})^2} = 1-tanh(x)^2$ 
+    - <img src="tan_hyperbolic.jpeg" width="400" />
 - vanishing gradient is attained much faster than sigmoid
-    - compare the slope of the two activation functions: <img src="sigmoid_vs_tanh.png" width=300/>
+    - compare the slope of the two activation functions: <img src="sigmoid_vs_tanh.png" width=300 />
     - since tanh is steeper, for much smaller values of x, its gradient reaches 0 compared to that of sigmoid.
-- this is zero centred, i.e. mean = 0 (simply put area under the curve = 0)
+- this is zero centred, i.e. mean = 0
+    - $\bar{f(x)} = \dfrac{\int\limits_{a}^b f(x) p(x) dx}{\int\limits_{a}^b p(x) dx} = \dfrac{\int\limits_{a}^b\dfrac{ f(x)}{b-a} dx}{\int\limits_{a}^b \dfrac{ 1}{b-a}  dx} = \frac{1}{b-a} \int\limits_{a}^b f(x) dx$ 
+        - this is mean in a fixed interval, keep in mind since all values are equally likely, uniform distribution was chosen
+        - hence it seems as if mean value is essentially *area under the curve*. (this is because of the uniform distribution assumption)
     - $\bar{f(x)} = \frac{1}{b-a}\int\limits_a^b tanh(x) = \frac{1}{b-a} tanh^{-1}(x) |_a^b = \frac{1}{b-a} \frac{1}{2}ln\left( \frac{1+x}{1-x}\right) |_a^b = \frac{1}{2(b-a)} ln\left( \frac{(1+b)(1-a)}{(1-b)(1+a)}\right)$
     - $b \rightarrow +\infty, a \rightarrow -\infty \Rightarrow = \frac{1}{2\times 2\times \infty} \times 0 = 0$
     - due to this, some gradients (on expanding the chain rule and expressing gradients as $a_{21}, a_{22}$, outputs from previous layer) can be positive and others negative due to these O values being + or - due to the range of tanh. this ensures updates in different directions for all parameters, which may be required as per their location in the loss-curve. \
@@ -144,6 +177,10 @@
 ## Huber Loss
 1. $\mathcal{L} = \begin{cases}\frac{1}{2}(y-\hat{y})^2 & \textrm{for} \left|y-\hat{y}\right| \le \delta \\ \delta \left|y-\hat{y}\right| - \frac{1}{2}\delta^2 \end{cases}$
 2. the comparison with $\delta$ is basically an outlier check, if a point is an outlier the loss function becomes a modified MAE, **without** any **issues of non-convexity** and **non-differentiability**.
+3. **Use this when**
+    1. Your data contains outliers, and you don’t want them to dominate the loss.
+    2. You want a balance between sensitivity to small errors and robustness to large errors.
+    3. Your dataset could be/is chaotic.
 
 ## Binary Cross Entropy
 1. another term for log-loss used in logistic regressor.
@@ -153,9 +190,14 @@
 ## Categorical Cross Entropy
 1. multi-class version of the above, also used as Softmax Logistic Regression.
 2. target variable supplied while training needs to be one-hot encoded.
+3. in `pytorch`, `torch.nn.CrossEntropyLoss()` criterion handles softmaxing and loss calculation, whereas for `keras`, you have to set activation of the last dense layer as `softmax` and then use the `categorical_crossentropy` as `loss` argument while compiling the model.
+3. use this when
+    1. 
 
 ## Sparse categorical cross entropy
 1. target variable supplied while training needs to be label encoded.
+2. use this when
+    1. 
 
 # Back Propagation
 
@@ -219,6 +261,17 @@
 
 **Note:** $P^L = \begin{bmatrix} -\frac{2}{n}(y_1-\hat{y}_1) \\ -\frac{2}{n}(y_2-\hat{y}_2) \\ \vdots \\ -\frac{2}{n}(y_n-\hat{y}_n)  \end{bmatrix}$
 
+## Parallelisation - Forward Prop and Backprop
+- forward prop can be parallelised across samples of a given mini-batch
+    - i.e. each sample can be processed parallely by the NN
+- backprop can be parallelised across samples of a given mini-batch
+    - *parameter level*: gradients for each parameter of a given layer can be computed parallely 
+        - since the parameters of the shallow layer  will require the gradients of the parameters of the deeper layers, this aspect will remain sequential.
+        - but for the params of the same layer, these won't have any further dependency, hence will be computed parallely.
+    - *sample level*: the same argument made in forward prop holds true
+        - gradients for each sample can be calculated (just like how the loss was calculated)
+        - they then will be aggregated for that mini-batch (just like how the loss was calculated)
+
 # Gradient Descent Types
 
 ## Batch
@@ -228,7 +281,7 @@
 4. validation loss decreased in a smooth manner.
 
 ## Stochastic
-1. for each epoch, a loop = `n_samples` is run wherein the training data is shuffled and a random sample is drawn.
+1. for each epoch, a loop = `n_samples` is run wherein the training data is shuffled and a random sample (**stochasticity**) is drawn.
     1. gradient update is carried out on this drawn sample.
 2. is slower in terms of algorithmic speed, since higher number of updates to be performed( = `n_epochs * n_samples`).
 3. is faster in terms of convergence, i.e. reaching an optimum, due to those higher number of updates being performed.
@@ -274,14 +327,11 @@
 2. monitored metric shouldn't stop changing by a delta value(shouldn't stop improving)
 
 ## Batch normalization
-1. normalization makes the loss function surface symmetrical across dimensionality space.
-2. <img src="batch_normalization_intuition.png" height="200" />
-3. normalize $\Rightarrow$ between 0 and 1.
-4. normalization performed when min and max values are known beforehand, i.e. don't depend on data.
-    1. for instance, `salary` as a feature does depend on data, max salary and min salary could be anything.
-    2. `marks out of 100` is a feature suitable for normalization since max = 100, min = 0.
-5. for features where min-max is unknown, use standardization instead. ($x \rightarrow \frac{x-\mu}{\sigma} $)
-6. Not just the input feature matrix, but activation matrix output from each layer is also normalized before feeding into the subsequent layer.
+1. typically used within the hidden layers of a neural net
+2. helps with resolving vanishing and exploding gradient problems
+3. used to normalize the activation-outputs of the preceding layer
+4. some activation outputs may be too large in magnitude, hence causing 
+5. Not just the input feature matrix, but activation matrix output from each layer is also normalized before feeding into the subsequent layer.
     1. Tanh and sigmoid activations already take care of this.
     2. Needed implementation for activation functions not having a fixed range of values.
 
@@ -292,6 +342,16 @@
 ### Internal Covariate Shift
 1. The distribution of inputs to hidden layers changes constantly, with each epoch.
 2. Hence, for some epochs a particular deeper hidden layer might see a particular distribution of activations, and the same layer can then see a different distributions owing to its previous layers undergoing weight updates.
+3. this is a problem because:
+    1. the subsequent layers' weights have to constantly adjust to the changing input-distribution.
+    2. Imagine each layer is trying to learn to map its inputs to the right outputs. \
+    But if the inputs (activations) to each layer keep changing during training, then each layer has to keep readapting to this moving target. \
+    That’s a pain and slows down convergence.
+    3. for **activations** such as **sigmoid, tanh** , if these layers are receiving this unnormalized input, the inputs could probably be large in magnitude (thus unactivated outputs could be large-positive or large-negative numbers) leading to activated outputs being pushed close to 1 or 0(sigmoid)/-1(tanh), thus causing vanishing gradients in this and all the preceding layers(chain rule of backpropagation will affect all early layers).
+    4. for **activations** such as **ReLU, Leaky ReLU, ELU**, BN will control the input that goes into these layers, thereby preventing explosion of the activated outputs (large positive inputs could potentially cause large activated outputs from these layers which in backprop will affect the gradients of the current and early layers, possibly exploding them). \
+    The exploding gradients problem could still be caused if the weights of these (ReLU, Leaky ReLU, ELU) layers are poorly initialised thus end up being high in magnitude.
+4. hence BN **stabilises activations**
+
 3. to tackle this, **lower learning rate** should be used.
 
 ### Technique
@@ -383,9 +443,9 @@
     1. higher $\beta$: more importance given to previous moving average, 
     2. lower $\beta$: more importance given to current new term, 
 
-## Momentun Optimization
+## Momentum Optimization
 1. used to handle non-convex loss functions
-    1. loss function is a function of al hyperparams across all layers.
+    1. loss function is a function of all hyperparams across all layers.
     2. this can easily make the loss function, whose formula may be convex, a non-convex function
         1. but the plot of the function be as if it contains several local minima and/or maxima.
     3. to optimize this created *non-convex* loss function is where momentum is used.
